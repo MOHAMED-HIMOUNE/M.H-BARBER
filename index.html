@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#10100e">
+<title>M.H BARBER — Premium</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="#home"><img src="logo.png" alt="شعار M.H Barber" onerror="this.style.visibility='hidden'"><span>M.H <b>BARBER</b></span></a>
+  <nav><a href="#services">الخدمات</a><a href="#booking">الحجز</a><a href="#queue">الطابور</a></nav>
+  <button class="outline small-btn" id="accountOpen">حسابي / دخول</button>
+</header>
+
+<main>
+<section class="hero" id="home">
+  <div class="hero-shade"></div>
+  <div class="hero-content">
+    <div class="eyebrow">THE ART OF GROOMING</div>
+    <div class="live-status"><i id="shopDot"></i><b id="shopState">جارٍ تحميل حالة المحل...</b></div>
+    <h1>M.H<br><em>BARBER</em></h1>
+    <p>أناقتك تبدأ من التفاصيل. احجز موعدك واستمتع بتجربة حلاقة راقية.</p>
+    <a class="gold-btn" href="#booking">احجز موعدك الآن <span>←</span></a>
+  </div>
+  <div class="hero-mark">M.H <span>BARBER</span></div>
+</section>
+
+<section class="section" id="services">
+  <div class="section-title"><small>OUR SERVICES</small><h2>خدماتنا</h2><p>اختر الخدمة المناسبة لك</p></div>
+  <div class="services">
+    <button class="service selected" data-service="حلاقة الشعر"><span>✂</span><b>حلاقة الشعر</b><small>قص وتصفيف</small></button>
+    <button class="service" data-service="الشعر واللحية"><span>◈</span><b>الشعر واللحية</b><small>إطلالة متكاملة</small></button>
+    <button class="service" data-service="تهذيب اللحية"><span>⌁</span><b>تهذيب اللحية</b><small>أناقة ودقة</small></button>
+    <button class="service" data-service="العناية بالوجه"><span>✧</span><b>العناية بالوجه</b><small>عناية وانتعاش</small></button>
+  </div>
+</section>
+
+<section class="section split" id="booking">
+  <div class="booking-copy">
+    <small>BOOK YOUR EXPERIENCE</small>
+    <h2>موعدك القادم<br><em>يبدأ من هنا</em></h2>
+    <p>سجّل الدخول بنقرة واحدة، واختار الخدمة والوقت المناسب. يمكنك امتلاك حجز نشط واحد فقط في كل مرة.</p>
+    <div class="note">الحجز لا يصبح مؤكداً إلا بعد موافقة المحل.</div>
+  </div>
+  <div class="panel">
+    <h3>احجز موعدك</h3>
+    <form id="bookingForm">
+      <label>الخدمة</label>
+      <select id="serviceSelect">
+        <option>حلاقة الشعر</option>
+        <option>الشعر واللحية</option>
+        <option>تهذيب اللحية</option>
+        <option>العناية بالوجه</option>
+      </select>
+      <label>التاريخ</label>
+      <input id="bookingDate" type="date" required>
+      <label>الوقت</label>
+      <input id="bookingTime" type="time" required>
+      <button class="gold-btn full" type="submit">إرسال طلب الحجز</button>
+    </form>
+    <p class="feedback" id="bookingFeedback"></p>
+  </div>
+</section>
+
+<section class="section queue-section" id="queue">
+  <div class="section-title"><small>LIVE WAITING LINE</small><h2>الطابور المباشر</h2><p>عدد الأشخاص الموجودين فعلياً في الانتظار</p></div>
+  <div class="queue-card">
+    <div class="queue-icon">♙</div>
+    <div class="queue-number" id="queueCount">—</div>
+    <b>أشخاص في الطابور</b>
+    <p id="shopNotice">يتم تحديث العدد مباشرة</p>
+    <button id="joinQueue" class="gold-btn">خذ رقم انتظار</button>
+    <p class="feedback" id="queueFeedback"></p>
+  </div>
+</section>
+
+<section class="section about">
+  <small>ABOUT M.H BARBER</small>
+  <h2>الأناقة في التفاصيل</h2>
+  <p>تجربة حلاقة تجمع بين الدقة والراحة والاهتمام بك.</p>
+</section>
+
+<section class="section account-area hidden" id="accountPanel">
+  <div class="section-title"><small>MY ACCOUNT</small><h2>حسابي</h2></div>
+  <div class="panel">
+    <p id="signedInAs"></p>
+    <div id="myStatus"></div>
+    <button id="logoutBtn" class="outline">تسجيل الخروج</button>
+  </div>
+</section>
+
+<section class="section admin-area hidden" id="adminPanel">
+  <div class="section-title"><small>PRIVATE OWNER AREA</small><h2>لوحة الإدارة</h2><p>هذه اللوحة تظهر لحساب الإدارة المصرّح به فقط.</p></div>
+  <div class="panel">
+    <div class="admin-head">
+      <h3>حالة المحل</h3>
+      <div><button id="openShop" class="green-btn">فتح المحل</button> <button id="closeShop" class="red-btn">إغلاق المحل</button></div>
+    </div>
+    <label>رسالة للزبائن</label>
+    <input id="shopMessage" placeholder="مثال: نعود غداً الساعة 09:00">
+    <button id="saveMessage" class="outline">حفظ الرسالة</button>
+  </div>
+  <div class="stats">
+    <div class="stat"><small>إيرادات اليوم</small><b id="revDay">0 دج</b></div>
+    <div class="stat"><small>إيرادات الشهر</small><b id="revMonth">0 دج</b></div>
+    <div class="stat"><small>إيرادات السنة</small><b id="revYear">0 دج</b></div>
+  </div>
+  <div class="panel"><h3>الحجوزات</h3><div id="adminBookings">جارٍ التحميل...</div></div>
+  <div class="panel"><h3>الطابور</h3><div id="adminQueue">جارٍ التحميل...</div></div>
+</section>
+</main>
+
+<footer><b>M.H BARBER</b><span>© 2026 — PREMIUM EXPERIENCE</span></footer>
+
+<!-- نافذة تسجيل الدخول المحدثة -->
+<div class="modal hidden" id="loginModal">
+  <div class="modal-box">
+    <button class="modal-close" id="closeModal">×</button>
+    <h2>الدخول إلى الحساب</h2>
+    
+    <!-- قسم دخول الزبون (بدون الحاجة لـ SMS مدفوع، دخول مجهول فوري وآمن) -->
+    <div id="customerAuth">
+      <p>دخول الزبائن السريع (بدون تسجيل معقد)</p>
+      <button id="customerLogin" class="gold-btn full">دخول كزبون وفتح الحجز</button>
+    </div>
+
+    <!-- قسم دخول المدير -->
+    <div id="adminAuth" class="hidden">
+      <p>دخول صاحب المحل</p>
+      <input id="adminEmail" type="email" placeholder="البريد الإلكتروني">
+      <input id="adminPassword" type="password" placeholder="كلمة المرور">
+      <button id="adminLogin" class="gold-btn full">دخول الإدارة</button>
+    </div>
+
+    <button id="switchAdmin" class="text-btn">دخول صاحب المحل</button>
+    <p class="feedback" id="authFeedback"></p>
+  </div>
+</div>
+
+<!-- ملفات مكتبات Firebase الأساسية (بدون الدوال المدفوعة) -->
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+
+<script src="firebase-config.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
