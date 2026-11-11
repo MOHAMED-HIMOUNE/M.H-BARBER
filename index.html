@@ -227,7 +227,14 @@ footer b{color:var(--gold)}
   const ADMIN_UID = "Mgx6RTN03sWDkU9SnWpjCRe7zs63";
   const WHATSAPP_NUMBER = "213782242293";
 
-  document.getElementById('bookingDate').min = new Date().toISOString().slice(0,10);
+  // تعيين تاريخ اليوم افتراضياً لحقل التاريخ
+  const todayObj = new Date();
+  const currentYearStr = todayObj.getFullYear().toString();
+  const currentMonthStr = (todayObj.getMonth() + 1).toString().padStart(2, '0');
+  const currentDayStr = todayObj.getDate().toString().padStart(2, '0');
+  const fullTodayStr = `${currentYearStr}-${currentMonthStr}-${currentDayStr}`;
+
+  document.getElementById('bookingDate').min = fullTodayStr;
 
   db.doc('public/shop').onSnapshot(doc => {
     const d = doc.exists ? doc.data() : { open: false };
@@ -384,7 +391,6 @@ footer b{color:var(--gold)}
     } catch(e) { alert(e.message); }
   }
 
-  // إنهاء الحلاقة وتحديث حالة الحجز وتسجيل السعر مباشرة داخل مستند الحجز
   async function finishService(id, price) {
     try {
       await db.collection('bookings').doc(id).update({
@@ -398,7 +404,7 @@ footer b{color:var(--gold)}
     } catch(e) { alert(e.message); }
   }
 
-  // حساب إيرادات اليوم والشهر والسنة تلقائياً من الحجوزات المكتملة
+  // حساب دقيق ومجدد تلقائياً لإيرادات اليوم والشهر والسنة بناءً على تاريخ الحجز الفعلي
   function loadAdminData() {
     db.collection('bookings').orderBy('createdAt', 'desc').onSnapshot(snapshot => {
       const root = document.getElementById('adminBookings');
@@ -409,20 +415,27 @@ footer b{color:var(--gold)}
       let monthRev = 0;
       let yearRev = 0;
 
-      const todayStr = new Date().toISOString().slice(0,10); // YYYY-MM-DD
-      const currentMonth = todayStr.slice(0,7); // YYYY-MM
-      const currentYear = todayStr.slice(0,4); // YYYY
+      const activeTodayStr = `${new Date().getFullYear()}-${(new Date().getMonth() + 1).toString().padStart(2, '0')}-${new Date().getDate().toString().padStart(2, '0')}`;
+      const activeMonthStr = activeTodayStr.slice(0, 7); // YYYY-MM
+      const activeYearStr = activeTodayStr.slice(0, 4);   // YYYY
 
       snapshot.forEach(docSnap => {
         const b = docSnap.data();
         const id = docSnap.id;
 
-        // حساب الإيرادات إذا كان الحجز منتهياً
-        if (b.status === 'منتهي' && b.revenue) {
-          const bDate = b.date || ''; // تاريخ الحجز
-          if (bDate === todayStr) dayRev += Number(b.revenue);
-          if (bDate.startsWith(currentMonth)) monthRev += Number(b.revenue);
-          if (bDate.startsWith(currentYear)) yearRev += Number(b.revenue);
+        if (b.status === 'منتهي') {
+          const revAmount = Number(b.revenue || b.price || 300);
+          const bDate = b.date || ''; // تاريخ الحجز الذي اختاره الزبون أو تم إنجازه فيه
+
+          if (bDate === activeTodayStr) {
+            dayRev += revAmount;
+          }
+          if (bDate.startsWith(activeMonthStr)) {
+            monthRev += revAmount;
+          }
+          if (bDate.startsWith(activeYearStr)) {
+            yearRev += revAmount;
+          }
         }
 
         const div = document.createElement('div');
@@ -437,7 +450,7 @@ footer b{color:var(--gold)}
         }
 
         div.innerHTML = `
-          <span><b>${b.clientName}</b> (${b.clientPhone}) | ${b.service} (${b.price || b.revenue || 300} دج)<br>📅 ${b.date} | ⏰ ${b.time} | <span style="color:var(--gold)">الحالة: ${b.status}</span> <br><small>${timePassed}</small></span>
+          <span><b>${b.clientName}</b> (${b.clientPhone}) | ${b.service} (${b.price || 300} دج)<br>📅 ${b.date} | ⏰ ${b.time} | <span style="color:var(--gold)">الحالة: ${b.status}</span> <br><small>${timePassed}</small></span>
           <div>
             ${b.status === 'قيد الانتظار' ? `<button class="green-btn" onclick="startService('${id}')">بدء الحلاقة</button>` : ''}
             ${b.status === 'جاري الحلاقة' ? `<button class="red-btn" onclick="finishService('${id}', ${b.price || 300})">إنهاء الحلاقة ✓</button>` : ''}
@@ -447,7 +460,7 @@ footer b{color:var(--gold)}
         root.appendChild(div);
       });
 
-      // عرض المبالغ المحسوبة في واجهة الإدارة
+      // تحديث الأرقام في واجهة المدير فوراً
       document.getElementById('revDay').textContent = dayRev + ' دج';
       document.getElementById('revMonth').textContent = monthRev + ' دج';
       document.getElementById('revYear').textContent = yearRev + ' دج';
