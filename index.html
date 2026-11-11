@@ -125,7 +125,7 @@ footer b{color:var(--gold)}
 <section class="section split" id="bookingSection">
   <div class="booking-copy">
     <h2>موعدك القادم<br><em>يبدأ من هنا</em></h2>
-    <p>اختر خدمتك المفضلة، حدد الكرسي المناسب، التاريخ والوقت، وسجل معلوماتك ليتم إرسال حجزك إلى واتساب المحل.</p>
+    <p>اختر خدمتك المفضلة، حدد الحلاق المناسب، التاريخ والوقت، وسجل معلوماتك ليتم إرسال حجزك إلى واتساب المحل.</p>
   </div>
   <div class="panel" id="bookingPanel">
     <h3>احجز موعدك</h3>
@@ -135,9 +135,9 @@ footer b{color:var(--gold)}
       <label>رقم الهاتف</label>
       <input id="clientPhone" type="tel" placeholder="06XXXXXXXX" required>
       
-      <label>اختر الكرسي / الحلاق</label>
+      <label>اختر الحلاق</label>
       <select id="chairSelect">
-        <!-- يتم تحديث الخيارات تلقائياً من إعدادات المدير -->
+        <!-- يتم تعبئتها ديناميكياً بالأسماء المؤكدة فقط -->
       </select>
 
       <label>الخدمة المطلوبة</label>
@@ -187,23 +187,25 @@ footer b{color:var(--gold)}
 <section class="section admin-area hidden" id="adminPanel">
   <div class="section-title"><h2>لوحة الإدارة المحترفة</h2></div>
   
-  <!-- إدارة الكراسي الثلاثة وتسمية الحلاقين -->
+  <!-- تخصيص أسماء الكراسي مع زر تأكيد -->
   <div class="panel" style="margin-bottom: 25px;">
-    <h3>🪑 تخصيص أسماء الكراسي (تظهر للزبائن في نموذج الحجز)</h3>
+    <h3>🪑 تخصيص أسماء الكراسي (التي تظهر للزبائن)</h3>
     <div class="chairs-grid">
       <div class="chair-box">
         <h4>الكرسي 1</h4>
-        <input id="chair1Name" placeholder="اسم الحلاق 1" oninput="updateChairNames()">
+        <input id="chair1Name" placeholder="أدخل اسم الحلاق هنا">
       </div>
       <div class="chair-box">
         <h4>الكرسي 2</h4>
-        <input id="chair2Name" placeholder="اسم الحلاق 2" oninput="updateChairNames()">
+        <input id="chair2Name" placeholder="أدخل اسم الحلاق هنا">
       </div>
       <div class="chair-box">
         <h4>الكرسي 3</h4>
-        <input id="chair3Name" placeholder="اسم الحلاق 3" oninput="updateChairNames()">
+        <input id="chair3Name" placeholder="أدخل اسم الحلاق هنا">
       </div>
     </div>
+    <button class="gold-btn full" onclick="saveAndConfirmChairs()" style="margin-top:10px;">تأكيد وحفظ أسماء الكراسي الحالية 💾</button>
+    <p class="feedback" id="chairFeedback" style="text-align:center; margin-top:8px;"></p>
   </div>
 
   <div class="panel">
@@ -284,39 +286,43 @@ footer b{color:var(--gold)}
   }
   document.documentElement.setAttribute('data-theme', localStorage.getItem('mh_theme') || 'dark');
 
-  // إدارة أسماء الكراسي والحلاقين
+  // تعبئة وإظهار الأسماء المؤكدة فقط للزبائن
   function loadChairsToSelect() {
-    const c1 = localStorage.getItem('mh_chair_1') || 'كرسي 1 (محمد)';
-    const c2 = localStorage.getItem('mh_chair_2') || 'كرسي 2 (أمين)';
-    const c3 = localStorage.getItem('mh_chair_3') || 'كرسي 3 (عماد)';
+    const c1 = localStorage.getItem('mh_chair_1') || '';
+    const c2 = localStorage.getItem('mh_chair_2') || '';
+    const c3 = localStorage.getItem('mh_chair_3') || '';
 
     document.getElementById('chair1Name').value = c1;
     document.getElementById('chair2Name').value = c2;
     document.getElementById('chair3Name').value = c3;
 
     const select = document.getElementById('chairSelect');
-    select.innerHTML = `
-      <option value="${c1}">${c1}</option>
-      <option value="${c2}">${c2}</option>
-      <option value="${c3}">${c3}</option>
-    `;
+    select.innerHTML = '';
+
+    let optionsHTML = '';
+    if (c1.trim() !== '') optionsHTML += `<option value="${c1.trim()}">${c1.trim()}</option>`;
+    if (c2.trim() !== '') optionsHTML += `<option value="${c2.trim()}">${c2.trim()}</option>`;
+    if (c3.trim() !== '') optionsHTML += `<option value="${c3.trim()}">${c3.trim()}</option>`;
+
+    if (optionsHTML === '') {
+      optionsHTML = `<option value="حلاق عام">حلاق عام</option>`;
+    }
+    select.innerHTML = optionsHTML;
   }
 
-  function updateChairNames() {
-    const c1 = document.getElementById('chair1Name').value || 'كرسي 1';
-    const c2 = document.getElementById('chair2Name').value || 'كرسي 2';
-    const c3 = document.getElementById('chair3Name').value || 'كرسي 3';
+  // عند الضغط على زر التأكيد والحفظ
+  function saveAndConfirmChairs() {
+    const c1 = document.getElementById('chair1Name').value;
+    const c2 = document.getElementById('chair2Name').value;
+    const c3 = document.getElementById('chair3Name').value;
 
     localStorage.setItem('mh_chair_1', c1);
     localStorage.setItem('mh_chair_2', c2);
     localStorage.setItem('mh_chair_3', c3);
 
-    const select = document.getElementById('chairSelect');
-    select.innerHTML = `
-      <option value="${c1}">${c1}</option>
-      <option value="${c2}">${c2}</option>
-      <option value="${c3}">${c3}</option>
-    `;
+    loadChairsToSelect();
+    document.getElementById('chairFeedback').textContent = '✅ تم تأكيد وحفظ أسماء الكراسي بنجاح وتحديثها للزبائن!';
+    setTimeout(() => document.getElementById('chairFeedback').textContent = '', 3000);
   }
 
   loadChairsToSelect();
@@ -374,7 +380,7 @@ footer b{color:var(--gold)}
     const currNameEl = document.getElementById('publicCurrentName');
     const currTimerEl = document.getElementById('publicCurrentTimer');
     if (currentClient) {
-      currNameEl.textContent = `${currentClient.clientName} (${currentClient.service}) — [${currentClient.chair || 'كرسي عام'}]`;
+      currNameEl.textContent = `${currentClient.clientName} (${currentClient.service}) — [${currentClient.chair || 'حلاق عام'}]`;
       if (currentClient.startTime) {
         const startSec = currentClient.startTime.toMillis();
         const diffMin = Math.floor((Date.now() - startSec) / 60000);
@@ -468,7 +474,7 @@ footer b{color:var(--gold)}
       const text = `السلام عليكم، لدي حجز جديد في M.H Barber:%0A` +
                    `👤 الاسم: ${encodeURIComponent(name)}%0A` +
                    `📞 الهاتف: ${encodeURIComponent(phone)}%0A` +
-                   `🪑 الكرسي / الحلاق: ${encodeURIComponent(chair)}%0A` +
+                   `🪑 الحلاق: ${encodeURIComponent(chair)}%0A` +
                    `✂️ الخدمة: ${encodeURIComponent(service)} (${price} دج)%0A` +
                    `📅 التاريخ: ${encodeURIComponent(date)}%0A` +
                    `⏰ الوقت: ${encodeURIComponent(time)}`;
