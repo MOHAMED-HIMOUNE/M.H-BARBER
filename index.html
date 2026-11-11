@@ -32,7 +32,6 @@ nav{display:flex;gap:28px;font-size:13px;color:#d2cec5}nav a:hover{color:var(--g
 .full{width:100%}.section{padding:85px 7%;max-width:1250px;margin:auto}.section-title{text-align:center;margin-bottom:35px}
 .section-title h2{font-size:34px;margin:8px 0}.section-title p{color:var(--muted);font-size:13px}
 
-/* جدول الأسعار الجديد */
 .pricing-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px}
 .price-card{background:linear-gradient(145deg,#22211d,#171613);border:1px solid var(--line);padding:24px;border-radius:8px;display:flex;justify-content:space-between;align-items:center}
 .price-card info b{display:block;font-size:17px;color:#fff;margin-bottom:4px}
@@ -85,7 +84,7 @@ footer b{color:var(--gold)}
   </div>
 </section>
 
-<!-- قسم قائمة الأسعار والخدمات المأخوذة من اللوحة -->
+<!-- قسم الأسعار والخدمات -->
 <section class="section" id="services">
   <div class="section-title"><small>PRICING & SERVICES</small><h2>قائمة الخدمات والأسعار</h2><p>أسعار تنافسية تناسب كافة تطلعاتك</p></div>
   <div class="pricing-grid">
@@ -135,7 +134,7 @@ footer b{color:var(--gold)}
 <section class="section split" id="booking">
   <div class="booking-copy">
     <h2>موعدك القادم<br><em>يبدأ من هنا</em></h2>
-    <p>اختر خدمتك المفضلة، حدد التاريخ والوقت المناسب، وسجل معلوماتك لتأكيد الحجز فوراً.</p>
+    <p>اختر خدمتك المفضلة، حدد التاريخ والوقت المناسب، وسجل معلوماتك ليتم إرسال حجزك مباشرة إلى واتساب المحل.</p>
   </div>
   <div class="panel">
     <h3>احجز موعدك</h3>
@@ -161,7 +160,7 @@ footer b{color:var(--gold)}
       <input id="bookingDate" type="date" required>
       <label>الوقت</label>
       <input id="bookingTime" type="time" required>
-      <button class="gold-btn full" type="submit" style="margin-top:15px;">تأكيد وإرسال الحجز</button>
+      <button class="gold-btn full" type="submit" style="margin-top:15px;">تأكيد وإرسال عبر واتساب 📲</button>
     </form>
     <p class="feedback" id="bookingFeedback"></p>
   </div>
@@ -238,6 +237,9 @@ footer b{color:var(--gold)}
   const db = firebase.firestore();
   const ADMIN_UID = "Mgx6RTN03sWDkU9SnWpjCRe7zs63";
 
+  // رقم الواتساب الخاص بك المحدث تلقائياً
+  const WHATSAPP_NUMBER = "213782242293";
+
   document.getElementById('bookingDate').min = new Date().toISOString().slice(0,10);
 
   // الاستماع المباشر لحالة المحل
@@ -280,7 +282,7 @@ footer b{color:var(--gold)}
     }
   });
 
-  // حجز زبون جديد مباشر
+  // حجز زبون جديد مباشر + إرسال عبر واتساب
   async function submitBooking(e) {
     e.preventDefault();
     const name = document.getElementById('clientName').value;
@@ -291,6 +293,7 @@ footer b{color:var(--gold)}
     const feedback = document.getElementById('bookingFeedback');
 
     try {
+      // 1. حفظ الحجز في قاعدة بيانات Firebase
       await db.collection('bookings').add({
         clientName: name,
         clientPhone: phone,
@@ -300,10 +303,26 @@ footer b{color:var(--gold)}
         status: 'جديد',
         createdAt: firebase.firestore.FieldValue.serverTimestamp()
       });
-      feedback.textContent = 'تم إرسال حجزك بنجاح! ننتظرك في الموعد.';
-      document.getElementById('bookingForm').reset();
+
+      feedback.textContent = 'تم تسجيل حجزك بنجاح! جاري تحويلك إلى واتساب...';
+
+      // 2. تجهيز رسالة واتساب المباشرة لرقمك
+      const text = `السلام عليكم، لدي حجز جديد في M.H Barber:%0A` +
+                   `👤 الاسم: ${encodeURIComponent(name)}%0A` +
+                   `📞 الهاتف: ${encodeURIComponent(phone)}%0A` +
+                   `✂️ الخدمة: ${encodeURIComponent(service)}%0A` +
+                   `📅 التاريخ: ${encodeURIComponent(date)}%0A` +
+                   `⏰ الوقت: ${encodeURIComponent(time)}`;
+
+      // فتح رابط واتساب فوراً
+      setTimeout(() => {
+        window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${text}`, '_blank');
+        document.getElementById('bookingForm').reset();
+        feedback.textContent = 'تم إرسال تفاصيل الحجز إلى واتساب بنجاح!';
+      }, 1000);
+
     } catch(e) {
-      feedback.textContent = 'خطأ في إرسال الحجز: ' + e.message;
+      feedback.textContent = 'خطأ في الحجز: ' + e.message;
     }
   }
 
