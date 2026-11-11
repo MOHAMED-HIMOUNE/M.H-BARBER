@@ -1,7 +1,7 @@
 (() => {
 const $ = id => document.getElementById(id);
 
-// تفعيل أزرار الواجهة العامة فوراً بغض النظر عن حالة الفايربيس
+// تفعيل أزرار الواجهة العامة فوراً
 if ($('accountOpen')) {
     $('accountOpen').onclick = () => {
         const modal = $('loginModal');
@@ -35,11 +35,10 @@ const ready = !!window.auth && !!window.db;
 let currentUser = null, isAdmin = false;
 let unsub = [], publicUnsub = [];
 
-const ADMIN_UID = "sRzxHot4wdPZPIV5qX5jHrVaddE2"; // الـ UID الخاص بك كمدير
+const ADMIN_UID = "sRzxHot4wdPZPIV5qX5jHrVaddE2"; 
 const feedback = (id, msg) => { if($(id)) $(id).textContent = msg || ''; };
 const stopListeners = () => { unsub.forEach(fn => fn && fn()); unsub = []; };
 
-// ضبط التاريخ الأدنى للحجز ليكون اليوم
 const localDate = new Date(Date.now() - new Date().getTimezoneOffset()*60000).toISOString().slice(0,10);
 if ($('bookingDate')) $('bookingDate').min = localDate;
 
@@ -71,7 +70,7 @@ const listenPublic = () => {
 };
 listenPublic();
 
-// تسجيل دخول الزبون تلقائياً (Anonymous Auth) أو تسجيل المدير بالبريد
+// تسجيل دخول الزبون أو المدير
 if ($('customerLogin')) {
     $('customerLogin').onclick = async () => {
         try {
@@ -97,7 +96,6 @@ if ($('adminLogin')) {
     };
 }
 
-// مراقبة حالة المصادقة
 auth.onAuthStateChanged(async user => {
     stopListeners(); 
     listenPublic(); 
@@ -109,7 +107,6 @@ auth.onAuthStateChanged(async user => {
     
     if (!user) return;
 
-    // التحقق هل المستخدم هو المدير عبر الـ UID مباشرة
     isAdmin = (user.uid === ADMIN_UID);
 
     if (isAdmin) {
@@ -122,7 +119,6 @@ auth.onAuthStateChanged(async user => {
     }
 });
 
-// نموذج الحجز المباشر للزبون
 if ($('bookingForm')) {
     $('bookingForm').onsubmit = async e => {
         e.preventDefault(); 
@@ -159,7 +155,6 @@ if ($('bookingForm')) {
     };
 }
 
-// الانضمام المباشر للطابور
 if ($('joinQueue')) {
     $('joinQueue').onclick = async () => {
         if (!currentUser) return feedback('queueFeedback', 'سجّل الدخول أولاً.'); 
@@ -184,7 +179,6 @@ if ($('joinQueue')) {
 
 if ($('logoutBtn')) $('logoutBtn').onclick = () => auth.signOut();
 
-// دوال الزبون
 function startCustomer() {
     unsub.push(db.collection('bookings').where('userId', '==', currentUser.uid).onSnapshot(s => {
         const active = s.docs.map(x => ({ id: x.id, ...x.data() })).find(x => ['new', 'confirmed'].includes(x.status));
@@ -207,7 +201,6 @@ function statusAr(s) {
     })[s] || s;
 }
 
-// دوال المدير
 function startAdmin() {
     unsub.push(db.collection('bookings').orderBy('createdAt', 'desc').onSnapshot(s => {
         const docs = s.docs.map(d => ({ id: d.id, ...d.data() })); 
@@ -384,6 +377,6 @@ function renderRevenue(items) {
     
     if ($('revDay')) $('revDay').textContent = d.toLocaleString('fr-DZ') + ' دج';
     if ($('revMonth')) $('revMonth').textContent = m.toLocaleString('fr-DZ') + ' دج';
-    if ($('revYear')) $('revYear').textContent -> $('revYear').textContent = y.toLocaleString('fr-DZ') + ' دج';
+    if ($('revYear')) $('revYear').textContent = y.toLocaleString('fr-DZ') + ' دج';
 }
 })();
