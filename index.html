@@ -54,10 +54,9 @@ input,select{display:block;width:100%;background:var(--bg);border:1px solid var(
 .stat{padding:16px;background:var(--panel);border:1px solid var(--line);border-radius:8px;text-align:center}
 .stat small{display:block;color:var(--muted);font-size:11px}.stat b{display:block;color:var(--gold);font-size:20px;margin-top:6px}
 
-/* قسم إدارة الكراسي الثلاثة للمدير */
-.chairs-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:15px;margin-bottom:20px}
-.chair-box{background:var(--bg);border:1px solid var(--line);padding:15px;border-radius:8px;text-align:center}
-.chair-box h4{color:var(--gold);margin:0 0 8px}
+.chairs-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:15px;margin-bottom:15px}
+.chair-box{background:var(--bg);border:1px solid var(--line);padding:12px;border-radius:8px;text-align:center}
+.chair-box h4{color:var(--gold);margin:0 0 6px;font-size:13px}
 
 .admin-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
 .green-btn{background:#176c42;color:white}.red-btn{background:#9d3030;color:white}
@@ -126,7 +125,7 @@ footer b{color:var(--gold)}
 <section class="section split" id="bookingSection">
   <div class="booking-copy">
     <h2>موعدك القادم<br><em>يبدأ من هنا</em></h2>
-    <p>اختر خدمتك المفضلة، حدد التاريخ والوقت المناسب، وسجل معلوماتك ليتم إرسال حجزك إلى واتساب المحل وإضافتك للطابور تلقائياً.</p>
+    <p>اختر خدمتك المفضلة، حدد الكرسي المناسب، التاريخ والوقت، وسجل معلوماتك ليتم إرسال حجزك إلى واتساب المحل.</p>
   </div>
   <div class="panel" id="bookingPanel">
     <h3>احجز موعدك</h3>
@@ -135,6 +134,12 @@ footer b{color:var(--gold)}
       <input id="clientName" placeholder="أدخل اسمك الكريم" required>
       <label>رقم الهاتف</label>
       <input id="clientPhone" type="tel" placeholder="06XXXXXXXX" required>
+      
+      <label>اختر الكرسي / الحلاق</label>
+      <select id="chairSelect">
+        <!-- يتم تحديث الخيارات تلقائياً من إعدادات المدير -->
+      </select>
+
       <label>الخدمة المطلوبة</label>
       <select id="serviceSelect">
         <option value="ديكرادي" data-price="300">ديكرادي (300 دج)</option>
@@ -184,19 +189,19 @@ footer b{color:var(--gold)}
   
   <!-- إدارة الكراسي الثلاثة وتسمية الحلاقين -->
   <div class="panel" style="margin-bottom: 25px;">
-    <h3>🪑 إدارة الكراسي الثلاثة وأسماء الحلاقين (تظهر لك فقط)</h3>
+    <h3>🪑 تخصيص أسماء الكراسي (تظهر للزبائن في نموذج الحجز)</h3>
     <div class="chairs-grid">
       <div class="chair-box">
-        <h4>الكرسي الأول</h4>
-        <input id="chair1Name" placeholder="اسم الحلاق 1" onchange="saveChairName(1)">
+        <h4>الكرسي 1</h4>
+        <input id="chair1Name" placeholder="اسم الحلاق 1" oninput="updateChairNames()">
       </div>
       <div class="chair-box">
-        <h4>الكرسي الثاني</h4>
-        <input id="chair2Name" placeholder="اسم الحلاق 2" onchange="saveChairName(2)">
+        <h4>الكرسي 2</h4>
+        <input id="chair2Name" placeholder="اسم الحلاق 2" oninput="updateChairNames()">
       </div>
       <div class="chair-box">
-        <h4>الكرسي الثالث</h4>
-        <input id="chair3Name" placeholder="اسم الحلاق 3" onchange="saveChairName(3)">
+        <h4>الكرسي 3</h4>
+        <input id="chair3Name" placeholder="اسم الحلاق 3" oninput="updateChairNames()">
       </div>
     </div>
   </div>
@@ -217,7 +222,6 @@ footer b{color:var(--gold)}
     <div class="stat"><small>إيرادات السنة</small><b id="revYear">0 دج</b></div>
   </div>
 
-  <!-- التقارير والإحصائيات المبسطة -->
   <div class="panel" style="margin-top: 20px;">
     <h3>📊 تقارير إحصائية سريعة</h3>
     <p id="statsReportText" style="color:var(--muted); font-size:14px; line-height:1.6;">جاري تحليل البيانات...</p>
@@ -270,7 +274,7 @@ footer b{color:var(--gold)}
   const ADMIN_UID = "Mgx6RTN03sWDkU9SnWpjCRe7zs63";
   const WHATSAPP_NUMBER = "213782242293";
 
-  // نظام تبديل الثيم ليلي / نهاري
+  // إدارة الثيم (ليلي/نهاري)
   function toggleTheme() {
     const html = document.documentElement;
     const currentTheme = html.getAttribute('data-theme');
@@ -278,29 +282,52 @@ footer b{color:var(--gold)}
     html.setAttribute('data-theme', newTheme);
     localStorage.setItem('mh_theme', newTheme);
   }
-  const savedTheme = localStorage.getItem('mh_theme') || 'dark';
-  document.documentElement.setAttribute('data-theme', savedTheme);
+  document.documentElement.setAttribute('data-theme', localStorage.getItem('mh_theme') || 'dark');
 
-  // حفظ أسماء الكراسي الثلاثة في لوحة التحكم
-  function loadChairs() {
-    document.getElementById('chair1Name').value = localStorage.getItem('mh_chair_1') || 'الحلاق 1';
-    document.getElementById('chair2Name').value = localStorage.getItem('mh_chair_2') || 'الحلاق 2';
-    document.getElementById('chair3Name').value = localStorage.getItem('mh_chair_3') || 'الحلاق 3';
-  }
-  function saveChairName(num) {
-    const val = document.getElementById(`chair2Name`.replace('2', num)).value;
-    localStorage.setItem(`mh_chair_${num}`, val);
-  }
-  loadChairs();
+  // إدارة أسماء الكراسي والحلاقين
+  function loadChairsToSelect() {
+    const c1 = localStorage.getItem('mh_chair_1') || 'كرسي 1 (محمد)';
+    const c2 = localStorage.getItem('mh_chair_2') || 'كرسي 2 (أمين)';
+    const c3 = localStorage.getItem('mh_chair_3') || 'كرسي 3 (عماد)';
 
-  // تشغيل صوت تنبيه خفيف للمدير عند وجود حجز جديد
+    document.getElementById('chair1Name').value = c1;
+    document.getElementById('chair2Name').value = c2;
+    document.getElementById('chair3Name').value = c3;
+
+    const select = document.getElementById('chairSelect');
+    select.innerHTML = `
+      <option value="${c1}">${c1}</option>
+      <option value="${c2}">${c2}</option>
+      <option value="${c3}">${c3}</option>
+    `;
+  }
+
+  function updateChairNames() {
+    const c1 = document.getElementById('chair1Name').value || 'كرسي 1';
+    const c2 = document.getElementById('chair2Name').value || 'كرسي 2';
+    const c3 = document.getElementById('chair3Name').value || 'كرسي 3';
+
+    localStorage.setItem('mh_chair_1', c1);
+    localStorage.setItem('mh_chair_2', c2);
+    localStorage.setItem('mh_chair_3', c3);
+
+    const select = document.getElementById('chairSelect');
+    select.innerHTML = `
+      <option value="${c1}">${c1}</option>
+      <option value="${c2}">${c2}</option>
+      <option value="${c3}">${c3}</option>
+    `;
+  }
+
+  loadChairsToSelect();
+
   function playAlertSound() {
     try {
       const ctx = new (window.AudioContext || window.webkitAudioContext)();
       const osc = ctx.createOscillator();
       const gain = ctx.createGain();
       osc.type = 'sine';
-      osc.frequency.setValueAtTime(587.33, ctx.currentTime); // نغمة راقية
+      osc.frequency.setValueAtTime(587.33, ctx.currentTime);
       gain.gain.setValueAtTime(0.1, ctx.currentTime);
       osc.connect(gain);
       gain.connect(ctx.destination);
@@ -323,9 +350,8 @@ footer b{color:var(--gold)}
   db.collection('bookings').where('inQueue', '==', true).onSnapshot(snapshot => {
     document.getElementById('queueCount').textContent = snapshot.size;
 
-    // تنبيه بصري وصوتي للمدير عند دخول حجز جديد
     if (lastBookingCount !== null && snapshot.size > lastBookingCount) {
-      playAlertStatusNotice();
+      playAlertSound();
     }
     lastBookingCount = snapshot.size;
 
@@ -348,7 +374,7 @@ footer b{color:var(--gold)}
     const currNameEl = document.getElementById('publicCurrentName');
     const currTimerEl = document.getElementById('publicCurrentTimer');
     if (currentClient) {
-      currNameEl.textContent = `${currentClient.clientName} (${currentClient.service})`;
+      currNameEl.textContent = `${currentClient.clientName} (${currentClient.service}) — [${currentClient.chair || 'كرسي عام'}]`;
       if (currentClient.startTime) {
         const startSec = currentClient.startTime.toMillis();
         const diffMin = Math.floor((Date.now() - startSec) / 60000);
@@ -361,19 +387,11 @@ footer b{color:var(--gold)}
 
     const nextNameEl = document.getElementById('publicNextName');
     if (nextClient) {
-      nextNameEl.textContent = `${nextClient.clientName} — الموعد: ${nextClient.time}`;
+      nextNameEl.textContent = `${nextClient.clientName} — الموعد: ${nextClient.time} (${nextClient.chair || ''})`;
     } else {
       nextNameEl.textContent = 'لا يوجد شخص في الانتظار حالياً';
     }
   });
-
-  function playAlertStatusNotice() {
-    playAlertSound();
-    if (auth.currentUser) {
-      document.title = "🔔 حجز جديد وارد!";
-      setTimeout(() => document.title = "M.H BARBER — Premium", 4000);
-    }
-  }
 
   async function adminLogin() {
     const email = document.getElementById('adminEmail').value;
@@ -410,6 +428,7 @@ footer b{color:var(--gold)}
     e.preventDefault();
     const name = document.getElementById('clientName').value;
     const phone = document.getElementById('clientPhone').value;
+    const chair = document.getElementById('chairSelect').value;
     const selectEl = document.getElementById('serviceSelect');
     const service = selectEl.value;
     const price = parseInt(selectEl.selectedOptions[0].dataset.price) || 300;
@@ -433,6 +452,7 @@ footer b{color:var(--gold)}
       await db.collection('bookings').add({
         clientName: name,
         clientPhone: phone,
+        chair: chair,
         service: service,
         price: price,
         date: date,
@@ -443,11 +463,12 @@ footer b{color:var(--gold)}
         createdAt: firebase.firestore.FieldValue.serverTimestamp()
       });
 
-      feedback.textContent = 'تم تسجيل حجزك وإضافتك للطابور بنجاح! جاري تحويلك إلى واتساب...';
+      feedback.textContent = 'تم تسجيل حجزك بنجاح! جاري تحويلك إلى واتساب...';
 
       const text = `السلام عليكم، لدي حجز جديد في M.H Barber:%0A` +
                    `👤 الاسم: ${encodeURIComponent(name)}%0A` +
                    `📞 الهاتف: ${encodeURIComponent(phone)}%0A` +
+                   `🪑 الكرسي / الحلاق: ${encodeURIComponent(chair)}%0A` +
                    `✂️ الخدمة: ${encodeURIComponent(service)} (${price} دج)%0A` +
                    `📅 التاريخ: ${encodeURIComponent(date)}%0A` +
                    `⏰ الوقت: ${encodeURIComponent(time)}`;
@@ -481,7 +502,6 @@ footer b{color:var(--gold)}
     } catch(e) { alert(e.message); }
   }
 
-  // إنهاء الحلاقة وتجهيز رابط تقييم الزبون عبر واتساب
   async function finishService(id, phone, name, price) {
     try {
       await db.collection('bookings').doc(id).update({
@@ -491,27 +511,23 @@ footer b{color:var(--gold)}
         endTime: firebase.firestore.FieldValue.serverTimestamp()
       });
 
-      // إرسال رسالة واتساب للزبون للتقييم والشكر
       if (phone && phone.length > 5 && phone !== 'طابور مباشر') {
-        const reviewText = `مرحباً بك ${name}، شكراً لزيارتك M.H Barber! نأمل أن تكون قد استمتعت بخدمتنا. يرجى تقييم تجربتك معنا من 1 إلى 5 نجوم ⭐`;
+        const reviewText = `مرحباً بك ${name}، شكراً لزيارتك M.H Barber! يرجى تقييم تجربتك معنا من 1 إلى 5 نجوم ⭐`;
         window.open(`https://wa.me/${phone}?text=${encodeURIComponent(reviewText)}`, '_blank');
       }
 
-      alert('تم إنهاء الحلاقة وإضافة الإيراد فوراً وإرسال رابط التقييم للزبون!');
+      alert('تم إنهاء الحلاقة بنجاح وإرسال رابط التقييم للزبون!');
     } catch(e) { alert(e.message); }
   }
 
   async function deleteBooking(id) {
-    if (confirm('هل أنت متأكد من حذف هذا الحجز نهائياً من القائمة؟')) {
+    if (confirm('هل أنت متأكد من حذف هذا الحجز نهائياً؟')) {
       try {
         await db.collection('bookings').doc(id).delete();
-      } catch(e) {
-        alert('خطأ أثناء الحذف: ' + e.message);
-      }
+      } catch(e) { alert(e.message); }
     }
   }
 
-  // تحميل وإعداد لوحة تحكم المدير والإحصائيات
   function loadAdminData() {
     db.collection('bookings').orderBy('createdAt', 'desc').onSnapshot(snapshot => {
       const root = document.getElementById('adminBookings');
@@ -531,15 +547,11 @@ footer b{color:var(--gold)}
         const b = docSnap.data();
         const id = docSnap.id;
 
-        // إحصائيات الخدمات الأكثر طلباً
-        if (b.service) {
-          serviceCounts[b.service] = (serviceCounts[b.service] || 0) + 1;
-        }
+        if (b.service) serviceCounts[b.service] = (serviceCounts[b.service] || 0) + 1;
 
         if (b.status === 'منتهي') {
           const revAmount = Number(b.revenue || b.price || 300);
           const bDate = b.date || '';
-
           if (bDate === activeTodayStr) dayRev += revAmount;
           if (bDate.startsWith(activeMonthStr)) monthRev += revAmount;
           if (bDate.startsWith(activeYearStr)) yearRev += revAmount;
@@ -557,7 +569,7 @@ footer b{color:var(--gold)}
         }
 
         div.innerHTML = `
-          <span><b>${b.clientName}</b> (${b.clientPhone}) | ${b.service} (${b.price || 300} دج)<br>📅 ${b.date} | ⏰ ${b.time} | <span style="color:var(--gold)">الحالة: ${b.status}</span> <br><small>${timePassed}</small></span>
+          <span><b>${b.clientName}</b> (${b.clientPhone}) | <span style="color:var(--gold)">${b.chair || 'بدون كرسي'}</span> | ${b.service} (${b.price || 300} دج)<br>📅 ${b.date} | ⏰ ${b.time} | الحالة: ${b.status} <br><small>${timePassed}</small></span>
           <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
             ${b.status === 'قيد الانتظار' ? `<button class="green-btn" onclick="startService('${id}')">بدء الحلاقة</button>` : ''}
             ${b.status === 'جاري الحلاقة' ? `<button class="red-btn" onclick="finishService('${id}', '${b.clientPhone}', '${b.clientName}', ${b.price || 300})">إنهاء الحلاقة ✓</button>` : ''}
@@ -568,23 +580,18 @@ footer b{color:var(--gold)}
         root.appendChild(div);
       });
 
-      // عرض الإيرادات
       document.getElementById('revDay').textContent = dayRev + ' دج';
       document.getElementById('revMonth').textContent = monthRev + ' دج';
       document.getElementById('revYear').textContent = yearRev + ' دج';
 
-      // تحليل الخدمة الأكثر طلباً لعرضها في قسم التقارير الإحصائية
-      let topService = "لا توجد بيانات كافية بعد";
+      let topService = "لا توجد بيانات كافية";
       let maxCount = 0;
       for (let [srv, count] of Object.entries(serviceCounts)) {
-        if (count > maxCount) {
-          maxCount = count;
-          topService = srv;
-        }
+        if (count > maxCount) { maxCount = count; topService = srv; }
       }
       document.getElementById('statsReportText').innerHTML = `
-        🏆 <b>الخدمة الأكثر طلباً في المحل:</b> <span style="color:var(--gold);">${topService}</span> (بواقع ${maxCount} حجز).<br>
-        📈 <b>إجمالي عدد الحجوزات المسجلة:</b> ${snapshot.size} حجز.
+        🏆 <b>الخدمة الأكثر طلباً:</b> <span style="color:var(--gold);">${topService}</span> (${maxCount} حجز).<br>
+        📈 <b>إجمالي الحجوزات:</b> ${snapshot.size} حجز.
       `;
     });
   }
