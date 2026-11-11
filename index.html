@@ -135,7 +135,7 @@ footer b{color:var(--gold)}
       <label>رقم الهاتف</label>
       <input id="clientPhone" type="tel" placeholder="06XXXXXXXX" required>
       
-      <label>اختر الحلاق</label>
+      <label>اختر الحلاق / الكرسي</label>
       <select id="chairSelect">
         <!-- يتم تعبئتها ديناميكياً بالأسماء المؤكدة فقط -->
       </select>
@@ -286,31 +286,33 @@ footer b{color:var(--gold)}
   }
   document.documentElement.setAttribute('data-theme', localStorage.getItem('mh_theme') || 'dark');
 
-  // تعبئة وإظهار الأسماء المؤكدة فقط للزبائن
+  // جلب وتحديث خيارات الكراسي للعامة بناءً على ما حفظه المدير
   function loadChairsToSelect() {
     const c1 = localStorage.getItem('mh_chair_1') || '';
     const c2 = localStorage.getItem('mh_chair_2') || '';
     const c3 = localStorage.getItem('mh_chair_3') || '';
 
+    // عرض الأسماء في حقول لوحة التحكم للمدير
     document.getElementById('chair1Name').value = c1;
     document.getElementById('chair2Name').value = c2;
     document.getElementById('chair3Name').value = c3;
 
+    // تصفية وعرض الأسماء المؤكدة فقط في قائمة الزبائن
     const select = document.getElementById('chairSelect');
     select.innerHTML = '';
 
     let optionsHTML = '';
-    if (c1.trim() !== '') optionsHTML += `<option value="${c1.trim()}">${c1.trim()}</option>`;
-    if (c2.trim() !== '') optionsHTML += `<option value="${c2.trim()}">${c2.trim()}</option>`;
-    if (c3.trim() !== '') optionsHTML += `<option value="${c3.trim()}">${c3.trim()}</option>`;
+    if (c1 && c1.trim() !== '') optionsHTML += `<option value="${c1.trim()}">${c1.trim()}</option>`;
+    if (c2 && c2.trim() !== '') optionsHTML += `<option value="${c2.trim()}">${c2.trim()}</option>`;
+    if (c3 && c3.trim() !== '') optionsHTML += `<option value="${c3.trim()}">${c3.trim()}</option>`;
 
     if (optionsHTML === '') {
-      optionsHTML = `<option value="حلاق عام">حلاق عام</option>`;
+      optionsHTML = `<option value="اختر الحلاق أو الكرسي">اختر الحلاق أو الكرسي</option>`;
     }
     select.innerHTML = optionsHTML;
   }
 
-  // عند الضغط على زر التأكيد والحفظ
+  // عند الضغط على زر تأكيد وحفظ الأسماء
   function saveAndConfirmChairs() {
     const c1 = document.getElementById('chair1Name').value;
     const c2 = document.getElementById('chair2Name').value;
@@ -321,7 +323,7 @@ footer b{color:var(--gold)}
     localStorage.setItem('mh_chair_3', c3);
 
     loadChairsToSelect();
-    document.getElementById('chairFeedback').textContent = '✅ تم تأكيد وحفظ أسماء الكراسي بنجاح وتحديثها للزبائن!';
+    document.getElementById('chairFeedback').textContent = '✅ تمت الإفادة وتحديث أسماء الكراسي للزبائن بنجاح!';
     setTimeout(() => document.getElementById('chairFeedback').textContent = '', 3000);
   }
 
