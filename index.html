@@ -119,21 +119,23 @@
     <button class="modal-close" id="closeModal" onclick="document.getElementById('loginModal').classList.add('hidden')">×</button>
     <h2>الدخول إلى الحساب</h2>
     
-    <!-- قسم دخول الزبون (بدون الحاجة لـ SMS مدفوع، دخول مجهول فوري وآمن) -->
+    <!-- قسم دخول الزبون -->
     <div id="customerAuth">
       <p>دخول الزبائن السريع (بدون تسجيل معقد)</p>
-      <button id="customerLogin" class="gold-btn full">دخول كزبون وفتح الحجز</button>
+      <!-- ربط زر الزبون بدوال تسجيل الدخول المباشر أو إغلاق النافذة -->
+      <button id="customerLogin" class="gold-btn full" onclick="if(window.auth){ auth.signInAnonymously().then(() => { document.getElementById('loginModal').classList.add('hidden'); alert('تم تسجيل الدخول بنجاح كزبون!'); }).catch(e => alert(e.message)); } else { alert('Firebase غير متصل'); }">دخول كزبون وفتح الحجز</button>
     </div>
 
-    <!-- قسم دخول المدير -->
+    <!-- قسم دخول المدير (مخفي افتراضياً) -->
     <div id="adminAuth" class="hidden">
       <p>دخول صاحب المحل</p>
       <input id="adminEmail" type="email" placeholder="البريد الإلكتروني">
       <input id="adminPassword" type="password" placeholder="كلمة المرور">
-      <button id="adminLogin" class="gold-btn full">دخول الإدارة</button>
+      <button id="adminLogin" class="gold-btn full" onclick="if(window.auth){ auth.signInWithEmailAndPassword(document.getElementById('adminEmail').value, document.getElementById('adminPassword').value).then(() => { document.getElementById('loginModal').classList.add('hidden'); }).catch(e => alert('خطأ في بيانات المدير: ' + e.message)); }">دخول الإدارة</button>
     </div>
 
-    <button id="switchAdmin" class="text-btn">دخول صاحب المحل</button>
+    <!-- زر التبديل بين الزبون والمدير -->
+    <button id="switchAdmin" class="text-btn" onclick="document.getElementById('customerAuth').classList.toggle('hidden'); document.getElementById('adminAuth').classList.toggle('hidden'); this.textContent = document.getElementById('adminAuth').classList.contains('hidden') ? 'دخول صاحب المحل' : 'العودة لدخول الزبائن';">دخول صاحب المحل</button>
     <p class="feedback" id="authFeedback"></p>
   </div>
 </div>
