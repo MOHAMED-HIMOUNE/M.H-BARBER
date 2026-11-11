@@ -1,48 +1,56 @@
 (() => {
 const $ = id => document.getElementById(id);
+
+// تفعيل أزرار الواجهة العامة فوراً بغض النظر عن حالة الفايربيس
+if ($('accountOpen')) {
+    $('accountOpen').onclick = () => {
+        const modal = $('loginModal');
+        if (modal) modal.classList.remove('hidden');
+    };
+}
+
+if ($('closeModal')) {
+    $('closeModal').onclick = () => {
+        const modal = $('loginModal');
+        if (modal) modal.classList.add('hidden');
+    };
+}
+
+if ($('switchAdmin')) {
+    $('switchAdmin').onclick = () => { 
+        $('customerAuth').classList.toggle('hidden'); 
+        $('adminAuth').classList.toggle('hidden'); 
+        $('switchAdmin').textContent = $('adminAuth').classList.contains('hidden') ? 'دخول صاحب المحل' : 'العودة لدخول الزبائن'; 
+    };
+}
+
+document.querySelectorAll('.service').forEach(btn => btn.addEventListener('click', () => {
+    document.querySelectorAll('.service').forEach(x => x.classList.remove('selected')); 
+    btn.classList.add('selected'); 
+    if ($('serviceSelect')) $('serviceSelect').value = btn.dataset.service;
+}));
+
+// التحقق من جاهزية Firebase للعمليات السحابية
 const ready = !!window.auth && !!window.db;
 let currentUser = null, isAdmin = false;
 let unsub = [], publicUnsub = [];
 
-const ADMIN_UID = "sRzxHot4wdPZPIV5qX5jHrVaddE2"; // الـ UID الخاص بك كمدير
-const feedback = (id, msg) => { $(id).textContent = msg || ''; };
+const ADMIN_UID = "sRzxHot4wdPZPIV5qX5jHrVaddE2"; 
+const feedback = (id, msg) => { if($(id)) $(id).textContent = msg || ''; };
 const stopListeners = () => { unsub.forEach(fn => fn && fn()); unsub = []; };
 
-// ضبط التاريخ الأدنى للحجز ليكون اليوم
 const localDate = new Date(Date.now() - new Date().getTimezoneOffset()*60000).toISOString().slice(0,10);
 if ($('bookingDate')) $('bookingDate').min = localDate;
 
-// أحداث واجهة المستخدم العامة
-if ($('accountOpen')) $('accountOpen').onclick = () => $('loginModal').classList.remove('hidden');
-if ($('closeModal')) $('closeModal').onclick = () => $('loginModal'].classList.add('hidden');
-if ($('switchAdmin')) $('switchAdmin').onclick = () => { 
-    $('customerAuth').classList.toggle('hidden'); 
-    $('adminAuth').classList.toggle('hidden'); 
-    $('switchAdmin').textContent = $('adminAuth').classList.contains('hidden') ? 'دخول صاحب المحل' : 'العودة لدخول الزبائن'; 
-};
-
-document.querySelectorAll('.service').forEach(btn => btn.addEventListener('click', () => {
- document.querySelectorAll('.service').forEach(x => x.classList.remove('selected')); 
- btn.classList.add('selected'); 
- if ($('serviceSelect')) $('serviceSelect').value = btn.dataset.service;
-}));
-
 if (!ready) {
- $('shopState').textContent = 'يرجى إكمال إعداد Firebase'; 
- $('shopDot').classList.add('off');
- if ($('bookingForm')) $('bookingForm').onsubmit = e => { e.preventDefault(); feedback('bookingFeedback','التطبيق يحتاج ربط Firebase أولاً.'); };
- if ($('joinQueue')) $('joinQueue').onclick = () => feedback('queueFeedback','التطبيق يحتاج ربط Firebase أولاً.');
- return;
+    if ($('shopState')) $('shopState').textContent = 'يرجى إكمال إعداد Firebase'; 
+    if ($('shopDot')) $('shopDot').classList.add('off');
+    if ($('bookingForm')) $('bookingForm').onsubmit = e => { e.preventDefault(); feedback('bookingFeedback','التطبيق يحتاج ربط Firebase أولاً.'); };
+    if ($('joinQueue')) $('joinQueue').onclick = () => feedback('queueFeedback','التطبيق يحتاج ربط Firebase أولاً.');
+    return;
 }
 
 const { auth, db } = window;
-
-// الاستماع للحالة العامة للمحل والطابور
-const listenPublic = () => {
- publicUnsub.forEach(fn => fn()); 
- publicUnsub = [];
- 
- publicUnsub.push(db.doc('public/shop').onSnapshot(s => {
   const d = s.exists ? s.data() : { open: false }; 
   $('shopState').textContent = d.open ? 'المحل مفتوح الآن' : 'المحل مغلق الآن'; 
   $('shopDot').classList.toggle('off', !d.open); 
