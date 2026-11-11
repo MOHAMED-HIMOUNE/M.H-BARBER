@@ -13,7 +13,6 @@
 body{margin:0;background:var(--bg);color:#f7f4ed;font-family:Cairo,Arial,sans-serif;overflow-x:hidden}
 button,input,select{font:inherit}button,a{cursor:pointer}a{color:inherit;text-decoration:none}
 
-/* الشريط العلوي */
 .topbar{height:82px;padding:0 5%;display:flex;align-items:center;justify-content:space-between;background:#11110ff2;border-bottom:1px solid #ffffff12;position:relative;z-index:4;flex-wrap:wrap}
 .brand{display:flex;align-items:center;gap:10px;font-size:18px;font-weight:900;letter-spacing:1px}
 .brand img{width:46px;height:46px;object-fit:cover;border-radius:50%;border:2px solid var(--gold)}
@@ -21,7 +20,6 @@ button,input,select{font:inherit}button,a{cursor:pointer}a{color:inherit;text-de
 nav{display:flex;gap:20px;font-size:13px;color:#d2cec5}nav a:hover{color:var(--gold)}
 .outline,.small-btn{background:transparent;border:1px solid var(--gold);color:var(--gold);padding:8px 14px;border-radius:4px;font-size:12px}
 
-/* الهيرو */
 .hero{min-height:600px;position:relative;display:flex;align-items:center;padding:50px 6%;overflow:hidden;background:url('background.jpg') center/cover no-repeat}
 .hero-shade{position:absolute;inset:0;background:linear-gradient(90deg,#0d0d0bf2 0%,#0d0d0bd9 45%,#0d0d0b60 100%),linear-gradient(0deg,#10100e 0%,transparent 35%)}
 .hero-content{position:relative;z-index:1;max-width:650px}
@@ -36,7 +34,6 @@ nav{display:flex;gap:20px;font-size:13px;color:#d2cec5}nav a:hover{color:var(--g
 .full{width:100%}.section{padding:60px 5%;max-width:1250px;margin:auto}.section-title{text-align:center;margin-bottom:30px}
 .section-title h2{font-size:28px;margin:8px 0}.section-title p{color:var(--muted);font-size:13px}
 
-/* عرض صورة الأسعار */
 .price-image-container{width:100%;max-width:1150px;margin:0 auto;border-radius:12px;overflow:hidden;border:2px solid var(--gold);box-shadow:0 15px 40px rgba(0,0,0,0.9);background:#000}
 .price-image-container img{width:100%;height:auto;display:block;object-fit:contain}
 
@@ -146,7 +143,7 @@ footer b{color:var(--gold)}
   </div>
 </section>
 
-<!-- قسم الطابور المباشر (مرئي للعامة مع عرض الزبون الحالي والوقت) -->
+<!-- قسم الطابور المباشر -->
 <section class="section queue-section" id="queue">
   <div class="section-title"><h2>الطابور المباشر</h2></div>
   <div class="queue-card">
@@ -238,7 +235,6 @@ footer b{color:var(--gold)}
     document.getElementById('shopDot').classList.toggle('off', !d.open);
   });
 
-  // تحديث بيانات الطابور العام (الزبون الحالي والزبون التالي) للعامة
   db.collection('bookings').where('inQueue', '==', true).onSnapshot(snapshot => {
     document.getElementById('queueCount').textContent = snapshot.size;
 
@@ -255,13 +251,11 @@ footer b{color:var(--gold)}
       }
     });
 
-    // ترتيب المنتظرين تصاعدياً حسب وقت الإنشاء
     waitingList.sort((a, b) => (a.createdAt?.toMillis() || 0) - (b.createdAt?.toMillis() || 0));
     if (waitingList.length > 0) {
       nextClient = waitingList[0];
     }
 
-    // عرض الزبون الحالي للعامة
     const currNameEl = document.getElementById('publicCurrentName');
     const currTimerEl = document.getElementById('publicCurrentTimer');
     if (currentClient) {
@@ -276,7 +270,6 @@ footer b{color:var(--gold)}
       currTimerEl.textContent = '';
     }
 
-    // عرض الزبون التالي للعامة
     const nextNameEl = document.getElementById('publicNextName');
     if (nextClient) {
       nextNameEl.textContent = `${nextClient.clientName} — الموعد: ${nextClient.time}`;
@@ -391,41 +384,47 @@ footer b{color:var(--gold)}
     } catch(e) { alert(e.message); }
   }
 
+  // إنهاء الحلاقة وتحديث حالة الحجز وتسجيل السعر مباشرة داخل مستند الحجز
   async function finishService(id, price) {
     try {
       await db.collection('bookings').doc(id).update({
         status: 'منتهي',
         inQueue: false,
+        revenue: price || 300,
         endTime: firebase.firestore.FieldValue.serverTimestamp()
       });
 
-      const todayStr = new Date().toISOString().slice(0,10);
-      const statRef = db.doc(`stats/${todayStr}`);
-      const doc = await statRef.get();
-      let currentRev = doc.exists ? (doc.data().revenue || 0) : 0;
-      await statRef.set({ revenue: currentRev + (price || 300) }, { merge: true });
-
-      alert('تم إنهاء الحلاقة وإضافة السعر لإيرادات اليوم بنجاح! وانتقل الدور للشخص التالي تلقائياً.');
+      alert('تم إنهاء الحلاقة بنجاح وإضافة الإيراد فوراً!');
     } catch(e) { alert(e.message); }
   }
 
+  // حساب إيرادات اليوم والشهر والسنة تلقائياً من الحجوزات المكتملة
   function loadAdminData() {
-    const todayStr = new Date().toISOString().slice(0,10);
-    db.doc(`stats/${todayStr}`).onSnapshot(doc => {
-      const rev = doc.exists ? (doc.data().revenue || 0) : 0;
-      document.getElementById('revDay').textContent = rev + ' دج';
-      document.getElementById('revMonth').textContent = rev + ' دج';
-      document.getElementById('revYear').textContent = rev + ' دج';
-    });
-
     db.collection('bookings').orderBy('createdAt', 'desc').onSnapshot(snapshot => {
       const root = document.getElementById('adminBookings');
       root.innerHTML = '';
       if(snapshot.empty) { root.textContent = 'لا توجد حجوزات حالياً.'; return; }
       
+      let dayRev = 0;
+      let monthRev = 0;
+      let yearRev = 0;
+
+      const todayStr = new Date().toISOString().slice(0,10); // YYYY-MM-DD
+      const currentMonth = todayStr.slice(0,7); // YYYY-MM
+      const currentYear = todayStr.slice(0,4); // YYYY
+
       snapshot.forEach(docSnap => {
         const b = docSnap.data();
         const id = docSnap.id;
+
+        // حساب الإيرادات إذا كان الحجز منتهياً
+        if (b.status === 'منتهي' && b.revenue) {
+          const bDate = b.date || ''; // تاريخ الحجز
+          if (bDate === todayStr) dayRev += Number(b.revenue);
+          if (bDate.startsWith(currentMonth)) monthRev += Number(b.revenue);
+          if (bDate.startsWith(currentYear)) yearRev += Number(b.revenue);
+        }
+
         const div = document.createElement('div');
         div.className = 'booking-row';
 
@@ -438,15 +437,20 @@ footer b{color:var(--gold)}
         }
 
         div.innerHTML = `
-          <span><b>${b.clientName}</b> (${b.clientPhone}) | ${b.service} (${b.price || 300} دج)<br>📅 ${b.date} | ⏰ ${b.time} | <span style="color:var(--gold)">الحالة: ${b.status}</span> <br><small>${timePassed}</small></span>
+          <span><b>${b.clientName}</b> (${b.clientPhone}) | ${b.service} (${b.price || b.revenue || 300} دج)<br>📅 ${b.date} | ⏰ ${b.time} | <span style="color:var(--gold)">الحالة: ${b.status}</span> <br><small>${timePassed}</small></span>
           <div>
             ${b.status === 'قيد الانتظار' ? `<button class="green-btn" onclick="startService('${id}')">بدء الحلاقة</button>` : ''}
             ${b.status === 'جاري الحلاقة' ? `<button class="red-btn" onclick="finishService('${id}', ${b.price || 300})">إنهاء الحلاقة ✓</button>` : ''}
-            ${b.status === 'منتهي' ? `<span style="color:#28d27c; font-weight:bold;">مكتمل</span>` : ''}
+            ${b.status === 'منتهي' ? `<span style="color:#28d27c; font-weight:bold;">مكتمل (${b.price || 300} دج)</span>` : ''}
           </div>
         `;
         root.appendChild(div);
       });
+
+      // عرض المبالغ المحسوبة في واجهة الإدارة
+      document.getElementById('revDay').textContent = dayRev + ' دج';
+      document.getElementById('revMonth').textContent = monthRev + ' دج';
+      document.getElementById('revYear').textContent = yearRev + ' دج';
     });
   }
 </script>
