@@ -10,7 +10,7 @@
 <header class="topbar">
   <a class="brand" href="#home"><img src="logo.png" alt="شعار M.H Barber" onerror="this.style.visibility='hidden'"><span>M.H <b>BARBER</b></span></a>
   <nav><a href="#services">الخدمات</a><a href="#booking">الحجز</a><a href="#queue">الطابور</a></nav>
-  <button class="outline small-btn" id="accountOpen">حسابي / دخول</button>
+  <button class="outline small-btn" id="accountOpen" onclick="document.getElementById('loginModal').classList.remove('hidden')">حسابي / دخول</button>
 </header>
 
 <main>
@@ -116,7 +116,7 @@
 <!-- نافذة تسجيل الدخول المحدثة -->
 <div class="modal hidden" id="loginModal">
   <div class="modal-box">
-    <button class="modal-close" id="closeModal">×</button>
+    <button class="modal-close" id="closeModal" onclick="document.getElementById('loginModal').classList.add('hidden')">×</button>
     <h2>الدخول إلى الحساب</h2>
     
     <!-- قسم دخول الزبون (بدون الحاجة لـ SMS مدفوع، دخول مجهول فوري وآمن) -->
