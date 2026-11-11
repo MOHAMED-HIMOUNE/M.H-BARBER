@@ -137,7 +137,7 @@ footer b{color:var(--gold)}
       
       <label>اختر الحلاق / الكرسي</label>
       <select id="chairSelect">
-        <!-- يتم تعبئتها ديناميكياً بالأسماء المؤكدة فقط -->
+        <option value="">جاري تحميل الحلاقين المتاحين...</option>
       </select>
 
       <label>الخدمة المطلوبة</label>
@@ -187,9 +187,9 @@ footer b{color:var(--gold)}
 <section class="section admin-area hidden" id="adminPanel">
   <div class="section-title"><h2>لوحة الإدارة المحترفة</h2></div>
   
-  <!-- تخصيص أسماء الكراسي مع زر تأكيد -->
+  <!-- تخصيص أسماء الكراسي عبر سحابيات Firebase -->
   <div class="panel" style="margin-bottom: 25px;">
-    <h3>🪑 تخصيص أسماء الكراسي (التي تظهر للزبائن)</h3>
+    <h3>🪑 تخصيص أسماء الكراسي (تظهر للزبائن سحابياً)</h3>
     <div class="chairs-grid">
       <div class="chair-box">
         <h4>الكرسي 1</h4>
@@ -286,48 +286,44 @@ footer b{color:var(--gold)}
   }
   document.documentElement.setAttribute('data-theme', localStorage.getItem('mh_theme') || 'dark');
 
-  // جلب وتحديث خيارات الكراسي للعامة بناءً على ما حفظه المدير
-  function loadChairsToSelect() {
-    const c1 = localStorage.getItem('mh_chair_1') || '';
-    const c2 = localStorage.getItem('mh_chair_2') || '';
-    const c3 = localStorage.getItem('mh_chair_3') || '';
+  // الاستماع المباشر لأسماء الكراسي من قاعدة البيانات لتظهر للجميع لحظياً
+  db.doc('public/chairs').onSnapshot(doc => {
+    const data = doc.exists ? doc.data() : { c1: '', c2: '', c3: '' };
+    
+    // تعبئة حقول لوحة المدير
+    document.getElementById('chair1Name').value = data.c1 || '';
+    document.getElementById('chair2Name').value = data.c2 || '';
+    document.getElementById('chair3Name').value = data.c3 || '';
 
-    // عرض الأسماء في حقول لوحة التحكم للمدير
-    document.getElementById('chair1Name').value = c1;
-    document.getElementById('chair2Name').value = c2;
-    document.getElementById('chair3Name').value = c3;
-
-    // تصفية وعرض الأسماء المؤكدة فقط في قائمة الزبائن
+    // تعبئة قائمة الاختيار للزبائن (إظهار الأسماء المؤكدة فقط)
     const select = document.getElementById('chairSelect');
     select.innerHTML = '';
 
     let optionsHTML = '';
-    if (c1 && c1.trim() !== '') optionsHTML += `<option value="${c1.trim()}">${c1.trim()}</option>`;
-    if (c2 && c2.trim() !== '') optionsHTML += `<option value="${c2.trim()}">${c2.trim()}</option>`;
-    if (c3 && c3.trim() !== '') optionsHTML += `<option value="${c3.trim()}">${c3.trim()}</option>`;
+    if (data.c1 && data.c1.trim() !== '') optionsHTML += `<option value="${data.c1.trim()}">${data.c1.trim()}</option>`;
+    if (data.c2 && data.c2.trim() !== '') optionsHTML += `<option value="${data.c2.trim()}">${data.c2.trim()}</option>`;
+    if (data.c3 && data.c3.trim() !== '') optionsHTML += `<option value="${data.c3.trim()}">${data.c3.trim()}</option>`;
 
     if (optionsHTML === '') {
       optionsHTML = `<option value="اختر الحلاق أو الكرسي">اختر الحلاق أو الكرسي</option>`;
     }
     select.innerHTML = optionsHTML;
-  }
+  });
 
-  // عند الضغط على زر تأكيد وحفظ الأسماء
-  function saveAndConfirmChairs() {
+  // حفظ وحفظ الكراسي في السحابة لترى للجميع
+  async function saveAndConfirmChairs() {
     const c1 = document.getElementById('chair1Name').value;
     const c2 = document.getElementById('chair2Name').value;
     const c3 = document.getElementById('chair3Name').value;
 
-    localStorage.setItem('mh_chair_1', c1);
-    localStorage.setItem('mh_chair_2', c2);
-    localStorage.setItem('mh_chair_3', c3);
-
-    loadChairsToSelect();
-    document.getElementById('chairFeedback').textContent = '✅ تمت الإفادة وتحديث أسماء الكراسي للزبائن بنجاح!';
-    setTimeout(() => document.getElementById('chairFeedback').textContent = '', 3000);
+    try {
+      await db.doc('public/chairs').set({ c1: c1, c2: c2, c3: c3 });
+      document.getElementById('chairFeedback').textContent = '✅ تم حفظ وتأكيد الأسماء سحابياً وتحديثها للجميع فوراً!';
+      setTimeout(() => document.getElementById('chairFeedback').textContent = '', 3000);
+    } catch(e) {
+      alert('خطأ في الحفظ: ' + e.message);
+    }
   }
-
-  loadChairsToSelect();
 
   function playAlertSound() {
     try {
