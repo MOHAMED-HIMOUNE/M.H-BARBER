@@ -32,13 +32,11 @@ nav{display:flex;gap:28px;font-size:13px;color:#d2cec5}nav a:hover{color:var(--g
 .full{width:100%}.section{padding:85px 7%;max-width:1250px;margin:auto}.section-title{text-align:center;margin-bottom:35px}
 .section-title h2{font-size:34px;margin:8px 0}.section-title p{color:var(--muted);font-size:13px}
 
-.pricing-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px}
-.price-card{background:linear-gradient(145deg,#22211d,#171613);border:1px solid var(--line);padding:24px;border-radius:8px;display:flex;justify-content:space-between;align-items:center}
-.price-card info b{display:block;font-size:17px;color:#fff;margin-bottom:4px}
-.price-card info small{color:var(--muted);font-size:12px}
-.price-tag{font-size:20px;font-weight:900;color:var(--gold);background:#11110f;padding:8px 14px;border-radius:6px;border:1px solid var(--line)}
+/* تنسيق عرض صورة لوحة الأسعار */
+.price-image-container{width:100%;max-width:1000px;margin:0 auto;border-radius:12px;overflow:hidden;border:2px solid var(--gold);box-shadow:0 10px 30px rgba(0,0,0,0.8);background:#1b1a17}
+.price-image-container img{width:100%;height:auto;display:block;object-fit:contain}
 
-.split{display:grid;grid-template-columns:1fr 1fr;gap:55px;align-items:center}
+.split{display:grid;grid-template-columns:1fr 1fr;gap:55px;align-items:center;margin-top:60px}
 .panel{background:var(--panel);border:1px solid var(--line);border-radius:9px;padding:25px}
 .panel h3{margin-top:0;color:var(--gold)}
 label{display:block;color:#c9c4b9;font-size:12px;margin:13px 0 5px}
@@ -84,50 +82,11 @@ footer b{color:var(--gold)}
   </div>
 </section>
 
-<!-- قسم الأسعار والخدمات -->
+<!-- قسم عرض صورة لوحة الأسعار بدل النصوص -->
 <section class="section" id="services">
-  <div class="section-title"><small>PRICING & SERVICES</small><h2>قائمة الخدمات والأسعار</h2><p>أسعار تنافسية تناسب كافة تطلعاتك</p></div>
-  <div class="pricing-grid">
-    <div class="price-card">
-      <info><b>ديكرادي (Dégradé)</b><small>حلاقة عصرية متدرجة</small></info>
-      <div class="price-tag">300 دج</div>
-    </div>
-    <div class="price-card">
-      <info><b>ديكرادي أطفال</b><small>أقل من 15 سنة</small></info>
-      <div class="price-tag">250 دج</div>
-    </div>
-    <div class="price-card">
-      <info><b>بروتين الشعر</b><small>حسب طول وطبيعة الشعر</small></info>
-      <div class="price-tag" style="font-size:14px; padding:12px;">حسب الكس</div>
-    </div>
-    <div class="price-card">
-      <info><b>Turkish / Tourist</b><small>خدمة سياحية/تركية متكاملة</small></info>
-      <div class="price-tag">300 دج</div>
-    </div>
-    <div class="price-card">
-      <info><b>Brushing + سشوار</b><small>تصفيف وتجفيف احترافي</small></info>
-      <div class="price-tag">150 دج</div>
-    </div>
-    <div class="price-card">
-      <info><b>تلسيج (Lissage)</b><small>فرد وتنعيم الشعر</small></info>
-      <div class="price-tag">100 دج</div>
-    </div>
-    <div class="price-card">
-      <info><b>ليساج لحية</b><small>تنعيم وتهذيب اللحية</small></info>
-      <div class="price-tag">150 دج</div>
-    </div>
-    <div class="price-card">
-      <info><b>Dégradé + Brushing + باربة</b><small>باقة العناية الكاملة</small></info>
-      <div class="price-tag">450 دج</div>
-    </div>
-    <div class="price-card">
-      <info><b>ماسق كابيلير (Masque)</b><small>جودة عالية للعناية بالشعر</small></info>
-      <div class="price-tag">200 دج</div>
-    </div>
-    <div class="price-card" style="border-color:var(--gold); background:linear-gradient(145deg,#2b271d,#1b1a17);">
-      <info><b style="color:var(--gold);">👑 PACK PREMIUM</b><small>بروتين + ديكرادي + باربة + ماسك</small></info>
-      <div class="price-tag" style="color:var(--gold2);">3000 دج</div>
-    </div>
+  <div class="section-title"><small>PRICING & SERVICES</small><h2>قائمة الخدمات والأسعار</h2><p>لوحة الأسعار الرسمية للصالون</p></div>
+  <div class="price-image-container">
+    <img src="prix.jpeg" alt="لوحة أسعار M.H Barber">
   </div>
 </section>
 
@@ -147,7 +106,7 @@ footer b{color:var(--gold)}
       <select id="serviceSelect">
         <option value="ديكرادي (300 دج)">ديكرادي (300 دج)</option>
         <option value="ديكرادي أطفال (250 دج)">ديكرادي أطفال (250 دج)</option>
-        <option value="بروتين الشعر">بروتين الشعر (حسب الكس)</option>
+        <option value="بروتين الشعر">بروتين الشعر</option>
         <option value="Turkish / Tourist (300 دج)">Turkish / Tourist (300 دج)</option>
         <option value="Brushing + سشوار (150 دج)">Brushing + سشوار (150 دج)</option>
         <option value="تلسيج (100 دج)">تلسيج (100 دج)</option>
@@ -236,13 +195,10 @@ footer b{color:var(--gold)}
   const auth = firebase.auth();
   const db = firebase.firestore();
   const ADMIN_UID = "Mgx6RTN03sWDkU9SnWpjCRe7zs63";
-
-  // رقم الواتساب الخاص بك المحدث تلقائياً
   const WHATSAPP_NUMBER = "213782242293";
 
   document.getElementById('bookingDate').min = new Date().toISOString().slice(0,10);
 
-  // الاستماع المباشر لحالة المحل
   db.doc('public/shop').onSnapshot(doc => {
     const d = doc.exists ? doc.data() : { open: false };
     document.getElementById('shopState').textContent = d.open ? 'المحل مفتوح الآن' : 'المحل مغلق حالياً';
@@ -253,7 +209,6 @@ footer b{color:var(--gold)}
     document.getElementById('queueCount').textContent = doc.exists ? (doc.data().waitingCount || 0) : 0;
   });
 
-  // تسجيل دخول المدير
   async function adminLogin() {
     const email = document.getElementById('adminEmail').value;
     const pass = document.getElementById('adminPassword').value;
@@ -268,7 +223,6 @@ footer b{color:var(--gold)}
     }
   }
 
-  // مراقبة الجلسة والتحكم بالواجهة
   auth.onAuthStateChanged(user => {
     if (user && user.uid === ADMIN_UID) {
       document.getElementById('adminPanel').classList.remove('hidden');
@@ -282,7 +236,6 @@ footer b{color:var(--gold)}
     }
   });
 
-  // حجز زبون جديد مباشر + إرسال عبر واتساب
   async function submitBooking(e) {
     e.preventDefault();
     const name = document.getElementById('clientName').value;
@@ -293,7 +246,6 @@ footer b{color:var(--gold)}
     const feedback = document.getElementById('bookingFeedback');
 
     try {
-      // 1. حفظ الحجز في قاعدة بيانات Firebase
       await db.collection('bookings').add({
         clientName: name,
         clientPhone: phone,
@@ -306,7 +258,6 @@ footer b{color:var(--gold)}
 
       feedback.textContent = 'تم تسجيل حجزك بنجاح! جاري تحويلك إلى واتساب...';
 
-      // 2. تجهيز رسالة واتساب المباشرة لرقمك
       const text = `السلام عليكم، لدي حجز جديد في M.H Barber:%0A` +
                    `👤 الاسم: ${encodeURIComponent(name)}%0A` +
                    `📞 الهاتف: ${encodeURIComponent(phone)}%0A` +
@@ -314,7 +265,6 @@ footer b{color:var(--gold)}
                    `📅 التاريخ: ${encodeURIComponent(date)}%0A` +
                    `⏰ الوقت: ${encodeURIComponent(time)}`;
 
-      // فتح رابط واتساب فوراً
       setTimeout(() => {
         window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${text}`, '_blank');
         document.getElementById('bookingForm').reset();
@@ -326,7 +276,6 @@ footer b{color:var(--gold)}
     }
   }
 
-  // فتح وإغلاق المحل
   async function updateShop(open) {
     try {
       await db.doc('public/shop').set({ open: open }, { merge: true });
@@ -336,7 +285,6 @@ footer b{color:var(--gold)}
     }
   }
 
-  // تحميل حجوزات الإدارة
   function loadAdminData() {
     db.collection('bookings').orderBy('createdAt', 'desc').onSnapshot(snapshot => {
       const root = document.getElementById('adminBookings');
