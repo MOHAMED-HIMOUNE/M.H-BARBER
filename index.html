@@ -14,27 +14,31 @@ body{margin:0;background:var(--bg);color:#f7f4ed;font-family:Cairo,Arial,sans-se
 button,input,select{font:inherit}button,a{cursor:pointer}a{color:inherit;text-decoration:none}
 .topbar{height:82px;padding:0 6%;display:flex;align-items:center;justify-content:space-between;background:#11110ff2;border-bottom:1px solid #ffffff12;position:relative;z-index:4}
 .brand{display:flex;align-items:center;gap:12px;font-size:19px;font-weight:900;letter-spacing:2px}
-.brand img{width:45px;height:45px;object-fit:cover;border-radius:50%;border:1px solid var(--gold)}
+.brand img{width:52px;height:52px;object-fit:cover;border-radius:50%;border:2px solid var(--gold)}
 .brand b{color:var(--gold)}
 nav{display:flex;gap:28px;font-size:13px;color:#d2cec5}nav a:hover{color:var(--gold)}
 .outline,.small-btn{background:transparent;border:1px solid var(--gold);color:var(--gold);padding:10px 18px;border-radius:3px}
-.hero{min-height:680px;position:relative;display:flex;align-items:center;padding:70px 9%;overflow:hidden;background:url('https://images.unsplash.com/photo-1503951914875-452162b0f3f1?auto=format&fit=crop&w=1920&q=80') center/cover no-repeat}
-.hero-shade{position:absolute;inset:0;background:linear-gradient(90deg,#0d0d0bf2 0%,#0d0d0bd9 44%,#0d0d0b50 100%),linear-gradient(0deg,#10100e 0%,transparent 35%)}
+.hero{min-height:680px;position:relative;display:flex;align-items:center;padding:70px 9%;overflow:hidden;background:url('background.jpg') center/cover no-repeat}
+.hero-shade{position:absolute;inset:0;background:linear-gradient(90deg,#0d0d0bf2 0%,#0d0d0bd9 45%,#0d0d0b60 100%),linear-gradient(0deg,#10100e 0%,transparent 35%)}
 .hero-content{position:relative;z-index:1;max-width:650px}
 .eyebrow{color:var(--gold);letter-spacing:4px;font-size:11px;font-weight:800}
 .live-status{display:inline-flex;align-items:center;gap:10px;margin:24px 0 18px;padding:9px 15px;border:1px solid #ffffff35;background:#1119;border-radius:30px;font-size:12px}
-.live-status i{width:9px;height:9px;border-radius:50%;background:#28d27c;box-shadow:0 0 12px #28d27c}
+.live-status i{width:10px;height:10px;border-radius:50%;background:#28d27c;box-shadow:0 0 12px #28d27c}
 .live-status i.off{background:#e34a4a;box-shadow:0 0 12px #e34a4a}
 .hero h1{font-size:clamp(60px,9vw,108px);line-height:.98;margin:10px 0;font-weight:900}
 .hero em{font-style:normal;color:var(--gold)}
 .hero-content p{max-width:480px;color:#d0ccc4;line-height:2;font-size:15px;margin:25px 0 30px}
-.gold-btn,.green-btn,.red-btn{display:inline-flex;align-items:center;justify-content:center;gap:12px;border:0;border-radius:3px;padding:13px 23px;background:linear-gradient(115deg,#a77d38,#f0d493);color:#17130b;font-weight:900}
+.gold-btn,.green-btn,.red-btn{display:inline-flex;align-items:center;justify-content:center;gap:12px;border:0;border-radius:3px;padding:13px 23px;background:linear-gradient(115deg,#a77d38,#f0d493);color:#17130b;font-weight:900;transition:0.2s}
 .full{width:100%}.section{padding:85px 7%;max-width:1250px;margin:auto}.section-title{text-align:center;margin-bottom:35px}
 .section-title h2{font-size:34px;margin:8px 0}.section-title p{color:var(--muted);font-size:13px}
-.services{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
-.service{background:linear-gradient(145deg,#22211d,#171613);border:1px solid var(--line);color:white;padding:26px 14px;display:flex;flex-direction:column;gap:8px;align-items:center;border-radius:7px}
-.service span{font-size:32px;color:var(--gold)}.service b{font-size:15px}.service small{color:var(--muted)}
-.service.selected,.service:hover{border-color:var(--gold);transform:translateY(-3px)}
+
+/* جدول الأسعار الجديد */
+.pricing-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px}
+.price-card{background:linear-gradient(145deg,#22211d,#171613);border:1px solid var(--line);padding:24px;border-radius:8px;display:flex;justify-content:space-between;align-items:center}
+.price-card info b{display:block;font-size:17px;color:#fff;margin-bottom:4px}
+.price-card info small{color:var(--muted);font-size:12px}
+.price-tag{font-size:20px;font-weight:900;color:var(--gold);background:#11110f;padding:8px 14px;border-radius:6px;border:1px solid var(--line)}
+
 .split{display:grid;grid-template-columns:1fr 1fr;gap:55px;align-items:center}
 .panel{background:var(--panel);border:1px solid var(--line);border-radius:9px;padding:25px}
 .panel h3{margin-top:0;color:var(--gold)}
@@ -56,17 +60,17 @@ footer b{color:var(--gold)}
 .modal-box{position:relative;width:min(440px,100%);background:#1b1a17;border:1px solid var(--gold);padding:30px;border-radius:9px}
 .modal-box h2{color:var(--gold);margin-top:0}
 .modal-close{position:absolute;left:14px;top:8px;background:none;border:0;color:white;font-size:27px}
-.text-btn{background:none;color:var(--gold);border:0;margin-top:16px;text-decoration:underline}
 </style>
 </head>
 <body>
 <header class="topbar">
   <a class="brand" href="#home">
-    <img src="https://images.unsplash.com/photo-1621605815971-fbc98d665033?auto=format&fit=crop&w=200&q=80" alt="M.H Logo">
+    <img src="logo.png" alt="M.H Logo">
     <span>M.H <b>BARBER</b></span>
   </a>
-  <nav><a href="#services">الخدمات</a><a href="#booking">الحجز</a><a href="#queue">الطابور</a></nav>
-  <button class="outline small-btn" onclick="document.getElementById('loginModal').classList.remove('hidden')">حسابي / دخول</button>
+  <nav><a href="#services">الخدمات والأسعار</a><a href="#booking">حجز موعد</a><a href="#queue">الطابور</a></nav>
+  <button class="outline small-btn" id="adminLoginBtn" onclick="document.getElementById('loginModal').classList.remove('hidden')">دخول المدير</button>
+  <button class="outline small-btn hidden" id="logoutBtn" onclick="auth.signOut()">تسجيل الخروج</button>
 </header>
 
 <main>
@@ -74,38 +78,90 @@ footer b{color:var(--gold)}
   <div class="hero-shade"></div>
   <div class="hero-content">
     <div class="eyebrow">THE ART OF GROOMING</div>
-    <div class="live-status"><i id="shopDot"></i><b id="shopState">جاري الاتصال بقاعدة البيانات...</b></div>
+    <div class="live-status"><i id="shopDot"></i><b id="shopState">جاري التحقق من حالة المحل...</b></div>
     <h1>M.H<br><em>BARBER</em></h1>
     <p>أناقتك تبدأ من التفاصيل. احجز موعدك واستمتع بتجربة حلاقة راقية.</p>
     <a class="gold-btn" href="#booking">احجز موعدك الآن <span>←</span></a>
   </div>
 </section>
 
+<!-- قسم قائمة الأسعار والخدمات المأخوذة من اللوحة -->
 <section class="section" id="services">
-  <div class="section-title"><small>OUR SERVICES</small><h2>خدماتنا</h2></div>
-  <div class="services">
-    <button class="service selected" data-service="حلاقة الشعر" onclick="selectService(this)"><span>✂</span><b>حلاقة الشعر</b></button>
-    <button class="service" data-service="الشعر واللحية" onclick="selectService(this)"><span>◈</span><b>الشعر واللحية</b></button>
-    <button class="service" data-service="تهذيب اللحية" onclick="selectService(this)"><span>⌁</span><b>تهذيب اللحية</b></button>
-    <button class="service" data-service="العناية بالوجه" onclick="selectService(this)"><span>✧</span><b>العناية بالوجه</b></button>
+  <div class="section-title"><small>PRICING & SERVICES</small><h2>قائمة الخدمات والأسعار</h2><p>أسعار تنافسية تناسب كافة تطلعاتك</p></div>
+  <div class="pricing-grid">
+    <div class="price-card">
+      <info><b>ديكرادي (Dégradé)</b><small>حلاقة عصرية متدرجة</small></info>
+      <div class="price-tag">300 دج</div>
+    </div>
+    <div class="price-card">
+      <info><b>ديكرادي أطفال</b><small>أقل من 15 سنة</small></info>
+      <div class="price-tag">250 دج</div>
+    </div>
+    <div class="price-card">
+      <info><b>بروتين الشعر</b><small>حسب طول وطبيعة الشعر</small></info>
+      <div class="price-tag" style="font-size:14px; padding:12px;">حسب الكس</div>
+    </div>
+    <div class="price-card">
+      <info><b>Turkish / Tourist</b><small>خدمة سياحية/تركية متكاملة</small></info>
+      <div class="price-tag">300 دج</div>
+    </div>
+    <div class="price-card">
+      <info><b>Brushing + سشوار</b><small>تصفيف وتجفيف احترافي</small></info>
+      <div class="price-tag">150 دج</div>
+    </div>
+    <div class="price-card">
+      <info><b>تلسيج (Lissage)</b><small>فرد وتنعيم الشعر</small></info>
+      <div class="price-tag">100 دج</div>
+    </div>
+    <div class="price-card">
+      <info><b>ليساج لحية</b><small>تنعيم وتهذيب اللحية</small></info>
+      <div class="price-tag">150 دج</div>
+    </div>
+    <div class="price-card">
+      <info><b>Dégradé + Brushing + باربة</b><small>باقة العناية الكاملة</small></info>
+      <div class="price-tag">450 دج</div>
+    </div>
+    <div class="price-card">
+      <info><b>ماسق كابيلير (Masque)</b><small>جودة عالية للعناية بالشعر</small></info>
+      <div class="price-tag">200 دج</div>
+    </div>
+    <div class="price-card" style="border-color:var(--gold); background:linear-gradient(145deg,#2b271d,#1b1a17);">
+      <info><b style="color:var(--gold);">👑 PACK PREMIUM</b><small>بروتين + ديكرادي + باربة + ماسك</small></info>
+      <div class="price-tag" style="color:var(--gold2);">3000 دج</div>
+    </div>
   </div>
 </section>
 
 <section class="section split" id="booking">
   <div class="booking-copy">
     <h2>موعدك القادم<br><em>يبدأ من هنا</em></h2>
-    <p>سجّل الدخول بنقرة واحدة، واختر الخدمة والوقت المناسب.</p>
+    <p>اختر خدمتك المفضلة، حدد التاريخ والوقت المناسب، وسجل معلوماتك لتأكيد الحجز فوراً.</p>
   </div>
   <div class="panel">
     <h3>احجز موعدك</h3>
     <form id="bookingForm" onsubmit="submitBooking(event)">
-      <label>الخدمة المختارة</label>
-      <input id="serviceSelect" value="حلاقة الشعر" readonly>
+      <label>الاسم الكامل</label>
+      <input id="clientName" placeholder="أدخل اسمك الكريم" required>
+      <label>رقم الهاتف</label>
+      <input id="clientPhone" type="tel" placeholder="06XXXXXXXX" required>
+      <label>الخدمة المطلوبة</label>
+      <select id="serviceSelect">
+        <option value="ديكرادي (300 دج)">ديكرادي (300 دج)</option>
+        <option value="ديكرادي أطفال (250 دج)">ديكرادي أطفال (250 دج)</option>
+        <option value="بروتين الشعر">بروتين الشعر (حسب الكس)</option>
+        <option value="Turkish / Tourist (300 دج)">Turkish / Tourist (300 دج)</option>
+        <option value="Brushing + سشوار (150 دج)">Brushing + سشوار (150 دج)</option>
+        <option value="تلسيج (100 دج)">تلسيج (100 دج)</option>
+        <option value="ليساج لحية (150 دج)">ليساج لحية (150 دج)</option>
+        <option value="Dégradé + Brushing + باربة (450 دج)">Dégradé + Brushing + باربة (450 دج)</option>
+        <option value="ماسق كابيلير (200 دج)">ماسق كابيلير (200 دج)</option>
+        <option value="PACK PREMIUM (3000 دج)">PACK PREMIUM (3000 دج)</option>
+      </select>
       <label>التاريخ</label>
       <input id="bookingDate" type="date" required>
       <label>الوقت</label>
       <input id="bookingTime" type="time" required>
-      <button class="gold-btn full" type="submit">إرسال طلب الحجز</button>
+      <button class="gold-btn full" type="submit" style="margin-top:15px;">تأكيد وإرسال الحجز</button>
     </form>
     <p class="feedback" id="bookingFeedback"></p>
   </div>
@@ -117,26 +173,18 @@ footer b{color:var(--gold)}
     <div class="queue-number" id="queueCount">0</div>
     <b>أشخاص في الانتظار</b>
     <p id="shopNotice">أهلاً بك في M.H Barber</p>
-    <button id="joinQueue" class="gold-btn" onclick="joinQueueBtn()">خذ رقم انتظار</button>
-    <p class="feedback" id="queueFeedback"></p>
-  </div>
-</section>
-
-<section class="section account-area hidden" id="accountPanel">
-  <div class="section-title"><h2>حسابي</h2></div>
-  <div class="panel">
-    <p id="signedInAs">متصل</p>
-    <div id="myStatus">لا يوجد لديك حجز نشط.</div>
-    <button id="logoutBtn" class="outline" onclick="window.auth.signOut()">تسجيل الخروج</button>
   </div>
 </section>
 
 <section class="section admin-area hidden" id="adminPanel">
-  <div class="section-title"><h2>لوحة الإدارة</h2></div>
+  <div class="section-title"><h2>لوحة الإدارة المحترفة</h2></div>
   <div class="panel">
     <div class="admin-head">
-      <h3>حالة المحل</h3>
-      <div><button class="green-btn" onclick="updateShop(true)">فتح المحل</button> <button class="red-btn" onclick="updateShop(false)">إغلاق المحل</button></div>
+      <h3>التحكم بحالة المحل</h3>
+      <div>
+        <button class="green-btn" onclick="updateShop(true)">فتح المحل</button>
+        <button class="red-btn" onclick="updateShop(false)">إغلاق المحل</button>
+      </div>
     </div>
   </div>
   <div class="stats">
@@ -144,31 +192,32 @@ footer b{color:var(--gold)}
     <div class="stat"><small>إيرادات الشهر</small><b id="revMonth">0 دج</b></div>
     <div class="stat"><small>إيرادات السنة</small><b id="revYear">0 دج</b></div>
   </div>
-  <div class="panel"><h3>الحجوزات</h3><div id="adminBookings">جاري التحميل...</div></div>
+  <div class="panel">
+    <h3>قائمة الحجوزات الواردة</h3>
+    <div id="adminBookings">جاري تحميل البيانات...</div>
+  </div>
 </section>
 </main>
 
 <footer><b>M.H BARBER</b><span>© 2026</span></footer>
 
-<!-- نافذة تسجيل الدخول -->
+<!-- نافذة دخول المدير فقط -->
 <div class="modal hidden" id="loginModal">
   <div class="modal-box">
     <button class="modal-close" onclick="document.getElementById('loginModal').classList.add('hidden')">×</button>
-    <h2>الدخول إلى الحساب</h2>
-    <div id="customerAuth">
-      <button class="gold-btn full" onclick="customerLogin()">دخول كزبون وفتح الحجز</button>
+    <h2>تسجيل دخول صاحب المحل</h2>
+    <div id="adminAuth">
+      <label>البريد الإلكتروني</label>
+      <input id="adminEmail" type="email" placeholder="admin@mh-barber.com">
+      <label>كلمة المرور</label>
+      <input id="adminPassword" type="password" placeholder="••••••••">
+      <button class="gold-btn full" onclick="adminLogin()" style="margin-top:18px;">تسجيل الدخول</button>
     </div>
-    <div id="adminAuth" class="hidden" style="margin-top:15px;">
-      <input id="adminEmail" type="email" placeholder="البريد الإلكتروني">
-      <input id="adminPassword" type="password" placeholder="كلمة المرور" style="margin-top:8px;">
-      <button class="gold-btn full" onclick="adminLogin()" style="margin-top:10px;">دخول الإدارة</button>
-    </div>
-    <button class="text-btn" onclick="document.getElementById('customerAuth').classList.toggle('hidden'); document.getElementById('adminAuth').classList.toggle('hidden');">تبديل وضع الدخول</button>
     <p class="feedback" id="authFeedback"></p>
   </div>
 </div>
 
-<!-- مكتبات Firebase -->
+<!-- Firebase Scripts -->
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
@@ -187,110 +236,101 @@ footer b{color:var(--gold)}
   firebase.initializeApp(firebaseConfig);
   const auth = firebase.auth();
   const db = firebase.firestore();
-  
-  // تم تحديث الـ UID الجديد الخاص بك هنا بنجاح:
   const ADMIN_UID = "Mgx6RTN03sWDkU9SnWpjCRe7zs63";
 
-  const localDate = new Date().toISOString().slice(0,10);
-  document.getElementById('bookingDate').min = localDate;
+  document.getElementById('bookingDate').min = new Date().toISOString().slice(0,10);
 
-  function selectService(btn) {
-    document.querySelectorAll('.service').forEach(x => x.classList.remove('selected'));
-    btn.classList.add('selected');
-    document.getElementById('serviceSelect').value = btn.dataset.service;
-  }
-
+  // الاستماع المباشر لحالة المحل
   db.doc('public/shop').onSnapshot(doc => {
     const d = doc.exists ? doc.data() : { open: false };
-    document.getElementById('shopState').textContent = d.open ? 'المحل مفتوح الآن' : 'المحل مغلق الآن';
+    document.getElementById('shopState').textContent = d.open ? 'المحل مفتوح الآن' : 'المحل مغلق حالياً';
     document.getElementById('shopDot').classList.toggle('off', !d.open);
-    document.getElementById('shopNotice').textContent = d.message || 'أهلاً بك في M.H Barber';
   });
 
   db.doc('public/stats').onSnapshot(doc => {
     document.getElementById('queueCount').textContent = doc.exists ? (doc.data().waitingCount || 0) : 0;
   });
 
-  async function customerLogin() {
-    try {
-      await auth.signInAnonymously();
-      document.getElementById('loginModal').classList.add('hidden');
-      alert('تم تسجيل الدخول بنجاح كزبون!');
-    } catch(e) { alert('خطأ في الاتصال: ' + e.message); }
-  }
-
+  // تسجيل دخول المدير
   async function adminLogin() {
+    const email = document.getElementById('adminEmail').value;
+    const pass = document.getElementById('adminPassword').value;
+    const feedback = document.getElementById('authFeedback');
+    feedback.textContent = 'جاري التثبت...';
     try {
-      const email = document.getElementById('adminEmail').value;
-      const pass = document.getElementById('adminPassword').value;
       await auth.signInWithEmailAndPassword(email, pass);
       document.getElementById('loginModal').classList.add('hidden');
-    } catch(e) { alert('خطأ في بيانات المدير: ' + e.message); }
+      feedback.textContent = '';
+    } catch(e) {
+      feedback.textContent = 'خطأ في الدخول: ' + e.message;
+    }
   }
 
+  // مراقبة الجلسة والتحكم بالواجهة
   auth.onAuthStateChanged(user => {
-    if (!user) {
-      document.getElementById('accountPanel').classList.add('hidden');
-      document.getElementById('adminPanel').classList.add('hidden');
-      return;
-    }
-    if (user.uid === ADMIN_UID) {
+    if (user && user.uid === ADMIN_UID) {
       document.getElementById('adminPanel').classList.remove('hidden');
+      document.getElementById('adminLoginBtn').classList.add('hidden');
+      document.getElementById('logoutBtn').classList.remove('hidden');
       loadAdminData();
     } else {
-      document.getElementById('accountPanel').classList.remove('hidden');
+      document.getElementById('adminPanel').classList.add('hidden');
+      document.getElementById('adminLoginBtn').classList.remove('hidden');
+      document.getElementById('logoutBtn').classList.add('hidden');
     }
   });
 
+  // حجز زبون جديد مباشر
   async function submitBooking(e) {
     e.preventDefault();
-    if (!auth.currentUser) return alert('يرجى تسجيل الدخول أولاً.');
+    const name = document.getElementById('clientName').value;
+    const phone = document.getElementById('clientPhone').value;
+    const service = document.getElementById('serviceSelect').value;
+    const date = document.getElementById('bookingDate').value;
+    const time = document.getElementById('bookingTime').value;
+    const feedback = document.getElementById('bookingFeedback');
+
     try {
       await db.collection('bookings').add({
-        userId: auth.currentUser.uid,
-        service: document.getElementById('serviceSelect').value,
-        date: document.getElementById('bookingDate').value,
-        time: document.getElementById('bookingTime').value,
-        status: 'new',
+        clientName: name,
+        clientPhone: phone,
+        service: service,
+        date: date,
+        time: time,
+        status: 'جديد',
         createdAt: firebase.firestore.FieldValue.serverTimestamp()
       });
-      document.getElementById('bookingFeedback').textContent = 'تم إرسال طلب الحجز بنجاح!';
-    } catch(e) { alert(e.message); }
+      feedback.textContent = 'تم إرسال حجزك بنجاح! ننتظرك في الموعد.';
+      document.getElementById('bookingForm').reset();
+    } catch(e) {
+      feedback.textContent = 'خطأ في إرسال الحجز: ' + e.message;
+    }
   }
 
-  async function joinQueueBtn() {
-    if (!auth.currentUser) return alert('سجّل الدخول أولاً.');
-    try {
-      await db.collection('queue').doc(auth.currentUser.uid).set({
-        userId: auth.currentUser.uid,
-        status: 'waiting',
-        createdAt: firebase.firestore.FieldValue.serverTimestamp()
-      }, {merge: true});
-      const statsRef = db.doc('public/stats');
-      const doc = await statsRef.get();
-      let count = doc.exists ? (doc.data().waitingCount || 0) : 0;
-      await statsRef.set({waitingCount: count + 1}, {merge: true});
-      alert('تم الانضمام للطابور بنجاح.');
-    } catch(e) { alert(e.message); }
-  }
-
+  // فتح وإغلاق المحل
   async function updateShop(open) {
     try {
-      await db.doc('public/shop').set({open}, {merge: true});
-      alert('تم تحديث حالة المحل!');
-    } catch(e) { alert(e.message); }
+      await db.doc('public/shop').set({ open: open }, { merge: true });
+      alert(open ? 'تم فتح المحل بنجاح!' : 'تم إغلاق المحل!');
+    } catch(e) {
+      alert('خطأ في التحديث: ' + e.message);
+    }
   }
 
+  // تحميل حجوزات الإدارة
   function loadAdminData() {
     db.collection('bookings').orderBy('createdAt', 'desc').onSnapshot(snapshot => {
       const root = document.getElementById('adminBookings');
       root.innerHTML = '';
-      if(snapshot.empty) { root.textContent = 'لا توجد حجوزات.'; return; }
+      if(snapshot.empty) { root.textContent = 'لا توجد حجوزات حالياً.'; return; }
       snapshot.forEach(doc => {
         const b = doc.data();
         const div = document.createElement('div');
         div.className = 'booking-row';
-        div.innerHTML = `<span>حجز: ${b.service} (${b.date} ${b.time}) - الحالة: ${b.status}</span>`;
+        div.innerHTML = `
+          <span><b>${b.clientName || 'زبون'}</b> (${b.clientPhone || 'بدون رقم'}) - ${b.service}</span>
+          <span>📅 ${b.date} | ⏰ ${b.time}</span>
+        `;
         root.appendChild(div);
       });
     });
