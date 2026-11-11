@@ -46,8 +46,12 @@ nav{display:flex;gap:20px;font-size:13px;color:#d2cec5}nav a:hover{color:var(--g
 label{display:block;color:#c9c4b9;font-size:12px;margin:12px 0 4px}
 input,select{display:block;width:100%;background:#11110f;border:1px solid #494338;color:#fff;padding:12px;border-radius:4px;outline:none;font-size:14px}
 .feedback{font-size:13px;color:var(--gold);margin-top:10px;font-weight:700;min-height:18px}
-.queue-card{max-width:480px;margin:auto;text-align:center;padding:28px 18px;background:linear-gradient(145deg,#24211a,#171613);border:1px solid var(--line);border-radius:10px}
+.queue-card{max-width:550px;margin:auto;text-align:center;padding:32px 20px;background:linear-gradient(145deg,#24211a,#171613);border:1px solid var(--line);border-radius:10px}
 .queue-number{font-size:55px;line-height:1.2;color:var(--gold);font-weight:900}
+.public-current-box{margin-top:20px;padding:15px;background:#171613;border:1px solid var(--gold);border-radius:8px;text-align:right}
+.public-current-box h4{color:var(--gold);margin:0 0 8px;font-size:16px}
+.public-current-box p{margin:4px 0;font-size:14px;color:#f7f4ed}
+
 .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:18px 0}
 .stat{padding:16px;background:#1d1b17;border:1px solid var(--line);border-radius:8px;text-align:center}
 .stat small{display:block;color:var(--muted);font-size:11px}.stat b{display:block;color:var(--gold);font-size:20px;margin-top:6px}
@@ -142,13 +146,23 @@ footer b{color:var(--gold)}
   </div>
 </section>
 
-<!-- قسم الطابور المباشر (يعرض عدد المنتظرين آلياً عبر الحجوزات) -->
+<!-- قسم الطابور المباشر (مرئي للعامة مع عرض الزبون الحالي والوقت) -->
 <section class="section queue-section" id="queue">
   <div class="section-title"><h2>الطابور المباشر</h2></div>
   <div class="queue-card">
     <div class="queue-number" id="queueCount">0</div>
     <b>أشخاص في الانتظار والطابور</b>
-    <p id="shopNotice" style="margin-top:10px; color:var(--muted);">يتم تحديث الطابور تلقائياً مع كل حجز جديد</p>
+    
+    <div class="public-current-box" id="publicCurrentBox">
+      <h4>⚡ الزبون الذي يتم حلاقته حالياً:</h4>
+      <p id="publicCurrentName">لا توجد حلاقة جارية حالياً (المقعد فارغ)</p>
+      <p id="publicCurrentTimer" style="color:var(--gold); font-weight:bold;"></p>
+    </div>
+
+    <div class="public-current-box" style="margin-top:12px; border-color:#39352c;">
+      <h4>👤 الشخص التالي في الدور:</h4>
+      <p id="publicNextName">لا يوجد شخص في الانتظار</p>
+    </div>
   </div>
 </section>
 
@@ -224,8 +238,51 @@ footer b{color:var(--gold)}
     document.getElementById('shopDot').classList.toggle('off', !d.open);
   });
 
+  // تحديث بيانات الطابور العام (الزبون الحالي والزبون التالي) للعامة
   db.collection('bookings').where('inQueue', '==', true).onSnapshot(snapshot => {
     document.getElementById('queueCount').textContent = snapshot.size;
+
+    let currentClient = null;
+    let nextClient = null;
+    let waitingList = [];
+
+    snapshot.forEach(doc => {
+      const data = doc.data();
+      if (data.status === 'جاري الحلاقة') {
+        currentClient = data;
+      } else if (data.status === 'قيد الانتظار') {
+        waitingList.push(data);
+      }
+    });
+
+    // ترتيب المنتظرين تصاعدياً حسب وقت الإنشاء
+    waitingList.sort((a, b) => (a.createdAt?.toMillis() || 0) - (b.createdAt?.toMillis() || 0));
+    if (waitingList.length > 0) {
+      nextClient = waitingList[0];
+    }
+
+    // عرض الزبون الحالي للعامة
+    const currNameEl = document.getElementById('publicCurrentName');
+    const currTimerEl = document.getElementById('publicCurrentTimer');
+    if (currentClient) {
+      currNameEl.textContent = `${currentClient.clientName} (${currentClient.service})`;
+      if (currentClient.startTime) {
+        const startSec = currentClient.startTime.toMillis();
+        const diffMin = Math.floor((Date.now() - startSec) / 60000);
+        currTimerEl.textContent = `⏱️ وقت الحلاقة المنقضي: ${diffMin} دقيقة`;
+      }
+    } else {
+      currNameEl.textContent = 'لا توجد حلاقة جارية حالياً (المقعد فارغ)';
+      currTimerEl.textContent = '';
+    }
+
+    // عرض الزبون التالي للعامة
+    const nextNameEl = document.getElementById('publicNextName');
+    if (nextClient) {
+      nextNameEl.textContent = `${nextClient.clientName} — الموعد: ${nextClient.time}`;
+    } else {
+      nextNameEl.textContent = 'لا يوجد شخص في الانتظار حالياً';
+    }
   });
 
   async function adminLogin() {
@@ -259,7 +316,6 @@ footer b{color:var(--gold)}
     }
   });
 
-  // حجز موعد جديد مع منع تكراره وإضافته أوتوماتيكياً للطابور
   async function submitBooking(e) {
     e.preventDefault();
     const name = document.getElementById('clientName').value;
@@ -349,7 +405,7 @@ footer b{color:var(--gold)}
       let currentRev = doc.exists ? (doc.data().revenue || 0) : 0;
       await statRef.set({ revenue: currentRev + (price || 300) }, { merge: true });
 
-      alert('تم إنهاء الحلاقة وإضافة السعر لإيرادات اليوم بنجاح!');
+      alert('تم إنهاء الحلاقة وإضافة السعر لإيرادات اليوم بنجاح! وانتقل الدور للشخص التالي تلقائياً.');
     } catch(e) { alert(e.message); }
   }
 
