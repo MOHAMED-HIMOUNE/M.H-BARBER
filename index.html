@@ -1,16 +1,69 @@
 <!doctype html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#10100e">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#10100e">
 <title>M.H BARBER — Premium</title>
-<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{--gold:#d5b16d;--gold2:#f2d99c;--bg:#10100e;--panel:#1b1a17;--muted:#aaa69d;--line:#39352c}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:#f7f4ed;font-family:Cairo,Arial,sans-serif}
+button,input,select{font:inherit}button,a{cursor:pointer}a{color:inherit;text-decoration:none}
+.topbar{height:82px;padding:0 6%;display:flex;align-items:center;justify-content:space-between;background:#11110ff2;border-bottom:1px solid #ffffff12;position:relative;z-index:4}
+.brand{display:flex;align-items:center;gap:12px;font-size:19px;font-weight:900;letter-spacing:2px}
+.brand img{width:58px;height:58px;object-fit:contain}.brand b{color:var(--gold)}
+nav{display:flex;gap:28px;font-size:13px;color:#d2cec5}nav a:hover{color:var(--gold)}
+.outline,.small-btn{background:transparent;border:1px solid var(--gold);color:var(--gold);padding:10px 18px;border-radius:3px}
+.hero{min-height:680px;position:relative;display:flex;align-items:center;padding:70px 9%;overflow:hidden;background:#171613}
+.hero-shade{position:absolute;inset:0;background:linear-gradient(90deg,#0d0d0bf2 0%,#0d0d0bd9 44%,#0d0d0b30 100%),linear-gradient(0deg,#10100e 0%,transparent 35%)}
+.hero-content{position:relative;z-index:1;max-width:650px}
+.eyebrow{color:var(--gold);letter-spacing:4px;font-size:11px;font-weight:800}
+.live-status{display:inline-flex;align-items:center;gap:10px;margin:24px 0 18px;padding:9px 15px;border:1px solid #ffffff35;background:#1119;border-radius:30px;font-size:12px}
+.live-status i{width:9px;height:9px;border-radius:50%;background:#28d27c;box-shadow:0 0 12px #28d27c}
+.live-status i.off{background:#e34a4a;box-shadow:0 0 12px #e34a4a}
+.hero h1{font-size:clamp(60px,9vw,108px);line-height:.98;margin:10px 0;font-weight:900}
+.hero em{font-style:normal;color:var(--gold)}
+.hero-content p{max-width:480px;color:#d0ccc4;line-height:2;font-size:15px;margin:25px 0 30px}
+.gold-btn,.green-btn,.red-btn{display:inline-flex;align-items:center;justify-content:center;gap:12px;border:0;border-radius:3px;padding:13px 23px;background:linear-gradient(115deg,#a77d38,#f0d493);color:#17130b;font-weight:900}
+.full{width:100%}.section{padding:85px 7%;max-width:1250px;margin:auto}.section-title{text-align:center;margin-bottom:35px}
+.section-title h2{font-size:34px;margin:8px 0}.section-title p{color:var(--muted);font-size:13px}
+.services{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.service{background:linear-gradient(145deg,#22211d,#171613);border:1px solid var(--line);color:white;padding:26px 14px;display:flex;flex-direction:column;gap:8px;align-items:center;border-radius:7px}
+.service span{font-size:32px;color:var(--gold)}.service b{font-size:15px}.service small{color:var(--muted)}
+.service.selected,.service:hover{border-color:var(--gold);transform:translateY(-3px)}
+.split{display:grid;grid-template-columns:1fr 1fr;gap:55px;align-items:center}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:9px;padding:25px}
+.panel h3{margin-top:0;color:var(--gold)}
+label{display:block;color:#c9c4b9;font-size:12px;margin:13px 0 5px}
+input,select{display:block;width:100%;background:#11110f;border:1px solid #494338;color:#fff;padding:12px;border-radius:4px;outline:none}
+.feedback{font-size:12px;color:var(--gold);min-height:18px}
+.queue-card{max-width:480px;margin:auto;text-align:center;padding:32px;background:linear-gradient(145deg,#24211a,#171613);border:1px solid var(--line);border-radius:10px}
+.queue-number{font-size:65px;line-height:1.3;color:var(--gold);font-weight:900}
+.about{text-align:center;background:#171613;border-block:1px solid #ffffff10}.about p{max-width:620px;margin:12px auto;line-height:2}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:18px 0}
+.stat{padding:20px;background:#1d1b17;border:1px solid var(--line);border-radius:8px}
+.stat small{display:block;color:var(--muted)}.stat b{display:block;color:var(--gold);font-size:25px;margin-top:8px}
+.admin-head{display:flex;align-items:center;justify-content:space-between;gap:15px;flex-wrap:wrap}
+.green-btn{background:#176c42;color:white}.red-btn{background:#9d3030;color:white}
+.booking-row{padding:14px 0;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.hidden{display:none!important}
+footer{padding:30px 7%;display:flex;justify-content:space-between;color:#8d887d;font-size:12px;border-top:1px solid #ffffff12}
+footer b{color:var(--gold)}
+.modal{position:fixed;inset:0;z-index:20;background:#000c;display:grid;place-items:center;padding:20px}
+.modal-box{position:relative;width:min(440px,100%);background:#1b1a17;border:1px solid var(--gold);padding:30px;border-radius:9px}
+.modal-box h2{color:var(--gold);margin-top:0}
+.modal-close{position:absolute;left:14px;top:8px;background:none;border:0;color:white;font-size:27px}
+.text-btn{background:none;color:var(--gold);border:0;margin-top:16px;text-decoration:underline}
+</style>
 </head>
 <body>
 <header class="topbar">
-  <a class="brand" href="#home"><img src="logo.png" alt="شعار M.H Barber" onerror="this.style.visibility='hidden'"><span>M.H <b>BARBER</b></span></a>
+  <a class="brand" href="#home"><span>M.H <b>BARBER</b></span></a>
   <nav><a href="#services">الخدمات</a><a href="#booking">الحجز</a><a href="#queue">الطابور</a></nav>
-  <button class="outline small-btn" id="accountOpen" onclick="document.getElementById('loginModal').classList.remove('hidden')">حسابي / دخول</button>
+  <button class="outline small-btn" onclick="document.getElementById('loginModal').classList.remove('hidden')">حسابي / دخول</button>
 </header>
 
 <main>
@@ -18,41 +71,33 @@
   <div class="hero-shade"></div>
   <div class="hero-content">
     <div class="eyebrow">THE ART OF GROOMING</div>
-    <div class="live-status"><i id="shopDot"></i><b id="shopState">جارٍ تحميل حالة المحل...</b></div>
+    <div class="live-status"><i id="shopDot"></i><b id="shopState">جاري الاتصال بقاعدة البيانات...</b></div>
     <h1>M.H<br><em>BARBER</em></h1>
     <p>أناقتك تبدأ من التفاصيل. احجز موعدك واستمتع بتجربة حلاقة راقية.</p>
     <a class="gold-btn" href="#booking">احجز موعدك الآن <span>←</span></a>
   </div>
-  <div class="hero-mark">M.H <span>BARBER</span></div>
 </section>
 
 <section class="section" id="services">
-  <div class="section-title"><small>OUR SERVICES</small><h2>خدماتنا</h2><p>اختر الخدمة المناسبة لك</p></div>
+  <div class="section-title"><small>OUR SERVICES</small><h2>خدماتنا</h2></div>
   <div class="services">
-    <button class="service selected" data-service="حلاقة الشعر"><span>✂</span><b>حلاقة الشعر</b><small>قص وتصفيف</small></button>
-    <button class="service" data-service="الشعر واللحية"><span>◈</span><b>الشعر واللحية</b><small>إطلالة متكاملة</small></button>
-    <button class="service" data-service="تهذيب اللحية"><span>⌁</span><b>تهذيب اللحية</b><small>أناقة ودقة</small></button>
-    <button class="service" data-service="العناية بالوجه"><span>✧</span><b>العناية بالوجه</b><small>عناية وانتعاش</small></button>
+    <button class="service selected" data-service="حلاقة الشعر" onclick="selectService(this)"><span>✂</span><b>حلاقة الشعر</b></button>
+    <button class="service" data-service="الشعر واللحية" onclick="selectService(this)"><span>◈</span><b>الشعر واللحية</b></button>
+    <button class="service" data-service="تهذيب اللحية" onclick="selectService(this)"><span>⌁</span><b>تهذيب اللحية</b></button>
+    <button class="service" data-service="العناية بالوجه" onclick="selectService(this)"><span>✧</span><b>العناية بالوجه</b></button>
   </div>
 </section>
 
 <section class="section split" id="booking">
   <div class="booking-copy">
-    <small>BOOK YOUR EXPERIENCE</small>
     <h2>موعدك القادم<br><em>يبدأ من هنا</em></h2>
-    <p>سجّل الدخول بنقرة واحدة، واختار الخدمة والوقت المناسب. يمكنك امتلاك حجز نشط واحد فقط في كل مرة.</p>
-    <div class="note">الحجز لا يصبح مؤكداً إلا بعد موافقة المحل.</div>
+    <p>سجّل الدخول بنقرة واحدة، واختر الخدمة والوقت المناسب.</p>
   </div>
   <div class="panel">
     <h3>احجز موعدك</h3>
-    <form id="bookingForm">
-      <label>الخدمة</label>
-      <select id="serviceSelect">
-        <option>حلاقة الشعر</option>
-        <option>الشعر واللحية</option>
-        <option>تهذيب اللحية</option>
-        <option>العناية بالوجه</option>
-      </select>
+    <form id="bookingForm" onsubmit="submitBooking(event)">
+      <label>الخدمة المختارة</label>
+      <input id="serviceSelect" value="حلاقة الشعر" readonly>
       <label>التاريخ</label>
       <input id="bookingDate" type="date" required>
       <label>الوقت</label>
@@ -64,89 +109,193 @@
 </section>
 
 <section class="section queue-section" id="queue">
-  <div class="section-title"><small>LIVE WAITING LINE</small><h2>الطابور المباشر</h2><p>عدد الأشخاص الموجودين فعلياً في الانتظار</p></div>
+  <div class="section-title"><h2>الطابور المباشر</h2></div>
   <div class="queue-card">
-    <div class="queue-icon">♙</div>
-    <div class="queue-number" id="queueCount">—</div>
-    <b>أشخاص في الطابور</b>
-    <p id="shopNotice">يتم تحديث العدد مباشرة</p>
-    <button id="joinQueue" class="gold-btn">خذ رقم انتظار</button>
+    <div class="queue-number" id="queueCount">0</div>
+    <b>أشخاص في الانتظار</b>
+    <p id="shopNotice">أهلاً بك في M.H Barber</p>
+    <button id="joinQueue" class="gold-btn" onclick="joinQueueBtn()">خذ رقم انتظار</button>
     <p class="feedback" id="queueFeedback"></p>
   </div>
 </section>
 
-<section class="section about">
-  <small>ABOUT M.H BARBER</small>
-  <h2>الأناقة في التفاصيل</h2>
-  <p>تجربة حلاقة تجمع بين الدقة والراحة والاهتمام بك.</p>
-</section>
-
 <section class="section account-area hidden" id="accountPanel">
-  <div class="section-title"><small>MY ACCOUNT</small><h2>حسابي</h2></div>
+  <div class="section-title"><h2>حسابي</h2></div>
   <div class="panel">
-    <p id="signedInAs"></p>
-    <div id="myStatus"></div>
-    <button id="logoutBtn" class="outline">تسجيل الخروج</button>
+    <p id="signedInAs">متصل</p>
+    <div id="myStatus">لا يوجد لديك حجز نشط.</div>
+    <button id="logoutBtn" class="outline" onclick="window.auth.signOut()">تسجيل الخروج</button>
   </div>
 </section>
 
 <section class="section admin-area hidden" id="adminPanel">
-  <div class="section-title"><small>PRIVATE OWNER AREA</small><h2>لوحة الإدارة</h2><p>هذه اللوحة تظهر لحساب الإدارة المصرّح به فقط.</p></div>
+  <div class="section-title"><h2>لوحة الإدارة</h2></div>
   <div class="panel">
     <div class="admin-head">
       <h3>حالة المحل</h3>
-      <div><button id="openShop" class="green-btn">فتح المحل</button> <button id="closeShop" class="red-btn">إغلاق المحل</button></div>
+      <div><button class="green-btn" onclick="updateShop(true)">فتح المحل</button> <button class="red-btn" onclick="updateShop(false)">إغلاق المحل</button></div>
     </div>
-    <label>رسالة للزبائن</label>
-    <input id="shopMessage" placeholder="مثال: نعود غداً الساعة 09:00">
-    <button id="saveMessage" class="outline">حفظ الرسالة</button>
   </div>
   <div class="stats">
     <div class="stat"><small>إيرادات اليوم</small><b id="revDay">0 دج</b></div>
     <div class="stat"><small>إيرادات الشهر</small><b id="revMonth">0 دج</b></div>
     <div class="stat"><small>إيرادات السنة</small><b id="revYear">0 دج</b></div>
   </div>
-  <div class="panel"><h3>الحجوزات</h3><div id="adminBookings">جارٍ التحميل...</div></div>
-  <div class="panel"><h3>الطابور</h3><div id="adminQueue">جارٍ التحميل...</div></div>
+  <div class="panel"><h3>الحجوزات</h3><div id="adminBookings">جاري التحميل...</div></div>
 </section>
 </main>
 
-<footer><b>M.H BARBER</b><span>© 2026 — PREMIUM EXPERIENCE</span></footer>
+<footer><b>M.H BARBER</b><span>© 2026</span></footer>
 
-<!-- نافذة تسجيل الدخول المحدثة -->
+<!-- نافذة تسجيل الدخول -->
 <div class="modal hidden" id="loginModal">
   <div class="modal-box">
-    <button class="modal-close" id="closeModal" onclick="document.getElementById('loginModal').classList.add('hidden')">×</button>
+    <button class="modal-close" onclick="document.getElementById('loginModal').classList.add('hidden')">×</button>
     <h2>الدخول إلى الحساب</h2>
-    
-    <!-- قسم دخول الزبون -->
     <div id="customerAuth">
-      <p>دخول الزبائن السريع (بدون تسجيل معقد)</p>
-      <!-- ربط زر الزبون بدوال تسجيل الدخول المباشر أو إغلاق النافذة -->
-      <button id="customerLogin" class="gold-btn full" onclick="if(window.auth){ auth.signInAnonymously().then(() => { document.getElementById('loginModal').classList.add('hidden'); alert('تم تسجيل الدخول بنجاح كزبون!'); }).catch(e => alert(e.message)); } else { alert('Firebase غير متصل'); }">دخول كزبون وفتح الحجز</button>
+      <button class="gold-btn full" onclick="customerLogin()">دخول كزبون وفتح الحجز</button>
     </div>
-
-    <!-- قسم دخول المدير (مخفي افتراضياً) -->
-    <div id="adminAuth" class="hidden">
-      <p>دخول صاحب المحل</p>
+    <div id="adminAuth" class="hidden" style="margin-top:15px;">
       <input id="adminEmail" type="email" placeholder="البريد الإلكتروني">
-      <input id="adminPassword" type="password" placeholder="كلمة المرور">
-      <button id="adminLogin" class="gold-btn full" onclick="if(window.auth){ auth.signInWithEmailAndPassword(document.getElementById('adminEmail').value, document.getElementById('adminPassword').value).then(() => { document.getElementById('loginModal').classList.add('hidden'); }).catch(e => alert('خطأ في بيانات المدير: ' + e.message)); }">دخول الإدارة</button>
+      <input id="adminPassword" type="password" placeholder="كلمة المرور" style="margin-top:8px;">
+      <button class="gold-btn full" onclick="adminLogin()" style="margin-top:10px;">دخول الإدارة</button>
     </div>
-
-    <!-- زر التبديل بين الزبون والمدير -->
-    <button id="switchAdmin" class="text-btn" onclick="document.getElementById('customerAuth').classList.toggle('hidden'); document.getElementById('adminAuth').classList.toggle('hidden'); this.textContent = document.getElementById('adminAuth').classList.contains('hidden') ? 'دخول صاحب المحل' : 'العودة لدخول الزبائن';">دخول صاحب المحل</button>
+    <button class="text-btn" onclick="document.getElementById('customerAuth').classList.toggle('hidden'); document.getElementById('adminAuth').classList.toggle('hidden');">تبديل وضع الدخول</button>
     <p class="feedback" id="authFeedback"></p>
   </div>
 </div>
 
-<!-- مكتبات Firebase الأساسية -->
+<!-- مكتبات Firebase -->
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 
-<!-- ملف التهيئة الخاص بك -->
-<script src="firebase-config.js"></script>
+<script>
+  // تهيئة Firebase المباشرة
+  const firebaseConfig = {
+    apiKey: "AIzaSyDO0RBoc24gaAbnqKXbJgciuB3IJCB0qlA",
+    authDomain: "mh-barber.firebaseapp.com",
+    projectId: "mh-barber",
+    storageBucket: "mh-barber.firebasestorage.app",
+    messagingSenderId: "625702538870",
+    appId: "1:625702538870:web:e3926936f556a4f3f8d957",
+    measurementId: "G-ME9H7B5D8N"
+  };
 
-<!-- سكريبت التطبيق -->
-<script src="app.js"></script>
+  firebase.initializeApp(firebaseConfig);
+  const auth = firebase.auth();
+  const db = firebase.firestore();
+  const ADMIN_UID = "sRzxHot4wdPZPIV5qX5jHrVaddE2";
+
+  // تفعيل التاريخ الأدنى اليوم
+  const localDate = new Date().toISOString().slice(0,10);
+  document.getElementById('bookingDate').min = localDate;
+
+  function selectService(btn) {
+    document.querySelectorAll('.service').forEach(x => x.classList.remove('selected'));
+    btn.classList.add('selected');
+    document.getElementById('serviceSelect').value = btn.dataset.service;
+  }
+
+  // الاستماع لحالة المحل والطابور
+  db.doc('public/shop').onSnapshot(doc => {
+    const d = doc.exists ? doc.data() : { open: false };
+    document.getElementById('shopState').textContent = d.open ? 'المحل مفتوح الآن' : 'المحل مغلق الآن';
+    document.getElementById('shopDot').classList.toggle('off', !d.open);
+    document.getElementById('shopNotice').textContent = d.message || 'أهلاً بك في M.H Barber';
+  });
+
+  db.doc('public/stats').onSnapshot(doc => {
+    document.getElementById('queueCount').textContent = doc.exists ? (doc.data().waitingCount || 0) : 0;
+  });
+
+  // تسجيل الدخول
+  async function customerLogin() {
+    try {
+      await auth.signInAnonymously();
+      document.getElementById('loginModal').classList.add('hidden');
+      alert('تم تسجيل الدخول بنجاح كزبون!');
+    } catch(e) { alert(e.message); }
+  }
+
+  async function adminLogin() {
+    try {
+      const email = document.getElementById('adminEmail').value;
+      const pass = document.getElementById('adminPassword').value;
+      await auth.signInWithEmailAndPassword(email, pass);
+      document.getElementById('loginModal').classList.add('hidden');
+    } catch(e) { alert('خطأ في بيانات المدير: ' + e.message); }
+  }
+
+  // مراقبة المصادقة
+  auth.onAuthStateChanged(user => {
+    if (!user) {
+      document.getElementById('accountPanel').classList.add('hidden');
+      document.getElementById('adminPanel').classList.add('hidden');
+      return;
+    }
+    if (user.uid === ADMIN_UID) {
+      document.getElementById('adminPanel').classList.remove('hidden');
+      loadAdminData();
+    } else {
+      document.getElementById('accountPanel').classList.remove('hidden');
+    }
+  });
+
+  // إرسال الحجز
+  async function submitBooking(e) {
+    e.preventDefault();
+    if (!auth.currentUser) return alert('يرجى تسجيل الدخول أولاً.');
+    try {
+      await db.collection('bookings').add({
+        userId: auth.currentUser.uid,
+        service: document.getElementById('serviceSelect').value,
+        date: document.getElementById('bookingDate').value,
+        time: document.getElementById('bookingTime').value,
+        status: 'new',
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+      });
+      document.getElementById('bookingFeedback').textContent = 'تم إرسال طلب الحجز بنجاح!';
+    } catch(e) { alert(e.message); }
+  }
+
+  async function joinQueueBtn() {
+    if (!auth.currentUser) return alert('سجّل الدخول أولاً.');
+    try {
+      await db.collection('queue').doc(auth.currentUser.uid).set({
+        userId: auth.currentUser.uid,
+        status: 'waiting',
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+      }, {merge: true});
+      const statsRef = db.doc('public/stats');
+      const doc = await statsRef.get();
+      let count = doc.exists ? (doc.data().waitingCount || 0) : 0;
+      await statsRef.set({waitingCount: count + 1}, {merge: true});
+      alert('تم الانضمام للطابور بنجاح.');
+    } catch(e) { alert(e.message); }
+  }
+
+  async function updateShop(open) {
+    try {
+      await db.doc('public/shop').set({open}, {merge: true});
+      alert('تم تحديث حالة المحل!');
+    } catch(e) { alert(e.message); }
+  }
+
+  function loadAdminData() {
+    db.collection('bookings').orderBy('createdAt', 'desc').onSnapshot(snapshot => {
+      const root = document.getElementById('adminBookings');
+      root.innerHTML = '';
+      if(snapshot.empty) { root.textContent = 'لا توجد حجوزات.'; return; }
+      snapshot.forEach(doc => {
+        const b = doc.data();
+        const div = document.createElement('div');
+        div.className = 'booking-row';
+        div.innerHTML = `<span>حجز: ${b.service} (${b.date} ${b.time}) - الحالة: ${b.status}</span>`;
+        root.appendChild(div);
+      });
+    });
+  }
+</script>
+</body>
+</html>
