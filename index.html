@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ar" dir="rtl">
+<html lang="ar" dir="rtl" data-theme="dark">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -8,28 +8,29 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
-:root{--gold:#d5b16d;--gold2:#f2d99c;--bg:#10100e;--panel:#1b1a17;--muted:#aaa69d;--line:#39352c}
+:root{--gold:#d5b16d;--gold2:#f2d99c;--bg:#10100e;--panel:#1b1a17;--muted:#aaa69d;--line:#39352c;--text:#f7f4ed}
+[data-theme="light"]{--gold:#b8860b;--gold2:#d4af37;--bg:#f4f4f0;--panel:#ffffff;--muted:#66635b;--line:#dcd8ce;--text:#1a1a1a}
 *{box-sizing:border-box}html{scroll-behavior:smooth}
-body{margin:0;background:var(--bg);color:#f7f4ed;font-family:Cairo,Arial,sans-serif;overflow-x:hidden}
+body{margin:0;background:var(--bg);color:var(--text);font-family:Cairo,Arial,sans-serif;overflow-x:hidden;transition:background 0.3s,color 0.3s}
 button,input,select{font:inherit}button,a{cursor:pointer}a{color:inherit;text-decoration:none}
 
-.topbar{height:82px;padding:0 5%;display:flex;align-items:center;justify-content:space-between;background:#11110ff2;border-bottom:1px solid #ffffff12;position:relative;z-index:4;flex-wrap:wrap}
+.topbar{height:82px;padding:0 5%;display:flex;align-items:center;justify-content:space-between;background:var(--panel);border-bottom:1px solid var(--line);position:relative;z-index:4;flex-wrap:wrap}
 .brand{display:flex;align-items:center;gap:10px;font-size:18px;font-weight:900;letter-spacing:1px}
 .brand img{width:46px;height:46px;object-fit:cover;border-radius:50%;border:2px solid var(--gold)}
 .brand b{color:var(--gold)}
-nav{display:flex;gap:20px;font-size:13px;color:#d2cec5}nav a:hover{color:var(--gold)}
+nav{display:flex;gap:20px;font-size:13px;color:var(--muted)}nav a:hover{color:var(--gold)}
 .outline,.small-btn{background:transparent;border:1px solid var(--gold);color:var(--gold);padding:8px 14px;border-radius:4px;font-size:12px}
 
 .hero{min-height:600px;position:relative;display:flex;align-items:center;padding:50px 6%;overflow:hidden;background:url('background.jpg') center/cover no-repeat}
-.hero-shade{position:absolute;inset:0;background:linear-gradient(90deg,#0d0d0bf2 0%,#0d0d0bd9 45%,#0d0d0b60 100%),linear-gradient(0deg,#10100e 0%,transparent 35%)}
+.hero-shade{position:absolute;inset:0;background:linear-gradient(90deg,#0d0d0bf2 0%,#0d0d0bd9 45%,#0d0d0b60 100%),linear-gradient(0deg,var(--bg) 0%,transparent 35%)}
 .hero-content{position:relative;z-index:1;max-width:650px}
 .eyebrow{color:var(--gold);letter-spacing:3px;font-size:11px;font-weight:800}
-.live-status{display:inline-flex;align-items:center;gap:10px;margin:20px 0 15px;padding:8px 14px;border:1px solid #ffffff35;background:#1119;border-radius:30px;font-size:12px}
+.live-status{display:inline-flex;align-items:center;gap:10px;margin:20px 0 15px;padding:8px 14px;border:1px solid var(--line);background:var(--panel);border-radius:30px;font-size:12px}
 .live-status i{width:10px;height:10px;border-radius:50%;background:#28d27c;box-shadow:0 0 12px #28d27c}
 .live-status i.off{background:#e34a4a;box-shadow:0 0 12px #e34a4a}
 .hero h1{font-size:clamp(45px,8vw,90px);line-height:1;margin:10px 0;font-weight:900}
 .hero em{font-style:normal;color:var(--gold)}
-.hero-content p{max-width:480px;color:#d0ccc4;line-height:1.8;font-size:14px;margin:20px 0 25px}
+.hero-content p{max-width:480px;color:var(--muted);line-height:1.8;font-size:14px;margin:20px 0 25px}
 .gold-btn,.green-btn,.red-btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;border:0;border-radius:4px;padding:12px 20px;background:linear-gradient(115deg,#a77d38,#f0d493);color:#17130b;font-weight:900;transition:0.2s}
 .full{width:100%}.section{padding:60px 5%;max-width:1250px;margin:auto}.section-title{text-align:center;margin-bottom:30px}
 .section-title h2{font-size:28px;margin:8px 0}.section-title p{color:var(--muted);font-size:13px}
@@ -38,38 +39,43 @@ nav{display:flex;gap:20px;font-size:13px;color:#d2cec5}nav a:hover{color:var(--g
 .price-image-container img{width:100%;height:auto;display:block;object-fit:contain}
 
 .split{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center;margin-top:40px}
-.panel{background:var(--panel);border:1px solid var(--line);border-radius:9px;padding:22px}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:9px;padding:22px;transition:background 0.3s}
 .panel h3{margin-top:0;color:var(--gold)}
-label{display:block;color:#c9c4b9;font-size:12px;margin:12px 0 4px}
-input,select{display:block;width:100%;background:#11110f;border:1px solid #494338;color:#fff;padding:12px;border-radius:4px;outline:none;font-size:14px}
+label{display:block;color:var(--muted);font-size:12px;margin:12px 0 4px}
+input,select{display:block;width:100%;background:var(--bg);border:1px solid var(--line);color:var(--text);padding:12px;border-radius:4px;outline:none;font-size:14px}
 .feedback{font-size:13px;color:var(--gold);margin-top:10px;font-weight:700;min-height:18px}
-.queue-card{max-width:550px;margin:auto;text-align:center;padding:32px 20px;background:linear-gradient(145deg,#24211a,#171613);border:1px solid var(--line);border-radius:10px}
+.queue-card{max-width:550px;margin:auto;text-align:center;padding:32px 20px;background:var(--panel);border:1px solid var(--line);border-radius:10px}
 .queue-number{font-size:55px;line-height:1.2;color:var(--gold);font-weight:900}
-.public-current-box{margin-top:20px;padding:15px;background:#171613;border:1px solid var(--gold);border-radius:8px;text-align:right}
+.public-current-box{margin-top:20px;padding:15px;background:var(--bg);border:1px solid var(--gold);border-radius:8px;text-align:right}
 .public-current-box h4{color:var(--gold);margin:0 0 8px;font-size:16px}
-.public-current-box p{margin:4px 0;font-size:14px;color:#f7f4ed}
+.public-current-box p{margin:4px 0;font-size:14px;color:var(--text)}
 
 .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:18px 0}
-.stat{padding:16px;background:#1d1b17;border:1px solid var(--line);border-radius:8px;text-align:center}
+.stat{padding:16px;background:var(--panel);border:1px solid var(--line);border-radius:8px;text-align:center}
 .stat small{display:block;color:var(--muted);font-size:11px}.stat b{display:block;color:var(--gold);font-size:20px;margin-top:6px}
+
+/* قسم إدارة الكراسي الثلاثة للمدير */
+.chairs-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:15px;margin-bottom:20px}
+.chair-box{background:var(--bg);border:1px solid var(--line);padding:15px;border-radius:8px;text-align:center}
+.chair-box h4{color:var(--gold);margin:0 0 8px}
+
 .admin-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
 .green-btn{background:#176c42;color:white}.red-btn{background:#9d3030;color:white}
 .delete-btn{background:#5a1818;color:#ffcccc;padding:8px 12px;font-size:12px;border-radius:4px;border:0;font-weight:bold}
-.delete-btn:hover{background:#842020}
 .booking-row{padding:14px 0;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
 .hidden{display:none!important}
-footer{padding:25px 5%;display:flex;justify-content:space-between;color:#8d887d;font-size:12px;border-top:1px solid #ffffff12}
+footer{padding:25px 5%;display:flex;justify-content:space-between;color:var(--muted);font-size:12px;border-top:1px solid var(--line)}
 footer b{color:var(--gold)}
 .modal{position:fixed;inset:0;z-index:20;background:#000c;display:grid;place-items:center;padding:15px}
-.modal-box{position:relative;width:min(440px,100%);background:#1b1a17;border:1px solid var(--gold);padding:25px;border-radius:9px}
+.modal-box{position:relative;width:min(440px,100%);background:var(--panel);border:1px solid var(--gold);padding:25px;border-radius:9px}
 .modal-box h2{color:var(--gold);margin-top:0;font-size:20px}
-.modal-close{position:absolute;left:12px;top:6px;background:none;border:0;color:white;font-size:25px}
+.modal-close{position:absolute;left:12px;top:6px;background:none;border:0;color:var(--text);font-size:25px}
 
 @media (max-width: 768px) {
   .topbar{height:auto;padding:12px 4%;flex-direction:column;gap:12px}
   nav{gap:15px;font-size:12px}
   .split{grid-template-columns:1fr;gap:25px;margin-top:20px}
-  .stats{grid-template-columns:1fr}
+  .stats, .chairs-grid{grid-template-columns:1fr}
   .booking-row{flex-direction:column;align-items:flex-start;gap:10px}
   .booking-row div{width:100%;display:flex;gap:8px}
   .booking-row div button{flex:1;justify-content:center}
@@ -84,9 +90,16 @@ footer b{color:var(--gold)}
     <img src="logo.png" alt="M.H Logo">
     <span>M.H <b>BARBER</b></span>
   </a>
-  <nav><a href="#services">الخدمات والأسعار</a><a href="#booking" id="navBooking">حجز موعد</a><a href="#queue">الطابور</a></nav>
-  <button class="outline small-btn" id="adminLoginBtn" onclick="document.getElementById('loginModal').classList.remove('hidden')">دخول المدير</button>
-  <button class="outline small-btn hidden" id="logoutBtn" onclick="auth.signOut()">تسجيل الخروج</button>
+  <nav>
+    <a href="#services">الخدمات والأسعار</a>
+    <a href="#booking" id="navBooking">حجز موعد</a>
+    <a href="#queue">الطابور</a>
+  </nav>
+  <div style="display:flex; gap:10px; align-items:center;">
+    <button class="outline small-btn" onclick="toggleTheme()" id="themeToggleBtn">🌓 الوضع</button>
+    <button class="outline small-btn" id="adminLoginBtn" onclick="document.getElementById('loginModal').classList.remove('hidden')">دخول المدير</button>
+    <button class="outline small-btn hidden" id="logoutBtn" onclick="auth.signOut()">تسجيل الخروج</button>
+  </div>
 </header>
 
 <main>
@@ -101,7 +114,7 @@ footer b{color:var(--gold)}
   </div>
 </section>
 
-<!-- قسم عرض لوحة الأسعار باستخدام prix.jpg -->
+<!-- قسم عرض لوحة الأسعار -->
 <section class="section" id="services">
   <div class="section-title"><small>PRICING & SERVICES</small><h2>قائمة الخدمات والأسعار</h2><p>لوحة الأسعار الرسمية لصالوننا</p></div>
   <div class="price-image-container">
@@ -158,7 +171,7 @@ footer b{color:var(--gold)}
       <p id="publicCurrentTimer" style="color:var(--gold); font-weight:bold;"></p>
     </div>
 
-    <div class="public-current-box" style="margin-top:12px; border-color:#39352c;">
+    <div class="public-current-box" style="margin-top:12px; border-color:var(--line);">
       <h4>👤 الشخص التالي في الدور:</h4>
       <p id="publicNextName">لا يوجد شخص في الانتظار</p>
     </div>
@@ -168,6 +181,26 @@ footer b{color:var(--gold)}
 <!-- لوحة الإدارة المحترفة -->
 <section class="section admin-area hidden" id="adminPanel">
   <div class="section-title"><h2>لوحة الإدارة المحترفة</h2></div>
+  
+  <!-- إدارة الكراسي الثلاثة وتسمية الحلاقين -->
+  <div class="panel" style="margin-bottom: 25px;">
+    <h3>🪑 إدارة الكراسي الثلاثة وأسماء الحلاقين (تظهر لك فقط)</h3>
+    <div class="chairs-grid">
+      <div class="chair-box">
+        <h4>الكرسي الأول</h4>
+        <input id="chair1Name" placeholder="اسم الحلاق 1" onchange="saveChairName(1)">
+      </div>
+      <div class="chair-box">
+        <h4>الكرسي الثاني</h4>
+        <input id="chair2Name" placeholder="اسم الحلاق 2" onchange="saveChairName(2)">
+      </div>
+      <div class="chair-box">
+        <h4>الكرسي الثالث</h4>
+        <input id="chair3Name" placeholder="اسم الحلاق 3" onchange="saveChairName(3)">
+      </div>
+    </div>
+  </div>
+
   <div class="panel">
     <div class="admin-head">
       <h3>التحكم بحالة المحل</h3>
@@ -177,12 +210,20 @@ footer b{color:var(--gold)}
       </div>
     </div>
   </div>
+
   <div class="stats">
     <div class="stat"><small>إيرادات اليوم</small><b id="revDay">0 دج</b></div>
     <div class="stat"><small>إيرادات الشهر</small><b id="revMonth">0 دج</b></div>
     <div class="stat"><small>إيرادات السنة</small><b id="revYear">0 دج</b></div>
   </div>
-  <div class="panel">
+
+  <!-- التقارير والإحصائيات المبسطة -->
+  <div class="panel" style="margin-top: 20px;">
+    <h3>📊 تقارير إحصائية سريعة</h3>
+    <p id="statsReportText" style="color:var(--muted); font-size:14px; line-height:1.6;">جاري تحليل البيانات...</p>
+  </div>
+
+  <div class="panel" style="margin-top: 20px;">
     <h3>قائمة الحجوزات والتحكم بالطابور والجلسات</h3>
     <div id="adminBookings">جاري تحميل البيانات...</div>
   </div>
@@ -229,12 +270,47 @@ footer b{color:var(--gold)}
   const ADMIN_UID = "Mgx6RTN03sWDkU9SnWpjCRe7zs63";
   const WHATSAPP_NUMBER = "213782242293";
 
-  const todayObj = new Date();
-  const currentYearStr = todayObj.getFullYear().toString();
-  const currentMonthStr = (todayObj.getMonth() + 1).toString().padStart(2, '0');
-  const currentDayStr = todayObj.getDate().toString().padStart(2, '0');
-  const fullTodayStr = `${currentYearStr}-${currentMonthStr}-${currentDayStr}`;
+  // نظام تبديل الثيم ليلي / نهاري
+  function toggleTheme() {
+    const html = document.documentElement;
+    const currentTheme = html.getAttribute('data-theme');
+    const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+    html.setAttribute('data-theme', newTheme);
+    localStorage.setItem('mh_theme', newTheme);
+  }
+  const savedTheme = localStorage.getItem('mh_theme') || 'dark';
+  document.documentElement.setAttribute('data-theme', savedTheme);
 
+  // حفظ أسماء الكراسي الثلاثة في لوحة التحكم
+  function loadChairs() {
+    document.getElementById('chair1Name').value = localStorage.getItem('mh_chair_1') || 'الحلاق 1';
+    document.getElementById('chair2Name').value = localStorage.getItem('mh_chair_2') || 'الحلاق 2';
+    document.getElementById('chair3Name').value = localStorage.getItem('mh_chair_3') || 'الحلاق 3';
+  }
+  function saveChairName(num) {
+    const val = document.getElementById(`chair2Name`.replace('2', num)).value;
+    localStorage.setItem(`mh_chair_${num}`, val);
+  }
+  loadChairs();
+
+  // تشغيل صوت تنبيه خفيف للمدير عند وجود حجز جديد
+  function playAlertSound() {
+    try {
+      const ctx = new (window.AudioContext || window.webkitAudioContext)();
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(587.33, ctx.currentTime); // نغمة راقية
+      gain.gain.setValueAtTime(0.1, ctx.currentTime);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start();
+      osc.stop(ctx.currentTime + 0.3);
+    } catch(e) {}
+  }
+
+  const todayObj = new Date();
+  const fullTodayStr = `${todayObj.getFullYear()}-${(todayObj.getMonth() + 1).toString().padStart(2, '0')}-${todayObj.getDate().toString().padStart(2, '0')}`;
   document.getElementById('bookingDate').min = fullTodayStr;
 
   db.doc('public/shop').onSnapshot(doc => {
@@ -243,8 +319,15 @@ footer b{color:var(--gold)}
     document.getElementById('shopDot').classList.toggle('off', !d.open);
   });
 
+  let lastBookingCount = null;
   db.collection('bookings').where('inQueue', '==', true).onSnapshot(snapshot => {
     document.getElementById('queueCount').textContent = snapshot.size;
+
+    // تنبيه بصري وصوتي للمدير عند دخول حجز جديد
+    if (lastBookingCount !== null && snapshot.size > lastBookingCount) {
+      playAlertStatusNotice();
+    }
+    lastBookingCount = snapshot.size;
 
     let currentClient = null;
     let nextClient = null;
@@ -260,9 +343,7 @@ footer b{color:var(--gold)}
     });
 
     waitingList.sort((a, b) => (a.createdAt?.toMillis() || 0) - (b.createdAt?.toMillis() || 0));
-    if (waitingList.length > 0) {
-      nextClient = waitingList[0];
-    }
+    if (waitingList.length > 0) nextClient = waitingList[0];
 
     const currNameEl = document.getElementById('publicCurrentName');
     const currTimerEl = document.getElementById('publicCurrentTimer');
@@ -285,6 +366,14 @@ footer b{color:var(--gold)}
       nextNameEl.textContent = 'لا يوجد شخص في الانتظار حالياً';
     }
   });
+
+  function playAlertStatusNotice() {
+    playAlertSound();
+    if (auth.currentUser) {
+      document.title = "🔔 حجز جديد وارد!";
+      setTimeout(() => document.title = "M.H BARBER — Premium", 4000);
+    }
+  }
 
   async function adminLogin() {
     const email = document.getElementById('adminEmail').value;
@@ -392,7 +481,8 @@ footer b{color:var(--gold)}
     } catch(e) { alert(e.message); }
   }
 
-  async function finishService(id, price) {
+  // إنهاء الحلاقة وتجهيز رابط تقييم الزبون عبر واتساب
+  async function finishService(id, phone, name, price) {
     try {
       await db.collection('bookings').doc(id).update({
         status: 'منتهي',
@@ -401,22 +491,27 @@ footer b{color:var(--gold)}
         endTime: firebase.firestore.FieldValue.serverTimestamp()
       });
 
-      alert('تم إنهاء الحلاقة بنجاح وإضافة الإيراد فوراً!');
+      // إرسال رسالة واتساب للزبون للتقييم والشكر
+      if (phone && phone.length > 5 && phone !== 'طابور مباشر') {
+        const reviewText = `مرحباً بك ${name}، شكراً لزيارتك M.H Barber! نأمل أن تكون قد استمتعت بخدمتنا. يرجى تقييم تجربتك معنا من 1 إلى 5 نجوم ⭐`;
+        window.open(`https://wa.me/${phone}?text=${encodeURIComponent(reviewText)}`, '_blank');
+      }
+
+      alert('تم إنهاء الحلاقة وإضافة الإيراد فوراً وإرسال رابط التقييم للزبون!');
     } catch(e) { alert(e.message); }
   }
 
-  // دالة حذف الحجز من لوحة تحكم المدير
   async function deleteBooking(id) {
     if (confirm('هل أنت متأكد من حذف هذا الحجز نهائياً من القائمة؟')) {
       try {
         await db.collection('bookings').doc(id).delete();
-        alert('تم حذف الحجز بنجاح.');
       } catch(e) {
         alert('خطأ أثناء الحذف: ' + e.message);
       }
     }
   }
 
+  // تحميل وإعداد لوحة تحكم المدير والإحصائيات
   function loadAdminData() {
     db.collection('bookings').orderBy('createdAt', 'desc').onSnapshot(snapshot => {
       const root = document.getElementById('adminBookings');
@@ -426,6 +521,7 @@ footer b{color:var(--gold)}
       let dayRev = 0;
       let monthRev = 0;
       let yearRev = 0;
+      let serviceCounts = {};
 
       const activeTodayStr = `${new Date().getFullYear()}-${(new Date().getMonth() + 1).toString().padStart(2, '0')}-${new Date().getDate().toString().padStart(2, '0')}`;
       const activeMonthStr = activeTodayStr.slice(0, 7);
@@ -435,19 +531,18 @@ footer b{color:var(--gold)}
         const b = docSnap.data();
         const id = docSnap.id;
 
+        // إحصائيات الخدمات الأكثر طلباً
+        if (b.service) {
+          serviceCounts[b.service] = (serviceCounts[b.service] || 0) + 1;
+        }
+
         if (b.status === 'منتهي') {
           const revAmount = Number(b.revenue || b.price || 300);
           const bDate = b.date || '';
 
-          if (bDate === activeTodayStr) {
-            dayRev += revAmount;
-          }
-          if (bDate.startsWith(activeMonthStr)) {
-            monthRev += revAmount;
-          }
-          if (bDate.startsWith(activeYearStr)) {
-            yearRev += revAmount;
-          }
+          if (bDate === activeTodayStr) dayRev += revAmount;
+          if (bDate.startsWith(activeMonthStr)) monthRev += revAmount;
+          if (bDate.startsWith(activeYearStr)) yearRev += revAmount;
         }
 
         const div = document.createElement('div');
@@ -463,9 +558,9 @@ footer b{color:var(--gold)}
 
         div.innerHTML = `
           <span><b>${b.clientName}</b> (${b.clientPhone}) | ${b.service} (${b.price || 300} دج)<br>📅 ${b.date} | ⏰ ${b.time} | <span style="color:var(--gold)">الحالة: ${b.status}</span> <br><small>${timePassed}</small></span>
-          <div style="display:flex; gap:8px; align-items:center;">
+          <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
             ${b.status === 'قيد الانتظار' ? `<button class="green-btn" onclick="startService('${id}')">بدء الحلاقة</button>` : ''}
-            ${b.status === 'جاري الحلاقة' ? `<button class="red-btn" onclick="finishService('${id}', ${b.price || 300})">إنهاء الحلاقة ✓</button>` : ''}
+            ${b.status === 'جاري الحلاقة' ? `<button class="red-btn" onclick="finishService('${id}', '${b.clientPhone}', '${b.clientName}', ${b.price || 300})">إنهاء الحلاقة ✓</button>` : ''}
             ${b.status === 'منتهي' ? `<span style="color:#28d27c; font-weight:bold;">مكتمل (${b.price || 300} دج)</span>` : ''}
             <button class="delete-btn" onclick="deleteBooking('${id}')">حذف 🗑️</button>
           </div>
@@ -473,9 +568,24 @@ footer b{color:var(--gold)}
         root.appendChild(div);
       });
 
+      // عرض الإيرادات
       document.getElementById('revDay').textContent = dayRev + ' دج';
       document.getElementById('revMonth').textContent = monthRev + ' دج';
       document.getElementById('revYear').textContent = yearRev + ' دج';
+
+      // تحليل الخدمة الأكثر طلباً لعرضها في قسم التقارير الإحصائية
+      let topService = "لا توجد بيانات كافية بعد";
+      let maxCount = 0;
+      for (let [srv, count] of Object.entries(serviceCounts)) {
+        if (count > maxCount) {
+          maxCount = count;
+          topService = srv;
+        }
+      }
+      document.getElementById('statsReportText').innerHTML = `
+        🏆 <b>الخدمة الأكثر طلباً في المحل:</b> <span style="color:var(--gold);">${topService}</span> (بواقع ${maxCount} حجز).<br>
+        📈 <b>إجمالي عدد الحجوزات المسجلة:</b> ${snapshot.size} حجز.
+      `;
     });
   }
 </script>
