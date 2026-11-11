@@ -10,52 +10,70 @@
 <style>
 :root{--gold:#d5b16d;--gold2:#f2d99c;--bg:#10100e;--panel:#1b1a17;--muted:#aaa69d;--line:#39352c}
 *{box-sizing:border-box}html{scroll-behavior:smooth}
-body{margin:0;background:var(--bg);color:#f7f4ed;font-family:Cairo,Arial,sans-serif}
+body{margin:0;background:var(--bg);color:#f7f4ed;font-family:Cairo,Arial,sans-serif;overflow-x:hidden}
 button,input,select{font:inherit}button,a{cursor:pointer}a{color:inherit;text-decoration:none}
-.topbar{height:82px;padding:0 6%;display:flex;align-items:center;justify-content:space-between;background:#11110ff2;border-bottom:1px solid #ffffff12;position:relative;z-index:4}
-.brand{display:flex;align-items:center;gap:12px;font-size:19px;font-weight:900;letter-spacing:2px}
-.brand img{width:52px;height:52px;object-fit:cover;border-radius:50%;border:2px solid var(--gold)}
+
+/* الشريط العلوي */
+.topbar{height:82px;padding:0 5%;display:flex;align-items:center;justify-content:space-between;background:#11110ff2;border-bottom:1px solid #ffffff12;position:relative;z-index:4;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:10px;font-size:18px;font-weight:900;letter-spacing:1px}
+.brand img{width:46px;height:46px;object-fit:cover;border-radius:50%;border:2px solid var(--gold)}
 .brand b{color:var(--gold)}
-nav{display:flex;gap:28px;font-size:13px;color:#d2cec5}nav a:hover{color:var(--gold)}
-.outline,.small-btn{background:transparent;border:1px solid var(--gold);color:var(--gold);padding:10px 18px;border-radius:3px}
-.hero{min-height:680px;position:relative;display:flex;align-items:center;padding:70px 9%;overflow:hidden;background:url('background.jpg') center/cover no-repeat}
+nav{display:flex;gap:20px;font-size:13px;color:#d2cec5}nav a:hover{color:var(--gold)}
+.outline,.small-btn{background:transparent;border:1px solid var(--gold);color:var(--gold);padding:8px 14px;border-radius:4px;font-size:12px}
+
+/* الهيرو والتخزين البصري */
+.hero{min-height:600px;position:relative;display:flex;align-items:center;padding:50px 6%;overflow:hidden;background:url('background.jpg') center/cover no-repeat}
 .hero-shade{position:absolute;inset:0;background:linear-gradient(90deg,#0d0d0bf2 0%,#0d0d0bd9 45%,#0d0d0b60 100%),linear-gradient(0deg,#10100e 0%,transparent 35%)}
 .hero-content{position:relative;z-index:1;max-width:650px}
-.eyebrow{color:var(--gold);letter-spacing:4px;font-size:11px;font-weight:800}
-.live-status{display:inline-flex;align-items:center;gap:10px;margin:24px 0 18px;padding:9px 15px;border:1px solid #ffffff35;background:#1119;border-radius:30px;font-size:12px}
+.eyebrow{color:var(--gold);letter-spacing:3px;font-size:11px;font-weight:800}
+.live-status{display:inline-flex;align-items:center;gap:10px;margin:20px 0 15px;padding:8px 14px;border:1px solid #ffffff35;background:#1119;border-radius:30px;font-size:12px}
 .live-status i{width:10px;height:10px;border-radius:50%;background:#28d27c;box-shadow:0 0 12px #28d27c}
 .live-status i.off{background:#e34a4a;box-shadow:0 0 12px #e34a4a}
-.hero h1{font-size:clamp(60px,9vw,108px);line-height:.98;margin:10px 0;font-weight:900}
+.hero h1{font-size:clamp(45px,8vw,90px);line-height:1;margin:10px 0;font-weight:900}
 .hero em{font-style:normal;color:var(--gold)}
-.hero-content p{max-width:480px;color:#d0ccc4;line-height:2;font-size:15px;margin:25px 0 30px}
-.gold-btn,.green-btn,.red-btn{display:inline-flex;align-items:center;justify-content:center;gap:12px;border:0;border-radius:3px;padding:13px 23px;background:linear-gradient(115deg,#a77d38,#f0d493);color:#17130b;font-weight:900;transition:0.2s}
-.full{width:100%}.section{padding:85px 7%;max-width:1250px;margin:auto}.section-title{text-align:center;margin-bottom:35px}
-.section-title h2{font-size:34px;margin:8px 0}.section-title p{color:var(--muted);font-size:13px}
+.hero-content p{max-width:480px;color:#d0ccc4;line-height:1.8;font-size:14px;margin:20px 0 25px}
+.gold-btn,.green-btn,.red-btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;border:0;border-radius:4px;padding:12px 20px;background:linear-gradient(115deg,#a77d38,#f0d493);color:#17130b;font-weight:900;transition:0.2s}
+.full{width:100%}.section{padding:60px 5%;max-width:1250px;margin:auto}.section-title{text-align:center;margin-bottom:30px}
+.section-title h2{font-size:28px;margin:8px 0}.section-title p{color:var(--muted);font-size:13px}
 
-.price-image-container{width:100%;max-width:1150px;margin:0 auto;border-radius:14px;overflow:hidden;border:2px solid var(--gold);box-shadow:0 20px 50px rgba(0,0,0,0.95);background:#000}
-.price-image-container img{width:100%;height:auto;display:block;object-fit:cover;image-rendering:-webkit-optimize-contrast;}
+/* عرض صورة الأسعار متجاوب للكمبيوتر والهاتف */
+.price-image-container{width:100%;max-width:1150px;margin:0 auto;border-radius:12px;overflow:hidden;border:2px solid var(--gold);box-shadow:0 15px 40px rgba(0,0,0,0.9);background:#000}
+.price-image-container img{width:100%;height:auto;display:block;object-fit:contain}
 
-.split{display:grid;grid-template-columns:1fr 1fr;gap:55px;align-items:center;margin-top:60px}
-.panel{background:var(--panel);border:1px solid var(--line);border-radius:9px;padding:25px}
+.split{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center;margin-top:40px}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:9px;padding:22px}
 .panel h3{margin-top:0;color:var(--gold)}
-label{display:block;color:#c9c4b9;font-size:12px;margin:13px 0 5px}
-input,select{display:block;width:100%;background:#11110f;border:1px solid #494338;color:#fff;padding:12px;border-radius:4px;outline:none}
+label{display:block;color:#c9c4b9;font-size:12px;margin:12px 0 4px}
+input,select{display:block;width:100%;background:#11110f;border:1px solid #494338;color:#fff;padding:12px;border-radius:4px;outline:none;font-size:14px}
 .feedback{font-size:13px;color:var(--gold);margin-top:10px;font-weight:700;min-height:18px}
-.queue-card{max-width:480px;margin:auto;text-align:center;padding:32px;background:linear-gradient(145deg,#24211a,#171613);border:1px solid var(--line);border-radius:10px}
-.queue-number{font-size:65px;line-height:1.3;color:var(--gold);font-weight:900}
-.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:18px 0}
-.stat{padding:20px;background:#1d1b17;border:1px solid var(--line);border-radius:8px}
-.stat small{display:block;color:var(--muted)}.stat b{display:block;color:var(--gold);font-size:25px;margin-top:8px}
-.admin-head{display:flex;align-items:center;justify-content:space-between;gap:15px;flex-wrap:wrap}
+.queue-card{max-width:480px;margin:auto;text-align:center;padding:28px 18px;background:linear-gradient(145deg,#24211a,#171613);border:1px solid var(--line);border-radius:10px}
+.queue-number{font-size:55px;line-height:1.2;color:var(--gold);font-weight:900}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:18px 0}
+.stat{padding:16px;background:#1d1b17;border:1px solid var(--line);border-radius:8px;text-align:center}
+.stat small{display:block;color:var(--muted);font-size:11px}.stat b{display:block;color:var(--gold);font-size:20px;margin-top:6px}
+.admin-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
 .green-btn{background:#176c42;color:white}.red-btn{background:#9d3030;color:white}
 .booking-row{padding:14px 0;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
 .hidden{display:none!important}
-footer{padding:30px 7%;display:flex;justify-content:space-between;color:#8d887d;font-size:12px;border-top:1px solid #ffffff12}
+footer{padding:25px 5%;display:flex;justify-content:space-between;color:#8d887d;font-size:12px;border-top:1px solid #ffffff12}
 footer b{color:var(--gold)}
-.modal{position:fixed;inset:0;z-index:20;background:#000c;display:grid;place-items:center;padding:20px}
-.modal-box{position:relative;width:min(440px,100%);background:#1b1a17;border:1px solid var(--gold);padding:30px;border-radius:9px}
-.modal-box h2{color:var(--gold);margin-top:0}
-.modal-close{position:absolute;left:14px;top:8px;background:none;border:0;color:white;font-size:27px}
+.modal{position:fixed;inset:0;z-index:20;background:#000c;display:grid;place-items:center;padding:15px}
+.modal-box{position:relative;width:min(440px,100%);background:#1b1a17;border:1px solid var(--gold);padding:25px;border-radius:9px}
+.modal-box h2{color:var(--gold);margin-top:0;font-size:20px}
+.modal-close{position:absolute;left:12px;top:6px;background:none;border:0;color:white;font-size:25px}
+
+/* 📱 تحسينات متقدمة مخصصة لشاشات الهواتف المحمولة */
+@media (max-width: 768px) {
+  .topbar{height:auto;padding:12px 4%;flex-direction:column;gap:12px}
+  nav{gap:15px;font-size:12px}
+  .split{grid-template-columns:1fr;gap:25px;margin-top:20px}
+  .stats{grid-template-columns:1fr}
+  .booking-row{flex-direction:column;align-items:flex-start;gap:10px}
+  .booking-row div{width:100%;display:flex;gap:8px}
+  .booking-row div button{flex:1;justify-content:center}
+  .hero{padding:40px 5%;min-height:500px}
+  .section{padding:40px 4%}
+}
 </style>
 </head>
 <body>
@@ -89,11 +107,11 @@ footer b{color:var(--gold)}
   </div>
 </section>
 
-<!-- قسم الحجز (يختفي عندما يسجل المدير دخوله) -->
+<!-- قسم الحجز (يختفي عند دخول المدير) -->
 <section class="section split" id="bookingSection">
   <div class="booking-copy">
     <h2>موعدك القادم<br><em>يبدأ من هنا</em></h2>
-    <p>اختر خدمتك المفضلة، حدد التاريخ والوقت المناسب، وسجل معلوماتك ليتم إرسال حجزك مباشرة إلى واتساب المحل.</p>
+    <p>اختر خدمتك المفضلة، حدد التاريخ والوقت المناسب، وسجل معلوماتك ليتم إرسال حجزك إلى واتساب المحل وإضافتك للطابور تلقائياً.</p>
   </div>
   <div class="panel" id="bookingPanel">
     <h3>احجز موعدك</h3>
@@ -103,7 +121,7 @@ footer b{color:var(--gold)}
       <label>رقم الهاتف</label>
       <input id="clientPhone" type="tel" placeholder="06XXXXXXXX" required>
       <label>الخدمة المطلوبة</label>
-      <select id="serviceSelect" onchange="updateServicePrice()">
+      <select id="serviceSelect">
         <option value="ديكرادي" data-price="300">ديكرادي (300 دج)</option>
         <option value="ديكرادي أطفال" data-price="250">ديكرادي أطفال (250 دج)</option>
         <option value="بروتين الشعر" data-price="1000">بروتين الشعر</option>
@@ -119,7 +137,7 @@ footer b{color:var(--gold)}
       <input id="bookingDate" type="date" required>
       <label>الوقت</label>
       <input id="bookingTime" type="time" required>
-      <button class="gold-btn full" type="submit" style="margin-top:15px;">تأكيد وإرسال عبر واتساب 📲</button>
+      <button class="gold-btn full" type="submit" style="margin-top:15px;">تأكيد الحجز وإرسال عبر واتساب 📲</button>
     </form>
     <p class="feedback" id="bookingFeedback"></p>
   </div>
@@ -130,9 +148,9 @@ footer b{color:var(--gold)}
   <div class="section-title"><h2>الطابور المباشر</h2></div>
   <div class="queue-card">
     <div class="queue-number" id="queueCount">0</div>
-    <b>أشخاص في الانتظار</b>
+    <b>أشخاص في الانتظار والطابور</b>
     <p id="shopNotice">أهلاً بك في M.H Barber</p>
-    <button class="gold-btn" onclick="joinQueue()" style="margin-top:15px;">خذ رقم انتظار 🎟️</button>
+    <button class="gold-btn" onclick="joinQueueManual()" style="margin-top:15px;">خذ رقم انتظار يدوي 🎟️</button>
     <p class="feedback" id="queueFeedback"></p>
   </div>
 </section>
@@ -155,7 +173,7 @@ footer b{color:var(--gold)}
     <div class="stat"><small>إيرادات السنة</small><b id="revYear">0 دج</b></div>
   </div>
   <div class="panel">
-    <h3>قائمة الحجوزات الواردة والتحكم بالجلسات</h3>
+    <h3>قائمة الحجوزات والتحكم بالطابور والجلسات</h3>
     <div id="adminBookings">جاري تحميل البيانات...</div>
   </div>
 </section>
@@ -209,8 +227,7 @@ footer b{color:var(--gold)}
     document.getElementById('shopDot').classList.toggle('off', !d.open);
   });
 
-  // تحديث عداد الطابور المباشر
-  db.collection('queue').onSnapshot(snapshot => {
+  db.collection('bookings').where('inQueue', '==', true).onSnapshot(snapshot => {
     document.getElementById('queueCount').textContent = snapshot.size;
   });
 
@@ -228,7 +245,6 @@ footer b{color:var(--gold)}
     }
   }
 
-  // عند تسجيل دخول المدير يتم إخفاء قسم الحجز ونافذة الزبون
   auth.onAuthStateChanged(user => {
     if (user && user.uid === ADMIN_UID) {
       document.getElementById('adminPanel').classList.remove('hidden');
@@ -246,13 +262,19 @@ footer b{color:var(--gold)}
     }
   });
 
-  // أخذ رقم انتظار في الطابور
-  async function joinQueue() {
+  async function joinQueueManual() {
     const name = prompt('أدخل اسمك الكريم للانضمام للطابور المباشر:');
     if (!name) return;
     try {
-      await db.collection('queue').add({
+      await db.collection('bookings').add({
         clientName: name,
+        clientPhone: 'طابور مباشر',
+        service: 'حلاقة سريعة',
+        price: 300,
+        date: new Date().toISOString().slice(0,10),
+        time: 'الآن',
+        status: 'قيد الانتظار',
+        inQueue: true,
         createdAt: firebase.firestore.FieldValue.serverTimestamp()
       });
       document.getElementById('queueFeedback').textContent = 'تم إضافتك للطابور بنجاح!';
@@ -261,7 +283,6 @@ footer b{color:var(--gold)}
     }
   }
 
-  // حجز موعد جديد مع منع تكراره
   async function submitBooking(e) {
     e.preventDefault();
     const name = document.getElementById('clientName').value;
@@ -294,11 +315,12 @@ footer b{color:var(--gold)}
         date: date,
         time: time,
         status: 'قيد الانتظار',
+        inQueue: true,
         startTime: null,
         createdAt: firebase.firestore.FieldValue.serverTimestamp()
       });
 
-      feedback.textContent = 'تم تسجيل حجزك بنجاح! جاري تحويلك إلى واتساب...';
+      feedback.textContent = 'تم تسجيل حجزك وإضافتك للطابور بنجاح! جاري تحويلك إلى واتساب...';
 
       const text = `السلام عليكم، لدي حجز جديد في M.H Barber:%0A` +
                    `👤 الاسم: ${encodeURIComponent(name)}%0A` +
@@ -327,7 +349,6 @@ footer b{color:var(--gold)}
     }
   }
 
-  // بدء الحلاقة وحساب الوقت المنقضي
   async function startService(id) {
     try {
       await db.collection('bookings').doc(id).update({
@@ -337,32 +358,25 @@ footer b{color:var(--gold)}
     } catch(e) { alert(e.message); }
   }
 
-  // إنهاء الحلاقة وإضافة السعر لإيرادات اليوم وتجاوز الزبون للذي يليه
   async function finishService(id, price) {
     try {
-      // 1. تحديث حالة الحجز إلى منتهي
       await db.collection('bookings').doc(id).update({
         status: 'منتهي',
+        inQueue: false,
         endTime: firebase.firestore.FieldValue.serverTimestamp()
       });
 
-      // 2. تحديث إيرادات اليوم والشهر والسنة في قاعدة البيانات
       const todayStr = new Date().toISOString().slice(0,10);
-      const monthStr = todayStr.slice(0,7);
-      const yearStr = todayStr.slice(0,4);
-
       const statRef = db.doc(`stats/${todayStr}`);
       const doc = await statRef.get();
       let currentRev = doc.exists ? (doc.data().revenue || 0) : 0;
       await statRef.set({ revenue: currentRev + (price || 300) }, { merge: true });
 
-      alert('تم إنهاء الحلاقة بنجاح وإضافة الإيراد لخزينة اليوم! جاهز للشخص التالي.');
+      alert('تم إنهاء الحلاقة وإضافة السعر لإيرادات اليوم بنجاح!');
     } catch(e) { alert(e.message); }
   }
 
-  // تحميل وعرض بيانات الإدارة وإيرادات اليوم
   function loadAdminData() {
-    // حساب الإيرادات المباشرة اليومية
     const todayStr = new Date().toISOString().slice(0,10);
     db.doc(`stats/${todayStr}`).onSnapshot(doc => {
       const rev = doc.exists ? (doc.data().revenue || 0) : 0;
@@ -387,7 +401,7 @@ footer b{color:var(--gold)}
           const startSec = b.startTime.toMillis();
           const nowSec = Date.now();
           const diffMin = Math.floor((nowSec - startSec) / 60000);
-          timePassed = `⏱️ الوقت المنقضي: ${diffMin} دقيقة`;
+          timePassed = `⏱️ الوقت المستغرق: ${diffMin} دقيقة`;
         }
 
         div.innerHTML = `
