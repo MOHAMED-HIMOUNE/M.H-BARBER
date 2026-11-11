@@ -21,7 +21,7 @@ button,input,select{font:inherit}button,a{cursor:pointer}a{color:inherit;text-de
 nav{display:flex;gap:20px;font-size:13px;color:#d2cec5}nav a:hover{color:var(--gold)}
 .outline,.small-btn{background:transparent;border:1px solid var(--gold);color:var(--gold);padding:8px 14px;border-radius:4px;font-size:12px}
 
-/* الهيرو والتخزين البصري */
+/* الهيرو */
 .hero{min-height:600px;position:relative;display:flex;align-items:center;padding:50px 6%;overflow:hidden;background:url('background.jpg') center/cover no-repeat}
 .hero-shade{position:absolute;inset:0;background:linear-gradient(90deg,#0d0d0bf2 0%,#0d0d0bd9 45%,#0d0d0b60 100%),linear-gradient(0deg,#10100e 0%,transparent 35%)}
 .hero-content{position:relative;z-index:1;max-width:650px}
@@ -36,7 +36,7 @@ nav{display:flex;gap:20px;font-size:13px;color:#d2cec5}nav a:hover{color:var(--g
 .full{width:100%}.section{padding:60px 5%;max-width:1250px;margin:auto}.section-title{text-align:center;margin-bottom:30px}
 .section-title h2{font-size:28px;margin:8px 0}.section-title p{color:var(--muted);font-size:13px}
 
-/* عرض صورة الأسعار متجاوب للكمبيوتر والهاتف */
+/* عرض صورة الأسعار */
 .price-image-container{width:100%;max-width:1150px;margin:0 auto;border-radius:12px;overflow:hidden;border:2px solid var(--gold);box-shadow:0 15px 40px rgba(0,0,0,0.9);background:#000}
 .price-image-container img{width:100%;height:auto;display:block;object-fit:contain}
 
@@ -62,7 +62,6 @@ footer b{color:var(--gold)}
 .modal-box h2{color:var(--gold);margin-top:0;font-size:20px}
 .modal-close{position:absolute;left:12px;top:6px;background:none;border:0;color:white;font-size:25px}
 
-/* 📱 تحسينات متقدمة مخصصة لشاشات الهواتف المحمولة */
 @media (max-width: 768px) {
   .topbar{height:auto;padding:12px 4%;flex-direction:column;gap:12px}
   nav{gap:15px;font-size:12px}
@@ -99,15 +98,15 @@ footer b{color:var(--gold)}
   </div>
 </section>
 
-<!-- قسم عرض لوحة الأسعار -->
+<!-- قسم عرض لوحة الأسعار باستخدام prix.jpg -->
 <section class="section" id="services">
   <div class="section-title"><small>PRICING & SERVICES</small><h2>قائمة الخدمات والأسعار</h2><p>لوحة الأسعار الرسمية لصالوننا</p></div>
   <div class="price-image-container">
-    <img src="prix.jpeg" alt="لوحة أسعار M.H Barber">
+    <img src="prix.jpg" alt="لوحة أسعار M.H Barber">
   </div>
 </section>
 
-<!-- قسم الحجز (يختفي عند دخول المدير) -->
+<!-- قسم الحجز -->
 <section class="section split" id="bookingSection">
   <div class="booking-copy">
     <h2>موعدك القادم<br><em>يبدأ من هنا</em></h2>
@@ -143,15 +142,13 @@ footer b{color:var(--gold)}
   </div>
 </section>
 
-<!-- قسم الطابور المباشر -->
+<!-- قسم الطابور المباشر (يعرض عدد المنتظرين آلياً عبر الحجوزات) -->
 <section class="section queue-section" id="queue">
   <div class="section-title"><h2>الطابور المباشر</h2></div>
   <div class="queue-card">
     <div class="queue-number" id="queueCount">0</div>
     <b>أشخاص في الانتظار والطابور</b>
-    <p id="shopNotice">أهلاً بك في M.H Barber</p>
-    <button class="gold-btn" onclick="joinQueueManual()" style="margin-top:15px;">خذ رقم انتظار يدوي 🎟️</button>
-    <p class="feedback" id="queueFeedback"></p>
+    <p id="shopNotice" style="margin-top:10px; color:var(--muted);">يتم تحديث الطابور تلقائياً مع كل حجز جديد</p>
   </div>
 </section>
 
@@ -262,27 +259,7 @@ footer b{color:var(--gold)}
     }
   });
 
-  async function joinQueueManual() {
-    const name = prompt('أدخل اسمك الكريم للانضمام للطابور المباشر:');
-    if (!name) return;
-    try {
-      await db.collection('bookings').add({
-        clientName: name,
-        clientPhone: 'طابور مباشر',
-        service: 'حلاقة سريعة',
-        price: 300,
-        date: new Date().toISOString().slice(0,10),
-        time: 'الآن',
-        status: 'قيد الانتظار',
-        inQueue: true,
-        createdAt: firebase.firestore.FieldValue.serverTimestamp()
-      });
-      document.getElementById('queueFeedback').textContent = 'تم إضافتك للطابور بنجاح!';
-    } catch(e) {
-      alert('خطأ: ' + e.message);
-    }
-  }
-
+  // حجز موعد جديد مع منع تكراره وإضافته أوتوماتيكياً للطابور
   async function submitBooking(e) {
     e.preventDefault();
     const name = document.getElementById('clientName').value;
