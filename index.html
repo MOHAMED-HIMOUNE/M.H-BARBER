@@ -33,7 +33,7 @@ nav{display:flex;gap:28px;font-size:13px;color:#d2cec5}nav a:hover{color:var(--g
 .section-title h2{font-size:34px;margin:8px 0}.section-title p{color:var(--muted);font-size:13px}
 
 .price-image-container{width:100%;max-width:1150px;margin:0 auto;border-radius:14px;overflow:hidden;border:2px solid var(--gold);box-shadow:0 20px 50px rgba(0,0,0,0.95);background:#000}
-.price-image-container img{width:100%;height:auto;display:block;object-fit:cover;image-rendering:-webkit-optimize-contrast;image-rendering:crisp-edges;}
+.price-image-container img{width:100%;height:auto;display:block;object-fit:cover;image-rendering:-webkit-optimize-contrast;}
 
 .split{display:grid;grid-template-columns:1fr 1fr;gap:55px;align-items:center;margin-top:60px}
 .panel{background:var(--panel);border:1px solid var(--line);border-radius:9px;padding:25px}
@@ -48,7 +48,7 @@ input,select{display:block;width:100%;background:#11110f;border:1px solid #49433
 .stat small{display:block;color:var(--muted)}.stat b{display:block;color:var(--gold);font-size:25px;margin-top:8px}
 .admin-head{display:flex;align-items:center;justify-content:space-between;gap:15px;flex-wrap:wrap}
 .green-btn{background:#176c42;color:white}.red-btn{background:#9d3030;color:white}
-.booking-row{padding:14px 0;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.booking-row{padding:14px 0;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
 .hidden{display:none!important}
 footer{padding:30px 7%;display:flex;justify-content:space-between;color:#8d887d;font-size:12px;border-top:1px solid #ffffff12}
 footer b{color:var(--gold)}
@@ -64,7 +64,7 @@ footer b{color:var(--gold)}
     <img src="logo.png" alt="M.H Logo">
     <span>M.H <b>BARBER</b></span>
   </a>
-  <nav><a href="#services">الخدمات والأسعار</a><a href="#booking">حجز موعد</a><a href="#queue">الطابور</a></nav>
+  <nav><a href="#services">الخدمات والأسعار</a><a href="#booking" id="navBooking">حجز موعد</a><a href="#queue">الطابور</a></nav>
   <button class="outline small-btn" id="adminLoginBtn" onclick="document.getElementById('loginModal').classList.remove('hidden')">دخول المدير</button>
   <button class="outline small-btn hidden" id="logoutBtn" onclick="auth.signOut()">تسجيل الخروج</button>
 </header>
@@ -89,12 +89,13 @@ footer b{color:var(--gold)}
   </div>
 </section>
 
-<section class="section split" id="booking">
+<!-- قسم الحجز (يختفي عندما يسجل المدير دخوله) -->
+<section class="section split" id="bookingSection">
   <div class="booking-copy">
     <h2>موعدك القادم<br><em>يبدأ من هنا</em></h2>
     <p>اختر خدمتك المفضلة، حدد التاريخ والوقت المناسب، وسجل معلوماتك ليتم إرسال حجزك مباشرة إلى واتساب المحل.</p>
   </div>
-  <div class="panel">
+  <div class="panel" id="bookingPanel">
     <h3>احجز موعدك</h3>
     <form id="bookingForm" onsubmit="submitBooking(event)">
       <label>الاسم الكامل</label>
@@ -102,17 +103,17 @@ footer b{color:var(--gold)}
       <label>رقم الهاتف</label>
       <input id="clientPhone" type="tel" placeholder="06XXXXXXXX" required>
       <label>الخدمة المطلوبة</label>
-      <select id="serviceSelect">
-        <option value="ديكرادي (300 دج)">ديكرادي (300 دج)</option>
-        <option value="ديكرادي أطفال (250 دج)">ديكرادي أطفال (250 دج)</option>
-        <option value="بروتين الشعر">بروتين الشعر</option>
-        <option value="Turkish / Tourist (300 دج)">Turkish / Tourist (300 دج)</option>
-        <option value="Brushing + سشوار (150 دج)">Brushing + سشوار (150 دج)</option>
-        <option value="تلسيج (100 دج)">تلسيج (100 دج)</option>
-        <option value="ليساج لحية (150 دج)">ليساج لحية (150 دج)</option>
-        <option value="Dégradé + Brushing + باربة (450 دج)">Dégradé + Brushing + باربة (450 دج)</option>
-        <option value="ماسق كابيلير (200 دج)">ماسق كابيلير (200 دج)</option>
-        <option value="PACK PREMIUM (3000 دج)">PACK PREMIUM (3000 دج)</option>
+      <select id="serviceSelect" onchange="updateServicePrice()">
+        <option value="ديكرادي" data-price="300">ديكرادي (300 دج)</option>
+        <option value="ديكرادي أطفال" data-price="250">ديكرادي أطفال (250 دج)</option>
+        <option value="بروتين الشعر" data-price="1000">بروتين الشعر</option>
+        <option value="Turkish / Tourist" data-price="300">Turkish / Tourist (300 دج)</option>
+        <option value="Brushing + سشوار" data-price="150">Brushing + سشوار (150 دج)</option>
+        <option value="تلسيج" data-price="100">تلسيج (100 دج)</option>
+        <option value="ليساج لحية" data-price="150">ليساج لحية (150 دج)</option>
+        <option value="Dégradé + Brushing + باربة" data-price="450">Dégradé + Brushing + باربة (450 دج)</option>
+        <option value="ماسق كابيلير" data-price="200">ماسق كابيلير (200 دج)</option>
+        <option value="PACK PREMIUM" data-price="3000">PACK PREMIUM (3000 دج)</option>
       </select>
       <label>التاريخ</label>
       <input id="bookingDate" type="date" required>
@@ -124,15 +125,19 @@ footer b{color:var(--gold)}
   </div>
 </section>
 
+<!-- قسم الطابور المباشر -->
 <section class="section queue-section" id="queue">
   <div class="section-title"><h2>الطابور المباشر</h2></div>
   <div class="queue-card">
     <div class="queue-number" id="queueCount">0</div>
     <b>أشخاص في الانتظار</b>
     <p id="shopNotice">أهلاً بك في M.H Barber</p>
+    <button class="gold-btn" onclick="joinQueue()" style="margin-top:15px;">خذ رقم انتظار 🎟️</button>
+    <p class="feedback" id="queueFeedback"></p>
   </div>
 </section>
 
+<!-- لوحة الإدارة المحترفة -->
 <section class="section admin-area hidden" id="adminPanel">
   <div class="section-title"><h2>لوحة الإدارة المحترفة</h2></div>
   <div class="panel">
@@ -150,7 +155,7 @@ footer b{color:var(--gold)}
     <div class="stat"><small>إيرادات السنة</small><b id="revYear">0 دج</b></div>
   </div>
   <div class="panel">
-    <h3>قائمة الحجوزات الواردة</h3>
+    <h3>قائمة الحجوزات الواردة والتحكم بالجلسات</h3>
     <div id="adminBookings">جاري تحميل البيانات...</div>
   </div>
 </section>
@@ -204,8 +209,9 @@ footer b{color:var(--gold)}
     document.getElementById('shopDot').classList.toggle('off', !d.open);
   });
 
-  db.doc('public/stats').onSnapshot(doc => {
-    document.getElementById('queueCount').textContent = doc.exists ? (doc.data().waitingCount || 0) : 0;
+  // تحديث عداد الطابور المباشر
+  db.collection('queue').onSnapshot(snapshot => {
+    document.getElementById('queueCount').textContent = snapshot.size;
   });
 
   async function adminLogin() {
@@ -222,25 +228,47 @@ footer b{color:var(--gold)}
     }
   }
 
+  // عند تسجيل دخول المدير يتم إخفاء قسم الحجز ونافذة الزبون
   auth.onAuthStateChanged(user => {
     if (user && user.uid === ADMIN_UID) {
       document.getElementById('adminPanel').classList.remove('hidden');
+      document.getElementById('bookingSection').classList.add('hidden');
+      document.getElementById('navBooking').classList.add('hidden');
       document.getElementById('adminLoginBtn').classList.add('hidden');
       document.getElementById('logoutBtn').classList.remove('hidden');
       loadAdminData();
     } else {
       document.getElementById('adminPanel').classList.add('hidden');
+      document.getElementById('bookingSection').classList.remove('hidden');
+      document.getElementById('navBooking').classList.remove('hidden');
       document.getElementById('adminLoginBtn').classList.remove('hidden');
       document.getElementById('logoutBtn').classList.add('hidden');
     }
   });
 
-  // حجز زبون جديد مع منع تكرار نفس التاريخ والوقت
+  // أخذ رقم انتظار في الطابور
+  async function joinQueue() {
+    const name = prompt('أدخل اسمك الكريم للانضمام للطابور المباشر:');
+    if (!name) return;
+    try {
+      await db.collection('queue').add({
+        clientName: name,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+      });
+      document.getElementById('queueFeedback').textContent = 'تم إضافتك للطابور بنجاح!';
+    } catch(e) {
+      alert('خطأ: ' + e.message);
+    }
+  }
+
+  // حجز موعد جديد مع منع تكراره
   async function submitBooking(e) {
     e.preventDefault();
     const name = document.getElementById('clientName').value;
     const phone = document.getElementById('clientPhone').value;
-    const service = document.getElementById('serviceSelect').value;
+    const selectEl = document.getElementById('serviceSelect');
+    const service = selectEl.value;
+    const price = parseInt(selectEl.selectedOptions[0].dataset.price) || 300;
     const date = document.getElementById('bookingDate').value;
     const time = document.getElementById('bookingTime').value;
     const feedback = document.getElementById('bookingFeedback');
@@ -248,35 +276,34 @@ footer b{color:var(--gold)}
     feedback.textContent = 'جاري التحقق من توفر الموعد...';
 
     try {
-      // 1. فحص هل يوجد حجز بنفس التاريخ والوقت مسبقاً
       const existingQuery = await db.collection('bookings')
         .where('date', '==', date)
         .where('time', '==', time)
         .get();
 
       if (!existingQuery.empty) {
-        feedback.textContent = '⚠️ عذراً، هذا الموعد (في التاريخ والوقت المحددين) محجوز مسبقاً. يرجى اختيار وقت آخر.';
+        feedback.textContent = '⚠️ عذراً، هذا الموعد محجوز مسبقاً. اختر وقتاً آخر.';
         return;
       }
 
-      // 2. إذا كان الموعد فارغاً، يتم حفظه في قاعدة البيانات
       await db.collection('bookings').add({
         clientName: name,
         clientPhone: phone,
         service: service,
+        price: price,
         date: date,
         time: time,
-        status: 'جديد',
+        status: 'قيد الانتظار',
+        startTime: null,
         createdAt: firebase.firestore.FieldValue.serverTimestamp()
       });
 
       feedback.textContent = 'تم تسجيل حجزك بنجاح! جاري تحويلك إلى واتساب...';
 
-      // 3. تجهيز رسالة واتساب
       const text = `السلام عليكم، لدي حجز جديد في M.H Barber:%0A` +
                    `👤 الاسم: ${encodeURIComponent(name)}%0A` +
                    `📞 الهاتف: ${encodeURIComponent(phone)}%0A` +
-                   `✂️ الخدمة: ${encodeURIComponent(service)}%0A` +
+                   `✂️ الخدمة: ${encodeURIComponent(service)} (${price} دج)%0A` +
                    `📅 التاريخ: ${encodeURIComponent(date)}%0A` +
                    `⏰ الوقت: ${encodeURIComponent(time)}`;
 
@@ -300,18 +327,76 @@ footer b{color:var(--gold)}
     }
   }
 
+  // بدء الحلاقة وحساب الوقت المنقضي
+  async function startService(id) {
+    try {
+      await db.collection('bookings').doc(id).update({
+        status: 'جاري الحلاقة',
+        startTime: firebase.firestore.FieldValue.serverTimestamp()
+      });
+    } catch(e) { alert(e.message); }
+  }
+
+  // إنهاء الحلاقة وإضافة السعر لإيرادات اليوم وتجاوز الزبون للذي يليه
+  async function finishService(id, price) {
+    try {
+      // 1. تحديث حالة الحجز إلى منتهي
+      await db.collection('bookings').doc(id).update({
+        status: 'منتهي',
+        endTime: firebase.firestore.FieldValue.serverTimestamp()
+      });
+
+      // 2. تحديث إيرادات اليوم والشهر والسنة في قاعدة البيانات
+      const todayStr = new Date().toISOString().slice(0,10);
+      const monthStr = todayStr.slice(0,7);
+      const yearStr = todayStr.slice(0,4);
+
+      const statRef = db.doc(`stats/${todayStr}`);
+      const doc = await statRef.get();
+      let currentRev = doc.exists ? (doc.data().revenue || 0) : 0;
+      await statRef.set({ revenue: currentRev + (price || 300) }, { merge: true });
+
+      alert('تم إنهاء الحلاقة بنجاح وإضافة الإيراد لخزينة اليوم! جاهز للشخص التالي.');
+    } catch(e) { alert(e.message); }
+  }
+
+  // تحميل وعرض بيانات الإدارة وإيرادات اليوم
   function loadAdminData() {
+    // حساب الإيرادات المباشرة اليومية
+    const todayStr = new Date().toISOString().slice(0,10);
+    db.doc(`stats/${todayStr}`).onSnapshot(doc => {
+      const rev = doc.exists ? (doc.data().revenue || 0) : 0;
+      document.getElementById('revDay').textContent = rev + ' دج';
+      document.getElementById('revMonth').textContent = rev + ' دج';
+      document.getElementById('revYear').textContent = rev + ' دج';
+    });
+
     db.collection('bookings').orderBy('createdAt', 'desc').onSnapshot(snapshot => {
       const root = document.getElementById('adminBookings');
       root.innerHTML = '';
       if(snapshot.empty) { root.textContent = 'لا توجد حجوزات حالياً.'; return; }
-      snapshot.forEach(doc => {
-        const b = doc.data();
+      
+      snapshot.forEach(docSnap => {
+        const b = docSnap.data();
+        const id = docSnap.id;
         const div = document.createElement('div');
         div.className = 'booking-row';
+
+        let timePassed = '';
+        if (b.startTime && b.status === 'جاري الحلاقة') {
+          const startSec = b.startTime.toMillis();
+          const nowSec = Date.now();
+          const diffMin = Math.floor((nowSec - startSec) / 60000);
+          timePassed = `⏱️ الوقت المنقضي: ${diffMin} دقيقة`;
+        }
+
         div.innerHTML = `
-          <span><b>${b.clientName || 'زبون'}</b> (${b.clientPhone || 'بدون رقم'}) - ${b.service}</span>
-          <span>📅 ${b.date} | ⏰ ${b.time}</span>
+          <span><b>${b.clientName}</b> (${b.clientPhone}) | ${b.service} (${b.price || 300} دج)<br>📅 ${b.date} | ⏰ ${b.time} | <span style="color:var(--gold)">الحالة: ${b.status}</span> <br><small>${timePassed}</small></span>
+          <div>
+            ${b.status === 'قيد الانتظار' ? `<button class="green-btn" onclick="startService('${id}')">بدء الحلاقة</button>` : ''}
+            ${b.status === 'جاري الحلاقة' ? `<button class="red-btn" onclick="finishService('${id}', ${b.price || 300})">إنهاء الحلاقة ✓</button>` : ''}
+            ${b.status === 'منتهي' ? `<span style="color:#28d27c; font-weight:bold;">مكتمل</span>` : ''}
+          </div>
         `;
         root.appendChild(div);
       });
