@@ -14,10 +14,10 @@ body{margin:0;background:var(--bg);color:#f7f4ed;font-family:Cairo,Arial,sans-se
 button,input,select{font:inherit}button,a{cursor:pointer}a{color:inherit;text-decoration:none}
 .topbar{height:82px;padding:0 6%;display:flex;align-items:center;justify-content:space-between;background:#11110ff2;border-bottom:1px solid #ffffff12;position:relative;z-index:4}
 .brand{display:flex;align-items:center;gap:12px;font-size:19px;font-weight:900;letter-spacing:2px}
-.brand img{width:58px;height:58px;object-fit:contain}.brand b{color:var(--gold)}
+.brand img{width:45px;height:45px;object-fit:contain;border-radius:50%}.brand b{color:var(--gold)}
 nav{display:flex;gap:28px;font-size:13px;color:#d2cec5}nav a:hover{color:var(--gold)}
 .outline,.small-btn{background:transparent;border:1px solid var(--gold);color:var(--gold);padding:10px 18px;border-radius:3px}
-.hero{min-height:680px;position:relative;display:flex;align-items:center;padding:70px 9%;overflow:hidden;background:#171613}
+.hero{min-height:680px;position:relative;display:flex;align-items:center;padding:70px 9%;overflow:hidden;background:url('https://images.unsplash.com/photo-1503951914875-452162b0f3f1?auto=format&fit=crop&w=1920&q=80') center/cover no-repeat}
 .hero-shade{position:absolute;inset:0;background:linear-gradient(90deg,#0d0d0bf2 0%,#0d0d0bd9 44%,#0d0d0b30 100%),linear-gradient(0deg,#10100e 0%,transparent 35%)}
 .hero-content{position:relative;z-index:1;max-width:650px}
 .eyebrow{color:var(--gold);letter-spacing:4px;font-size:11px;font-weight:800}
@@ -42,7 +42,6 @@ input,select{display:block;width:100%;background:#11110f;border:1px solid #49433
 .feedback{font-size:12px;color:var(--gold);min-height:18px}
 .queue-card{max-width:480px;margin:auto;text-align:center;padding:32px;background:linear-gradient(145deg,#24211a,#171613);border:1px solid var(--line);border-radius:10px}
 .queue-number{font-size:65px;line-height:1.3;color:var(--gold);font-weight:900}
-.about{text-align:center;background:#171613;border-block:1px solid #ffffff10}.about p{max-width:620px;margin:12px auto;line-height:2}
 .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:18px 0}
 .stat{padding:20px;background:#1d1b17;border:1px solid var(--line);border-radius:8px}
 .stat small{display:block;color:var(--muted)}.stat b{display:block;color:var(--gold);font-size:25px;margin-top:8px}
@@ -171,15 +170,14 @@ footer b{color:var(--gold)}
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 
 <script>
-  // تهيئة Firebase المباشرة
+  // تأكد من وضع مفتاح مشروعك الحقيقي في apiKey أدناه
   const firebaseConfig = {
-    apiKey: "AIzaSyDO0RBoc24gaAbnqKXbJgciuB3IJCB0qlA",
+    apiKey: "ضع_مفتاح_api_الصحيح_هنا",
     authDomain: "mh-barber.firebaseapp.com",
     projectId: "mh-barber",
     storageBucket: "mh-barber.firebasestorage.app",
     messagingSenderId: "625702538870",
-    appId: "1:625702538870:web:e3926936f556a4f3f8d957",
-    measurementId: "G-ME9H7B5D8N"
+    appId: "1:625702538870:web:e3926936f556a4f3f8d957"
   };
 
   firebase.initializeApp(firebaseConfig);
@@ -187,7 +185,6 @@ footer b{color:var(--gold)}
   const db = firebase.firestore();
   const ADMIN_UID = "sRzxHot4wdPZPIV5qX5jHrVaddE2";
 
-  // تفعيل التاريخ الأدنى اليوم
   const localDate = new Date().toISOString().slice(0,10);
   document.getElementById('bookingDate').min = localDate;
 
@@ -197,7 +194,6 @@ footer b{color:var(--gold)}
     document.getElementById('serviceSelect').value = btn.dataset.service;
   }
 
-  // الاستماع لحالة المحل والطابور
   db.doc('public/shop').onSnapshot(doc => {
     const d = doc.exists ? doc.data() : { open: false };
     document.getElementById('shopState').textContent = d.open ? 'المحل مفتوح الآن' : 'المحل مغلق الآن';
@@ -209,13 +205,12 @@ footer b{color:var(--gold)}
     document.getElementById('queueCount').textContent = doc.exists ? (doc.data().waitingCount || 0) : 0;
   });
 
-  // تسجيل الدخول
   async function customerLogin() {
     try {
       await auth.signInAnonymously();
       document.getElementById('loginModal').classList.add('hidden');
       alert('تم تسجيل الدخول بنجاح كزبون!');
-    } catch(e) { alert(e.message); }
+    } catch(e) { alert('خطأ في الاتصال: ' + e.message); }
   }
 
   async function adminLogin() {
@@ -227,7 +222,6 @@ footer b{color:var(--gold)}
     } catch(e) { alert('خطأ في بيانات المدير: ' + e.message); }
   }
 
-  // مراقبة المصادقة
   auth.onAuthStateChanged(user => {
     if (!user) {
       document.getElementById('accountPanel').classList.add('hidden');
@@ -242,7 +236,6 @@ footer b{color:var(--gold)}
     }
   });
 
-  // إرسال الحجز
   async function submitBooking(e) {
     e.preventDefault();
     if (!auth.currentUser) return alert('يرجى تسجيل الدخول أولاً.');
