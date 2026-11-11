@@ -54,6 +54,8 @@ input,select{display:block;width:100%;background:#11110f;border:1px solid #49433
 .stat small{display:block;color:var(--muted);font-size:11px}.stat b{display:block;color:var(--gold);font-size:20px;margin-top:6px}
 .admin-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
 .green-btn{background:#176c42;color:white}.red-btn{background:#9d3030;color:white}
+.delete-btn{background:#5a1818;color:#ffcccc;padding:8px 12px;font-size:12px;border-radius:4px;border:0;font-weight:bold}
+.delete-btn:hover{background:#842020}
 .booking-row{padding:14px 0;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
 .hidden{display:none!important}
 footer{padding:25px 5%;display:flex;justify-content:space-between;color:#8d887d;font-size:12px;border-top:1px solid #ffffff12}
@@ -227,7 +229,6 @@ footer b{color:var(--gold)}
   const ADMIN_UID = "Mgx6RTN03sWDkU9SnWpjCRe7zs63";
   const WHATSAPP_NUMBER = "213782242293";
 
-  // تعيين تاريخ اليوم افتراضياً لحقل التاريخ
   const todayObj = new Date();
   const currentYearStr = todayObj.getFullYear().toString();
   const currentMonthStr = (todayObj.getMonth() + 1).toString().padStart(2, '0');
@@ -404,7 +405,18 @@ footer b{color:var(--gold)}
     } catch(e) { alert(e.message); }
   }
 
-  // حساب دقيق ومجدد تلقائياً لإيرادات اليوم والشهر والسنة بناءً على تاريخ الحجز الفعلي
+  // دالة حذف الحجز من لوحة تحكم المدير
+  async function deleteBooking(id) {
+    if (confirm('هل أنت متأكد من حذف هذا الحجز نهائياً من القائمة؟')) {
+      try {
+        await db.collection('bookings').doc(id).delete();
+        alert('تم حذف الحجز بنجاح.');
+      } catch(e) {
+        alert('خطأ أثناء الحذف: ' + e.message);
+      }
+    }
+  }
+
   function loadAdminData() {
     db.collection('bookings').orderBy('createdAt', 'desc').onSnapshot(snapshot => {
       const root = document.getElementById('adminBookings');
@@ -416,8 +428,8 @@ footer b{color:var(--gold)}
       let yearRev = 0;
 
       const activeTodayStr = `${new Date().getFullYear()}-${(new Date().getMonth() + 1).toString().padStart(2, '0')}-${new Date().getDate().toString().padStart(2, '0')}`;
-      const activeMonthStr = activeTodayStr.slice(0, 7); // YYYY-MM
-      const activeYearStr = activeTodayStr.slice(0, 4);   // YYYY
+      const activeMonthStr = activeTodayStr.slice(0, 7);
+      const activeYearStr = activeTodayStr.slice(0, 4);
 
       snapshot.forEach(docSnap => {
         const b = docSnap.data();
@@ -425,7 +437,7 @@ footer b{color:var(--gold)}
 
         if (b.status === 'منتهي') {
           const revAmount = Number(b.revenue || b.price || 300);
-          const bDate = b.date || ''; // تاريخ الحجز الذي اختاره الزبون أو تم إنجازه فيه
+          const bDate = b.date || '';
 
           if (bDate === activeTodayStr) {
             dayRev += revAmount;
@@ -451,16 +463,16 @@ footer b{color:var(--gold)}
 
         div.innerHTML = `
           <span><b>${b.clientName}</b> (${b.clientPhone}) | ${b.service} (${b.price || 300} دج)<br>📅 ${b.date} | ⏰ ${b.time} | <span style="color:var(--gold)">الحالة: ${b.status}</span> <br><small>${timePassed}</small></span>
-          <div>
+          <div style="display:flex; gap:8px; align-items:center;">
             ${b.status === 'قيد الانتظار' ? `<button class="green-btn" onclick="startService('${id}')">بدء الحلاقة</button>` : ''}
             ${b.status === 'جاري الحلاقة' ? `<button class="red-btn" onclick="finishService('${id}', ${b.price || 300})">إنهاء الحلاقة ✓</button>` : ''}
             ${b.status === 'منتهي' ? `<span style="color:#28d27c; font-weight:bold;">مكتمل (${b.price || 300} دج)</span>` : ''}
+            <button class="delete-btn" onclick="deleteBooking('${id}')">حذف 🗑️</button>
           </div>
         `;
         root.appendChild(div);
       });
 
-      // تحديث الأرقام في واجهة المدير فوراً
       document.getElementById('revDay').textContent = dayRev + ' دج';
       document.getElementById('revMonth').textContent = monthRev + ' دج';
       document.getElementById('revYear').textContent = yearRev + ' دج';
