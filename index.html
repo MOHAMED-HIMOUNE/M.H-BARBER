@@ -21,6 +21,10 @@ button,input,select{font:inherit}button,a{cursor:pointer}a{color:inherit;text-de
 nav{display:flex;gap:20px;font-size:13px;color:var(--muted)}nav a:hover{color:var(--gold)}
 .outline,.small-btn{background:transparent;border:1px solid var(--gold);color:var(--gold);padding:8px 14px;border-radius:4px;font-size:12px}
 
+/* شريط إعلان الغياب للعامة */
+#publicAbsenceBanner{background:linear-gradient(115deg,#8b0000,#b22222);color:#fff;text-align:center;padding:12px;font-weight:bold;font-size:15px;display:none;border-bottom:2px solid var(--gold);box-shadow:0 4px 15px rgba(0,0,0,0.5);animation:pulseBanner 1.5s infinite}
+@keyframes pulseBanner{0%{opacity:1}50%{opacity:0.8}100%{opacity:1}}
+
 .hero{min-height:600px;position:relative;display:flex;align-items:center;padding:50px 6%;overflow:hidden;background:url('background.jpg') center/cover no-repeat}
 .hero-shade{position:absolute;inset:0;background:linear-gradient(90deg,#0d0d0bf2 0%,#0d0d0bd9 45%,#0d0d0b60 100%),linear-gradient(0deg,var(--bg) 0%,transparent 35%)}
 .hero-content{position:relative;z-index:1;max-width:650px}
@@ -42,7 +46,7 @@ nav{display:flex;gap:20px;font-size:13px;color:var(--muted)}nav a:hover{color:va
 .panel{background:var(--panel);border:1px solid var(--line);border-radius:9px;padding:22px;transition:background 0.3s}
 .panel h3{margin-top:0;color:var(--gold)}
 label{display:block;color:var(--muted);font-size:12px;margin:12px 0 4px}
-input,select{display:block;width:100%;background:var(--bg);border:1px solid var(--line);color:var(--text);padding:12px;border-radius:4px;outline:none;font-size:14px}
+input,select,textarea{display:block;width:100%;background:var(--bg);border:1px solid var(--line);color:var(--text);padding:12px;border-radius:4px;outline:none;font-size:14px}
 .feedback{font-size:13px;color:var(--gold);margin-top:10px;font-weight:700;min-height:18px}
 .queue-card{max-width:550px;margin:auto;text-align:center;padding:32px 20px;background:var(--panel);border:1px solid var(--line);border-radius:10px}
 .queue-number{font-size:55px;line-height:1.2;color:var(--gold);font-weight:900}
@@ -84,6 +88,10 @@ footer b{color:var(--gold)}
 </style>
 </head>
 <body>
+
+<!-- شريط إعلان الغياب يظهر للعامة فقط عند كتابته من الإدارة -->
+<div id="publicAbsenceBanner"></div>
+
 <header class="topbar">
   <a class="brand" href="#home">
     <img src="logo.png" alt="M.H Logo">
@@ -109,6 +117,7 @@ footer b{color:var(--gold)}
     <div class="live-status"><i id="shopDot"></i><b id="shopState">جاري التحقق من حالة المحل...</b></div>
     <h1>M.H<br><em>BARBER</em></h1>
     <p>أناقتك تبدأ من التفاصيل. احجز موعدك واستمتع بتجربة حلاقة راقية.</p>
+    <!-- تم إصلاح وتفعيل زر احجز موعدك الآن لينقل الزبون لقسم الحجز مباشرة -->
     <a class="gold-btn" href="#booking">احجز موعدك الآن <span>←</span></a>
   </div>
 </section>
@@ -121,7 +130,7 @@ footer b{color:var(--gold)}
   </div>
 </section>
 
-<!-- قسم الحجز -->
+<!-- قسم الحجز (يختفي عندما يكون المدير مسجلاً دخوله) -->
 <section class="section split" id="bookingSection">
   <div class="booking-copy">
     <h2>موعدك القادم<br><em>يبدأ من هنا</em></h2>
@@ -142,15 +151,15 @@ footer b{color:var(--gold)}
 
       <label>الخدمة المطلوبة</label>
       <select id="serviceSelect">
-        <option value="ديكرادي" data-price="300">ديقرادي (300 دج)</option>
-        <option value="ديكرادي أطفال" data-price="250">ديقرادي أطفال (250 دج)</option>
-        <option value="بروتين الشعر" data-price="1000">(سعر في محل) بروتين الشعر</option>
+        <option value="ديكرادي" data-price="300">ديكرادي (300 دج)</option>
+        <option value="ديكرادي أطفال" data-price="250">ديكرادي أطفال (250 دج)</option>
+        <option value="بروتين الشعر" data-price="1000">بروتين الشعر</option>
         <option value="Turkish / Tourist" data-price="300">Turkish / Tourist (300 دج)</option>
-        <option value="Brushing + سشوار" data-price="150">Brushing + sechoir (150 دج)</option>
-        <option value="تلسيج" data-price="100">طرساج / lissage (100 دج)</option>
-        <option value="ليساج لحية" data-price="150">طرساج لحية / lissage barbe (150دج)</option>
-        <option value="Dégradé + Brushing + باربة" data-price="450">Dégradé + Brushing + barbe (450 دج)</option>
-        <option value="ماسق كابيلير" data-price="200">ماسك / masque (200 دج)</option>
+        <option value="Brushing + سشوار" data-price="150">Brushing + سشوار (150 دج)</option>
+        <option value="تلسيج" data-price="100">تلسيج (100 دج)</option>
+        <option value="ليساج لحية" data-price="150">ليساج لحية (150 دج)</option>
+        <option value="Dégradé + Brushing + باربة" data-price="450">Dégradé + Brushing + باربة (450 دج)</option>
+        <option value="ماسق كابيلير" data-price="200">ماسق كابيلير (200 دج)</option>
         <option value="PACK PREMIUM" data-price="3000">PACK PREMIUM (3000 دج)</option>
       </select>
       <label>التاريخ</label>
@@ -187,9 +196,18 @@ footer b{color:var(--gold)}
 <section class="section admin-area hidden" id="adminPanel">
   <div class="section-title"><h2>لوحة الإدارة المحترفة</h2></div>
   
-  <!-- تخصيص أسماء الكراسي عبر سحابيات Firebase -->
+  <!-- مساحة رسالة الغياب أو الاعتذار للعامة -->
+  <div class="panel" style="margin-bottom: 25px; border-color: #b22222;">
+    <h3>📢 رسالة الغياب أو التنبيه العام للزبائن</h3>
+    <p style="color:var(--muted); font-size:12px; margin-bottom:8px;">اكتب رسالة هنا في حال كنت غائباً عن المحل لتظهر بارزة للجميع في أعلى الموقع. اتركها فارغة لإخفائها.</p>
+    <textarea id="adminAbsenceText" placeholder="مثال: أنا غائب عن المحل اليوم وسأعود غد إن شاء الله..." rows="2" style="margin-bottom:10px;"></textarea>
+    <button class="gold-btn full" onclick="saveAbsenceNotice()">تحديث ونشر رسالة الغياب 📢</button>
+    <p class="feedback" id="absenceFeedback" style="text-align:center; margin-top:6px;"></p>
+  </div>
+
+  <!-- تخصيص أسماء الكراسي -->
   <div class="panel" style="margin-bottom: 25px;">
-    <h3>🪑 تخصيص أسماء الكراسي (تظهر للزبائن سحابياً)</h3>
+    <h3>🪑 تخصيص أسماء الكراسي (تظهر للزبائن)</h3>
     <div class="chairs-grid">
       <div class="chair-box">
         <h4>الكرسي 1</h4>
@@ -276,7 +294,7 @@ footer b{color:var(--gold)}
   const ADMIN_UID = "Mgx6RTN03sWDkU9SnWpjCRe7zs63";
   const WHATSAPP_NUMBER = "213782242293";
 
-  // إدارة الثيم (ليلي/نهاري)
+  // نظام الثيم (ليلي/نهاري)
   function toggleTheme() {
     const html = document.documentElement;
     const currentTheme = html.getAttribute('data-theme');
@@ -286,31 +304,56 @@ footer b{color:var(--gold)}
   }
   document.documentElement.setAttribute('data-theme', localStorage.getItem('mh_theme') || 'dark');
 
-  // الاستماع المباشر لأسماء الكراسي من قاعدة البيانات لتظهر للجميع لحظياً
-  db.doc('public/chairs').onSnapshot(doc => {
-    const data = doc.exists ? doc.data() : { c1: '', c2: '', c3: '' };
-    
-    // تعبئة حقول لوحة المدير
-    document.getElementById('chair1Name').value = data.c1 || '';
-    document.getElementById('chair2Name').value = data.c2 || '';
-    document.getElementById('chair3Name').value = data.c3 || '';
+  // الاستماع لرسالة الغياب ونشرها للعامة فوراً
+  db.doc('public/absence').onSnapshot(doc => {
+    const banner = document.getElementById('publicAbsenceBanner');
+    const textInput = document.getElementById('adminAbsenceText');
+    const msg = doc.exists ? (doc.data().message || '') : '';
+    if (textInput) textInput.value = msg;
 
-    // تعبئة قائمة الاختيار للزبائن (إظهار الأسماء المؤكدة فقط)
-    const select = document.getElementById('chairSelect');
-    select.innerHTML = '';
-
-    let optionsHTML = '';
-    if (data.c1 && data.c1.trim() !== '') optionsHTML += `<option value="${data.c1.trim()}">${data.c1.trim()}</option>`;
-    if (data.c2 && data.c2.trim() !== '') optionsHTML += `<option value="${data.c2.trim()}">${data.c2.trim()}</option>`;
-    if (data.c3 && data.c3.trim() !== '') optionsHTML += `<option value="${data.c3.trim()}">${data.c3.trim()}</option>`;
-
-    if (optionsHTML === '') {
-      optionsHTML = `<option value="اختر الحلاق أو الكرسي">اختر الحلاق أو الكرسي</option>`;
+    if (msg.trim() !== '') {
+      banner.textContent = `🚨 تنبيه مهم من المحل: ${msg}`;
+      banner.style.display = 'block';
+    } else {
+      banner.style.display = 'none';
     }
-    select.innerHTML = optionsHTML;
   });
 
-  // حفظ وحفظ الكراسي في السحابة لترى للجميع
+  async function saveAbsenceNotice() {
+    const msg = document.getElementById('adminAbsenceText').value;
+    try {
+      await db.doc('public/absence').set({ message: msg });
+      document.getElementById('absenceFeedback').textContent = '✅ تم تحديث ونشر رسالة الغياب بنجاح!';
+      setTimeout(() => document.getElementById('absenceFeedback').textContent = '', 3000);
+    } catch(e) {
+      alert('خطأ: ' + e.message);
+    }
+  }
+
+  // الاستماع لأسماء الكراسي
+  db.doc('public/chairs').onSnapshot(doc => {
+    const data = doc.exists ? doc.data() : { c1: '', c2: '', c3: '' };
+    if (document.getElementById('chair1Name')) {
+      document.getElementById('chair1Name').value = data.c1 || '';
+      document.getElementById('chair2Name').value = data.c2 || '';
+      document.getElementById('chair3Name').value = data.c3 || '';
+    }
+
+    const select = document.getElementById('chairSelect');
+    if (select) {
+      select.innerHTML = '';
+      let optionsHTML = '';
+      if (data.c1 && data.c1.trim() !== '') optionsHTML += `<option value="${data.c1.trim()}">${data.c1.trim()}</option>`;
+      if (data.c2 && data.c2.trim() !== '') optionsHTML += `<option value="${data.c2.trim()}">${data.c2.trim()}</option>`;
+      if (data.c3 && data.c3.trim() !== '') optionsHTML += `<option value="${data.c3.trim()}">${data.c3.trim()}</option>`;
+
+      if (optionsHTML === '') {
+        optionsHTML = `<option value="اختر الحلاق أو الكرسي">اختر الحلاق أو الكرسي</option>`;
+      }
+      select.innerHTML = optionsHTML;
+    }
+  });
+
   async function saveAndConfirmChairs() {
     const c1 = document.getElementById('chair1Name').value;
     const c2 = document.getElementById('chair2Name').value;
@@ -325,18 +368,25 @@ footer b{color:var(--gold)}
     }
   }
 
-  function playAlertSound() {
+  // صوت تنبيه قوي ومتكرر للمدير عند دخول حجز جديد
+  function playLoudAlertSound() {
     try {
       const ctx = new (window.AudioContext || window.webkitAudioContext)();
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
-      osc.type = 'sine';
-      osc.frequency.setValueAtTime(587.33, ctx.currentTime);
-      gain.gain.setValueAtTime(0.1, ctx.currentTime);
-      osc.connect(gain);
-      gain.connect(ctx.destination);
-      osc.start();
-      osc.stop(ctx.currentTime + 0.3);
+      const playTone = (freq, startTime, duration) => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'square';
+        osc.frequency.setValueAtTime(freq, ctx.currentTime + startTime);
+        gain.gain.setValueAtTime(0.15, ctx.currentTime + startTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + startTime + duration);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(ctx.currentTime + startTime);
+        osc.stop(ctx.currentTime + startTime + duration);
+      };
+      playTone(587.33, 0, 0.25);
+      playTone(880.00, 0.3, 0.35);
+      playTone(1174.66, 0.7, 0.5);
     } catch(e) {}
   }
 
@@ -355,7 +405,7 @@ footer b{color:var(--gold)}
     document.getElementById('queueCount').textContent = snapshot.size;
 
     if (lastBookingCount !== null && snapshot.size > lastBookingCount) {
-      playAlertSound();
+      playLoudAlertSound();
     }
     lastBookingCount = snapshot.size;
 
@@ -414,14 +464,14 @@ footer b{color:var(--gold)}
   auth.onAuthStateChanged(user => {
     if (user && user.uid === ADMIN_UID) {
       document.getElementById('adminPanel').classList.remove('hidden');
-      document.getElementById('bookingSection').classList.add('hidden');
+      document.getElementById('bookingSection').classList.add('hidden'); // إخفاء نموذج حجز الموعد عن المدير تماماً
       document.getElementById('navBooking').classList.add('hidden');
       document.getElementById('adminLoginBtn').classList.add('hidden');
       document.getElementById('logoutBtn').classList.remove('hidden');
       loadAdminData();
     } else {
       document.getElementById('adminPanel').classList.add('hidden');
-      document.getElementById('bookingSection').classList.remove('hidden');
+      document.getElementById('bookingSection').classList.remove('hidden'); // إظهار نموذج الحجز للزبائن
       document.getElementById('navBooking').classList.remove('hidden');
       document.getElementById('adminLoginBtn').classList.remove('hidden');
       document.getElementById('logoutBtn').classList.add('hidden');
@@ -535,6 +585,7 @@ footer b{color:var(--gold)}
   function loadAdminData() {
     db.collection('bookings').orderBy('createdAt', 'desc').onSnapshot(snapshot => {
       const root = document.getElementById('adminBookings');
+      if (!root) return;
       root.innerHTML = '';
       if(snapshot.empty) { root.textContent = 'لا توجد حجوزات حالياً.'; return; }
       
