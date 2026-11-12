@@ -477,33 +477,37 @@ footer b{color:var(--gold)}
     }
   });
 
-  // جلب التقييمات المنشورة مع معالجة الأخطاء
-  db.collection('reviews').where('approved', '==', true).orderBy('createdAt', 'desc').onSnapshot(snapshot => {
+  // جلب كافة التقييمات وتصفيتها برمجياً لضمان ظهورها للعامة فور الموافقة عليها
+  db.collection('reviews').onSnapshot(snapshot => {
     const grid = document.getElementById('publicReviewsGrid');
     if (!grid) return;
     grid.innerHTML = '';
-    if (snapshot.empty) {
-      grid.innerHTML = '<p style="color:var(--muted); text-align:center; grid-column: 1/-1;">لا توجد تقييمات منشورة حتى الآن.</p>';
-      return;
-    }
+    
+    let hasApprovedReviews = false;
     snapshot.forEach(doc => {
       const r = doc.data();
-      const starsCount = parseInt(r.stars) || 5;
-      const starsStr = '⭐'.repeat(starsCount);
-      const div = document.createElement('div');
-      div.className = 'review-card';
-      div.innerHTML = `
-        <div class="stars">${starsStr}</div>
-        <b style="color:var(--gold); font-size:15px;">${r.clientName}</b>
-        <p>"${r.comment}"</p>
-      `;
-      grid.appendChild(div);
+      if (r.approved === true) {
+        hasApprovedReviews = true;
+        const starsCount = parseInt(r.stars) || 5;
+        const starsStr = '⭐'.repeat(starsCount);
+        const div = document.createElement('div');
+        div.className = 'review-card';
+        div.innerHTML = `
+          <div class="stars">${starsStr}</div>
+          <b style="color:var(--gold); font-size:15px;">${r.clientName}</b>
+          <p>"${r.comment}"</p>
+        `;
+        grid.appendChild(div);
+      }
     });
+
+    if (!hasApprovedReviews) {
+      grid.innerHTML = '<p style="color:var(--muted); text-align:center; grid-column: 1/-1;">لا توجد تقييمات منشورة حتى الآن.</p>';
+    }
   }, error => {
     console.error("خطأ في قراءة التقييمات:", error);
   });
 
-  // إرسال تقييم جديد مع التقاط الخطأ وعرضه
   async function submitReview(e) {
     e.preventDefault();
     const name = document.getElementById('revName').value;
@@ -525,15 +529,15 @@ footer b{color:var(--gold)}
       setTimeout(() => feedback.textContent = '', 6000);
     } catch(err) {
       console.error(err);
-      feedback.textContent = '❌ حدث خطأ أثناء الإرسال: تأكد من ضبط قواعد الأمان (Firestore Rules) لتسمح بالإضافة.';
+      feedback.textContent = '❌ حدث خطأ أثناء الإرسال: تأكد من ضبط قواعد الأمان (Firestore Rules).';
     }
   }
 
   async function approveReview(id) {
     try {
       await db.collection('reviews').doc(id).update({ approved: true });
-      alert('تم نشر التقييم ليصبح مرئياً للجميع في الموقع!');
-    } catch(e) { alert(e.message); }
+      alert('تم نشر التقييم ليصبح مرئياً للجميع في الموقع فوراً!');
+    } catch(e) { alert('خطأ في النشر: ' + e.message); }
   }
 
   async function deleteReview(id) {
@@ -706,7 +710,7 @@ footer b{color:var(--gold)}
   }
 
   function loadAdminReviews() {
-    db.collection('reviews').orderBy('createdAt', 'desc').onSnapshot(snapshot => {
+    db.collection('reviews').onSnapshot(snapshot => {
       const root = document.getElementById('adminReviewsList');
       if (!root) return;
       root.innerHTML = '';
