@@ -89,7 +89,6 @@ footer b{color:var(--gold)}
 </head>
 <body>
 
-<!-- شريط إعلان الغياب يظهر للعامة فقط عند كتابته من الإدارة -->
 <div id="publicAbsenceBanner"></div>
 
 <header class="topbar">
@@ -117,7 +116,6 @@ footer b{color:var(--gold)}
     <div class="live-status"><i id="shopDot"></i><b id="shopState">جاري التحقق من حالة المحل...</b></div>
     <h1>M.H<br><em>BARBER</em></h1>
     <p>أناقتك تبدأ من التفاصيل. احجز موعدك واستمتع بتجربة حلاقة راقية.</p>
-    <!-- تم إصلاح وتفعيل زر احجز موعدك الآن لينقل الزبون لقسم الحجز مباشرة -->
     <a class="gold-btn" href="#booking">احجز موعدك الآن <span>←</span></a>
   </div>
 </section>
@@ -130,7 +128,7 @@ footer b{color:var(--gold)}
   </div>
 </section>
 
-<!-- قسم الحجز (يختفي عندما يكون المدير مسجلاً دخوله) -->
+<!-- قسم الحجز -->
 <section class="section split" id="bookingSection">
   <div class="booking-copy">
     <h2>موعدك القادم<br><em>يبدأ من هنا</em></h2>
@@ -196,30 +194,27 @@ footer b{color:var(--gold)}
 <section class="section admin-area hidden" id="adminPanel">
   <div class="section-title"><h2>لوحة الإدارة المحترفة</h2></div>
   
-  <!-- مساحة رسالة الغياب أو الاعتذار للعامة -->
   <div class="panel" style="margin-bottom: 25px; border-color: #b22222;">
     <h3>📢 رسالة الغياب أو التنبيه العام للزبائن</h3>
-    <p style="color:var(--muted); font-size:12px; margin-bottom:8px;">اكتب رسالة هنا في حال كنت غائباً عن المحل لتظهر بارزة للجميع في أعلى الموقع. اتركها فارغة لإخفائها.</p>
-    <textarea id="adminAbsenceText" placeholder="مثال: أنا غائب عن المحل اليوم وسأعود غد إن شاء الله..." rows="2" style="margin-bottom:10px;"></textarea>
+    <textarea id="adminAbsenceText" placeholder="مثال: أنا غائب عن المحل اليوم وسأعود غداً..." rows="2" style="margin-bottom:10px;"></textarea>
     <button class="gold-btn full" onclick="saveAbsenceNotice()">تحديث ونشر رسالة الغياب 📢</button>
     <p class="feedback" id="absenceFeedback" style="text-align:center; margin-top:6px;"></p>
   </div>
 
-  <!-- تخصيص أسماء الكراسي -->
   <div class="panel" style="margin-bottom: 25px;">
     <h3>🪑 تخصيص أسماء الكراسي (تظهر للزبائن)</h3>
     <div class="chairs-grid">
       <div class="chair-box">
         <h4>الكرسي 1</h4>
-        <input id="chair1Name" placeholder="أدخل اسم الحلاق هنا">
+        <input id="chair1Name" placeholder="اسم الحلاق 1">
       </div>
       <div class="chair-box">
         <h4>الكرسي 2</h4>
-        <input id="chair2Name" placeholder="أدخل اسم الحلاق هنا">
+        <input id="chair2Name" placeholder="اسم الحلاق 2">
       </div>
       <div class="chair-box">
         <h4>الكرسي 3</h4>
-        <input id="chair3Name" placeholder="أدخل اسم الحلاق هنا">
+        <input id="chair3Name" placeholder="اسم الحلاق 3">
       </div>
     </div>
     <button class="gold-btn full" onclick="saveAndConfirmChairs()" style="margin-top:10px;">تأكيد وحفظ أسماء الكراسي الحالية 💾</button>
@@ -242,6 +237,11 @@ footer b{color:var(--gold)}
     <div class="stat"><small>إيرادات السنة</small><b id="revYear">0 دج</b></div>
   </div>
 
+  <!-- زر تصفير إيرادات اليوم يدوياً متى أردت -->
+  <div style="text-align: center; margin: 15px 0;">
+    <button class="red-btn" onclick="resetDailyRevenue()" style="font-size: 13px; padding: 10px 20px;">🔄 تصفير إيرادات اليوم يدوياً</button>
+  </div>
+
   <div class="panel" style="margin-top: 20px;">
     <h3>📊 تقارير إحصائية سريعة</h3>
     <p id="statsReportText" style="color:var(--muted); font-size:14px; line-height:1.6;">جاري تحليل البيانات...</p>
@@ -256,7 +256,6 @@ footer b{color:var(--gold)}
 
 <footer><b>M.H BARBER</b><span>© 2026</span></footer>
 
-<!-- نافذة دخول المدير فقط -->
 <div class="modal hidden" id="loginModal">
   <div class="modal-box">
     <button class="modal-close" onclick="document.getElementById('loginModal').classList.add('hidden')">×</button>
@@ -272,7 +271,6 @@ footer b{color:var(--gold)}
   </div>
 </div>
 
-<!-- Firebase Scripts -->
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
@@ -294,7 +292,6 @@ footer b{color:var(--gold)}
   const ADMIN_UID = "Mgx6RTN03sWDkU9SnWpjCRe7zs63";
   const WHATSAPP_NUMBER = "213782242293";
 
-  // نظام الثيم (ليلي/نهاري)
   function toggleTheme() {
     const html = document.documentElement;
     const currentTheme = html.getAttribute('data-theme');
@@ -304,7 +301,6 @@ footer b{color:var(--gold)}
   }
   document.documentElement.setAttribute('data-theme', localStorage.getItem('mh_theme') || 'dark');
 
-  // الاستماع لرسالة الغياب ونشرها للعامة فوراً
   db.doc('public/absence').onSnapshot(doc => {
     const banner = document.getElementById('publicAbsenceBanner');
     const textInput = document.getElementById('adminAbsenceText');
@@ -330,7 +326,6 @@ footer b{color:var(--gold)}
     }
   }
 
-  // الاستماع لأسماء الكراسي
   db.doc('public/chairs').onSnapshot(doc => {
     const data = doc.exists ? doc.data() : { c1: '', c2: '', c3: '' };
     if (document.getElementById('chair1Name')) {
@@ -361,14 +356,13 @@ footer b{color:var(--gold)}
 
     try {
       await db.doc('public/chairs').set({ c1: c1, c2: c2, c3: c3 });
-      document.getElementById('chairFeedback').textContent = '✅ تم حفظ وتأكيد الأسماء سحابياً وتحديثها للجميع فوراً!';
+      document.getElementById('chairFeedback').textContent = '✅ تم حفظ وتأكيد الأسماء وتحديثها للجميع!';
       setTimeout(() => document.getElementById('chairFeedback').textContent = '', 3000);
     } catch(e) {
       alert('خطأ في الحفظ: ' + e.message);
     }
   }
 
-  // صوت تنبيه قوي ومتكرر للمدير عند دخول حجز جديد
   function playLoudAlertSound() {
     try {
       const ctx = new (window.AudioContext || window.webkitAudioContext)();
@@ -464,14 +458,14 @@ footer b{color:var(--gold)}
   auth.onAuthStateChanged(user => {
     if (user && user.uid === ADMIN_UID) {
       document.getElementById('adminPanel').classList.remove('hidden');
-      document.getElementById('bookingSection').classList.add('hidden'); // إخفاء نموذج حجز الموعد عن المدير تماماً
+      document.getElementById('bookingSection').classList.add('hidden');
       document.getElementById('navBooking').classList.add('hidden');
       document.getElementById('adminLoginBtn').classList.add('hidden');
       document.getElementById('logoutBtn').classList.remove('hidden');
       loadAdminData();
     } else {
       document.getElementById('adminPanel').classList.add('hidden');
-      document.getElementById('bookingSection').classList.remove('hidden'); // إظهار نموذج الحجز للزبائن
+      document.getElementById('bookingSection').classList.remove('hidden');
       document.getElementById('navBooking').classList.remove('hidden');
       document.getElementById('adminLoginBtn').classList.remove('hidden');
       document.getElementById('logoutBtn').classList.add('hidden');
@@ -574,11 +568,39 @@ footer b{color:var(--gold)}
     } catch(e) { alert(e.message); }
   }
 
+  // دالة الحذف المحدثة: تخصم المبالغ من الإيرادات إذا كان الحجز مكتملًا قبل حذفه نهائياً
   async function deleteBooking(id) {
     if (confirm('هل أنت متأكد من حذف هذا الحجز نهائياً؟')) {
       try {
+        const docRef = await db.collection('bookings').doc(id).get();
+        if (docRef.exists) {
+          const data = docRef.data();
+          // إذا كان الحجز منتهياً، نقوم بتحديث الـ localStorage أو حفظ القيمة لخصمها فوريًا
+          if (data.status === 'منتهي') {
+            const revAmount = Number(data.revenue || data.price || 300);
+            const bDate = data.date || '';
+            const activeTodayStr = `${new Date().getFullYear()}-${(new Date().getMonth() + 1).toString().padStart(2, '0')}-${new Date().getDate().toString().padStart(2, '0')}`;
+            
+            // إذا كان الحجز يخص اليوم، نقوم بتخفيض إيرادات اليوم يدوياً في الذاكرة لتتحدث فوراً
+            let manualOffset = Number(localStorage.getItem('mh_manual_offset') || 0) + revAmount;
+            if (bDate === activeTodayStr) {
+              localStorage.setItem('mh_manual_offset', manualOffset);
+            }
+          }
+        }
         await db.collection('bookings').doc(id).delete();
+        alert('تم حذف الحجز وتحديث الإيرادات بنجاح.');
       } catch(e) { alert(e.message); }
+    }
+  }
+
+  // تصفير إيرادات اليوم يدوياً
+  function resetDailyRevenue() {
+    if (confirm('هل تريد فعلاً تصفير إيرادات اليوم والبدء من الصفر؟')) {
+      localStorage.setItem('mh_reset_date', fullTodayStr);
+      localStorage.setItem('mh_manual_offset', 0);
+      loadAdminData();
+      alert('تم تصفير إيرادات اليوم بنجاح!');
     }
   }
 
@@ -597,6 +619,12 @@ footer b{color:var(--gold)}
       const activeTodayStr = `${new Date().getFullYear()}-${(new Date().getMonth() + 1).toString().padStart(2, '0')}-${new Date().getDate().toString().padStart(2, '0')}`;
       const activeMonthStr = activeTodayStr.slice(0, 7);
       const activeYearStr = activeTodayStr.slice(0, 4);
+
+      // التحقق من تصفير اليوم إذا تغير التاريخ أو تم الضغط على زر التصفير
+      if (localStorage.getItem('mh_reset_date') !== activeTodayStr) {
+        localStorage.setItem('mh_reset_date', activeTodayStr);
+        localStorage.setItem('mh_manual_offset', 0);
+      }
 
       snapshot.forEach(docSnap => {
         const b = docSnap.data();
@@ -634,6 +662,10 @@ footer b{color:var(--gold)}
         `;
         root.appendChild(div);
       });
+
+      // تطبيق الخصم اليدوي عند الحذف أو التصفير
+      let manualOffset = Number(localStorage.getItem('mh_manual_offset') || 0);
+      dayRev = Math.max(0, dayRev - manualOffset);
 
       document.getElementById('revDay').textContent = dayRev + ' دج';
       document.getElementById('revMonth').textContent = monthRev + ' دج';
