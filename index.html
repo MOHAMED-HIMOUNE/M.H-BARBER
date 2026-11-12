@@ -120,7 +120,6 @@ footer b{color:var(--gold)}
   </div>
 </section>
 
-<!-- قسم عرض لوحة الأسعار -->
 <section class="section" id="services">
   <div class="section-title"><small>PRICING & SERVICES</small><h2>قائمة الخدمات والأسعار</h2><p>لوحة الأسعار الرسمية لصالوننا</p></div>
   <div class="price-image-container">
@@ -128,7 +127,6 @@ footer b{color:var(--gold)}
   </div>
 </section>
 
-<!-- قسم الحجز -->
 <section class="section split" id="bookingSection">
   <div class="booking-copy">
     <h2>موعدك القادم<br><em>يبدأ من هنا</em></h2>
@@ -170,7 +168,6 @@ footer b{color:var(--gold)}
   </div>
 </section>
 
-<!-- قسم الطابور المباشر -->
 <section class="section queue-section" id="queue">
   <div class="section-title"><h2>الطابور المباشر</h2></div>
   <div class="queue-card">
@@ -190,7 +187,6 @@ footer b{color:var(--gold)}
   </div>
 </section>
 
-<!-- لوحة الإدارة المحترفة -->
 <section class="section admin-area hidden" id="adminPanel">
   <div class="section-title"><h2>لوحة الإدارة المحترفة</h2></div>
   
@@ -237,7 +233,6 @@ footer b{color:var(--gold)}
     <div class="stat"><small>إيرادات السنة</small><b id="revYear">0 دج</b></div>
   </div>
 
-  <!-- زر تصفير إيرادات اليوم يدوياً متى أردت -->
   <div style="text-align: center; margin: 15px 0;">
     <button class="red-btn" onclick="resetDailyRevenue()" style="font-size: 13px; padding: 10px 20px;">🔄 تصفير إيرادات اليوم يدوياً</button>
   </div>
@@ -552,10 +547,25 @@ footer b{color:var(--gold)}
 
   async function finishService(id, phone, name, price) {
     try {
+      const rev = price || 300;
+      
+      // عند إنهاء الخدمة، نقوم بتحديث السجل وإضافة المبلغ إلى الإيرادات التراكمية المحفوظة في localStorage
+      const activeTodayStr = `${new Date().getFullYear()}-${(new Date().getMonth() + 1).toString().padStart(2, '0')}-${new Date().getDate().toString().padStart(2, '0')}`;
+      const activeMonthStr = activeTodayStr.slice(0, 7);
+      const activeYearStr = activeTodayStr.slice(0, 4);
+
+      let savedDayRev = Number(localStorage.getItem('mh_saved_day_' + activeTodayStr) || 0) + rev;
+      let savedMonthRev = Number(localStorage.getItem('mh_saved_month_' + activeMonthStr) || 0) + rev;
+      let savedYearRev = Number(localStorage.getItem('mh_saved_year_' + activeYearStr) || 0) + rev;
+
+      localStorage.setItem('mh_saved_day_' + activeTodayStr, savedDayRev);
+      localStorage.setItem('mh_saved_month_' + activeMonthStr, savedMonthRev);
+      localStorage.setItem('mh_saved_year_' + activeYearStr, savedYearRev);
+
       await db.collection('bookings').doc(id).update({
         status: 'منتهي',
         inQueue: false,
-        revenue: price || 300,
+        revenue: rev,
         endTime: firebase.firestore.FieldValue.serverTimestamp()
       });
 
@@ -564,32 +574,17 @@ footer b{color:var(--gold)}
         window.open(`https://wa.me/${phone}?text=${encodeURIComponent(reviewText)}`, '_blank');
       }
 
-      alert('تم إنهاء الحلاقة بنجاح وإرسال رابط التقييم للزبون!');
+      alert('تم إنهاء الحلاقة بنجاح وإضافته للإيرادات الدائمة!');
+      loadAdminData();
     } catch(e) { alert(e.message); }
   }
 
-  // دالة الحذف المحدثة: تخصم المبالغ من الإيرادات إذا كان الحجز مكتملًا قبل حذفه نهائياً
+  // الحذف الآمن: يحذف السجل من القائمة ولا يمس الإيرادات نهائياً
   async function deleteBooking(id) {
-    if (confirm('هل أنت متأكد من حذف هذا الحجز نهائياً؟')) {
+    if (confirm('هل أنت متأكد من حذف هذا السجل من القائمة؟ (لن تتأثر الإيرادات المحفوظة)')) {
       try {
-        const docRef = await db.collection('bookings').doc(id).get();
-        if (docRef.exists) {
-          const data = docRef.data();
-          // إذا كان الحجز منتهياً، نقوم بتحديث الـ localStorage أو حفظ القيمة لخصمها فوريًا
-          if (data.status === 'منتهي') {
-            const revAmount = Number(data.revenue || data.price || 300);
-            const bDate = data.date || '';
-            const activeTodayStr = `${new Date().getFullYear()}-${(new Date().getMonth() + 1).toString().padStart(2, '0')}-${new Date().getDate().toString().padStart(2, '0')}`;
-            
-            // إذا كان الحجز يخص اليوم، نقوم بتخفيض إيرادات اليوم يدوياً في الذاكرة لتتحدث فوراً
-            let manualOffset = Number(localStorage.getItem('mh_manual_offset') || 0) + revAmount;
-            if (bDate === activeTodayStr) {
-              localStorage.setItem('mh_manual_offset', manualOffset);
-            }
-          }
-        }
         await db.collection('bookings').doc(id).delete();
-        alert('تم حذف الحجز وتحديث الإيرادات بنجاح.');
+        alert('تم حذف السجل بنجاح.');
       } catch(e) { alert(e.message); }
     }
   }
@@ -597,8 +592,8 @@ footer b{color:var(--gold)}
   // تصفير إيرادات اليوم يدوياً
   function resetDailyRevenue() {
     if (confirm('هل تريد فعلاً تصفير إيرادات اليوم والبدء من الصفر؟')) {
-      localStorage.setItem('mh_reset_date', fullTodayStr);
-      localStorage.setItem('mh_manual_offset', 0);
+      const activeTodayStr = `${new Date().getFullYear()}-${(new Date().getMonth() + 1).toString().padStart(2, '0')}-${new Date().getDate().toString().padStart(2, '0')}`;
+      localStorage.setItem('mh_saved_day_' + activeTodayStr, 0);
       loadAdminData();
       alert('تم تصفير إيرادات اليوم بنجاح!');
     }
@@ -611,34 +606,22 @@ footer b{color:var(--gold)}
       root.innerHTML = '';
       if(snapshot.empty) { root.textContent = 'لا توجد حجوزات حالياً.'; return; }
       
-      let dayRev = 0;
-      let monthRev = 0;
-      let yearRev = 0;
       let serviceCounts = {};
 
       const activeTodayStr = `${new Date().getFullYear()}-${(new Date().getMonth() + 1).toString().padStart(2, '0')}-${new Date().getDate().toString().padStart(2, '0')}`;
       const activeMonthStr = activeTodayStr.slice(0, 7);
       const activeYearStr = activeTodayStr.slice(0, 4);
 
-      // التحقق من تصفير اليوم إذا تغير التاريخ أو تم الضغط على زر التصفير
-      if (localStorage.getItem('mh_reset_date') !== activeTodayStr) {
-        localStorage.setItem('mh_reset_date', activeTodayStr);
-        localStorage.setItem('mh_manual_offset', 0);
-      }
+      // جلب الإيرادات المحفوظة والمثبتة باستقلالية تامة عن الحجوزات الموجودة بالقائمة
+      let dayRev = Number(localStorage.getItem('mh_saved_day_' + activeTodayStr) || 0);
+      let monthRev = Number(localStorage.getItem('mh_saved_month_' + activeMonthStr) || 0);
+      let yearRev = Number(localStorage.getItem('mh_saved_year_' + activeYearStr) || 0);
 
       snapshot.forEach(docSnap => {
         const b = docSnap.data();
         const id = docSnap.id;
 
         if (b.service) serviceCounts[b.service] = (serviceCounts[b.service] || 0) + 1;
-
-        if (b.status === 'منتهي') {
-          const revAmount = Number(b.revenue || b.price || 300);
-          const bDate = b.date || '';
-          if (bDate === activeTodayStr) dayRev += revAmount;
-          if (bDate.startsWith(activeMonthStr)) monthRev += revAmount;
-          if (bDate.startsWith(activeYearStr)) yearRev += revAmount;
-        }
 
         const div = document.createElement('div');
         div.className = 'booking-row';
@@ -648,6 +631,7 @@ footer b{color:var(--gold)}
           const startSec = b.startTime.toMillis();
           const nowSec = Date.now();
           const diffMin = Math.floor((nowSec - startSec) / 60000);
+          time`⏱️ الوقت المستغرق: ${diffMin} دقيقة`;
           timePassed = `⏱️ الوقت المستغرق: ${diffMin} دقيقة`;
         }
 
@@ -663,10 +647,6 @@ footer b{color:var(--gold)}
         root.appendChild(div);
       });
 
-      // تطبيق الخصم اليدوي عند الحذف أو التصفير
-      let manualOffset = Number(localStorage.getItem('mh_manual_offset') || 0);
-      dayRev = Math.max(0, dayRev - manualOffset);
-
       document.getElementById('revDay').textContent = dayRev + ' دج';
       document.getElementById('revMonth').textContent = monthRev + ' دج';
       document.getElementById('revYear').textContent = yearRev + ' دج';
@@ -678,7 +658,7 @@ footer b{color:var(--gold)}
       }
       document.getElementById('statsReportText').innerHTML = `
         🏆 <b>الخدمة الأكثر طلباً:</b> <span style="color:var(--gold);">${topService}</span> (${maxCount} حجز).<br>
-        📈 <b>إجمالي الحجوزات:</b> ${snapshot.size} حجز.
+        📈 <b>إجمالي الحجوزات في القائمة:</b> ${snapshot.size} حجز.
       `;
     });
   }
