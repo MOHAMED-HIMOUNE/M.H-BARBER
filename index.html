@@ -98,7 +98,7 @@ footer b{color:var(--gold)}
   </a>
   <nav>
     <a href="#services">الخدمات والأسعار</a>
-    <a href="#booking" id="navBooking">حجز موعد</a>
+    <a href="#bookingSection" id="navBooking">حجز موعد</a>
     <a href="#queue">الطابور</a>
   </nav>
   <div style="display:flex; gap:10px; align-items:center;">
@@ -116,7 +116,8 @@ footer b{color:var(--gold)}
     <div class="live-status"><i id="shopDot"></i><b id="shopState">جاري التحقق من حالة المحل...</b></div>
     <h1>M.H<br><em>BARBER</em></h1>
     <p>أناقتك تبدأ من التفاصيل. احجز موعدك واستمتع بتجربة حلاقة راقية.</p>
-    <a class="gold-btn" href="#booking">احجز موعدك الآن <span>←</span></a>
+    <!-- تم ربط الزر بالشكل الصحيح لينقل الزبون إلى قسم الحجز مباشرة -->
+    <a class="gold-btn" href="#bookingSection">احجز موعدك الآن <span>←</span></a>
   </div>
 </section>
 
@@ -233,8 +234,11 @@ footer b{color:var(--gold)}
     <div class="stat"><small>إيرادات السنة</small><b id="revYear">0 دج</b></div>
   </div>
 
-  <div style="text-align: center; margin: 15px 0;">
-    <button class="red-btn" onclick="resetDailyRevenue()" style="font-size: 13px; padding: 10px 20px;">🔄 تصفير إيرادات اليوم يدوياً</button>
+  <!-- أزرار تصفير الإيرادات (اليوم، الشهر، السنة) -->
+  <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin: 15px 0;">
+    <button class="red-btn" onclick="resetRevenue('day')" style="font-size: 12px; padding: 10px 15px;">🔄 تصفير إيرادات اليوم</button>
+    <button class="red-btn" onclick="resetRevenue('month')" style="font-size: 12px; padding: 10px 15px;">🔄 تصفير إيرادات الشهر</button>
+    <button class="red-btn" onclick="resetRevenue('year')" style="font-size: 12px; padding: 10px 15px;">🔄 تصفير إيرادات السنة</button>
   </div>
 
   <div class="panel" style="margin-top: 20px;">
@@ -587,13 +591,23 @@ footer b{color:var(--gold)}
     }
   }
 
-  function resetDailyRevenue() {
-    if (confirm('هل تريد فعلاً تصفير إيرادات اليوم والبدء من الصفر؟')) {
-      const activeTodayStr = `${new Date().getFullYear()}-${(new Date().getMonth() + 1).toString().padStart(2, '0')}-${new Date().getDate().toString().padStart(2, '0')}`;
+  // دالة تصفير الإيرادات (اليوم، الشهر، أو السنة)
+  function resetRevenue(type) {
+    const activeTodayStr = `${new Date().getFullYear()}-${(new Date().getMonth() + 1).toString().padStart(2, '0')}-${new Date().getDate().toString().padStart(2, '0')}`;
+    const activeMonthStr = activeTodayStr.slice(0, 7);
+    const activeYearStr = activeTodayStr.slice(0, 4);
+
+    if (type === 'day' && confirm('هل تريد فعلاً تصفير إيرادات اليوم؟')) {
       localStorage.setItem('mh_saved_day_' + activeTodayStr, 0);
-      loadAdminData();
       alert('تم تصفير إيرادات اليوم بنجاح!');
+    } else if (type === 'month' && confirm('هل تريد فعلاً تصفير إيرادات هذا الشهر؟')) {
+      localStorage.setItem('mh_saved_month_' + activeMonthStr, 0);
+      alert('تم تصفير إيرادات الشهر بنجاح!');
+    } else if (type === 'year' && confirm('هل تريد فعلاً تصفير إيرادات هذه السنة؟')) {
+      localStorage.setItem('mh_saved_year_' + activeYearStr, 0);
+      alert('تم تصفير إيرادات السنة بنجاح!');
     }
+    loadAdminData();
   }
 
   function loadAdminData() {
