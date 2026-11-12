@@ -549,7 +549,6 @@ footer b{color:var(--gold)}
     try {
       const rev = price || 300;
       
-      // عند إنهاء الخدمة، نقوم بتحديث السجل وإضافة المبلغ إلى الإيرادات التراكمية المحفوظة في localStorage
       const activeTodayStr = `${new Date().getFullYear()}-${(new Date().getMonth() + 1).toString().padStart(2, '0')}-${new Date().getDate().toString().padStart(2, '0')}`;
       const activeMonthStr = activeTodayStr.slice(0, 7);
       const activeYearStr = activeTodayStr.slice(0, 4);
@@ -579,7 +578,6 @@ footer b{color:var(--gold)}
     } catch(e) { alert(e.message); }
   }
 
-  // الحذف الآمن: يحذف السجل من القائمة ولا يمس الإيرادات نهائياً
   async function deleteBooking(id) {
     if (confirm('هل أنت متأكد من حذف هذا السجل من القائمة؟ (لن تتأثر الإيرادات المحفوظة)')) {
       try {
@@ -589,7 +587,6 @@ footer b{color:var(--gold)}
     }
   }
 
-  // تصفير إيرادات اليوم يدوياً
   function resetDailyRevenue() {
     if (confirm('هل تريد فعلاً تصفير إيرادات اليوم والبدء من الصفر؟')) {
       const activeTodayStr = `${new Date().getFullYear()}-${(new Date().getMonth() + 1).toString().padStart(2, '0')}-${new Date().getDate().toString().padStart(2, '0')}`;
@@ -612,7 +609,6 @@ footer b{color:var(--gold)}
       const activeMonthStr = activeTodayStr.slice(0, 7);
       const activeYearStr = activeTodayStr.slice(0, 4);
 
-      // جلب الإيرادات المحفوظة والمثبتة باستقلالية تامة عن الحجوزات الموجودة بالقائمة
       let dayRev = Number(localStorage.getItem('mh_saved_day_' + activeTodayStr) || 0);
       let monthRev = Number(localStorage.getItem('mh_saved_month_' + activeMonthStr) || 0);
       let yearRev = Number(localStorage.getItem('mh_saved_year_' + activeYearStr) || 0);
@@ -631,7 +627,6 @@ footer b{color:var(--gold)}
           const startSec = b.startTime.toMillis();
           const nowSec = Date.now();
           const diffMin = Math.floor((nowSec - startSec) / 60000);
-          time`⏱️ الوقت المستغرق: ${diffMin} دقيقة`;
           timePassed = `⏱️ الوقت المستغرق: ${diffMin} دقيقة`;
         }
 
