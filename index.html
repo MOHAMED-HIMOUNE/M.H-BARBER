@@ -62,12 +62,10 @@ input,select,textarea{display:block;width:100%;background:var(--bg);border:1px s
 .chair-box{background:var(--bg);border:1px solid var(--line);padding:12px;border-radius:8px;text-align:center}
 .chair-box h4{color:var(--gold);margin:0 0 6px;font-size:13px}
 
-/* تصميم بطاقات آراء الزبائن العامة */
 .reviews-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;margin-top:30px}
 .review-card{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:20px;position:relative}
 .review-card .stars{color:#f5c518;font-size:16px;margin-bottom:8px}
 .review-card p{margin:8px 0 0;font-size:14px;color:var(--text);line-height:1.6}
-.review-card small{color:var(--muted);font-size:12px}
 
 .admin-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
 .green-btn{background:#176c42;color:white}.red-btn{background:#9d3030;color:white}
@@ -111,7 +109,7 @@ footer b{color:var(--gold)}
   </nav>
   <div style="display:flex; gap:10px; align-items:center;">
     <button class="outline small-btn" onclick="toggleTheme()" id="themeToggleBtn">🌓 الوضع</button>
-    <button class="outline small-btn" id="adminLoginBtn" onclick="document.getElementById('loginModal').classList.add('hidden')">دخول المدير</button>
+    <button class="outline small-btn" id="adminLoginBtn" onclick="document.getElementById('loginModal').classList.remove('hidden')">دخول المدير</button>
     <button class="outline small-btn hidden" id="logoutBtn" onclick="auth.signOut()">تسجيل الخروج</button>
   </div>
 </header>
@@ -155,15 +153,15 @@ footer b{color:var(--gold)}
 
       <label>الخدمة المطلوبة</label>
       <select id="serviceSelect">
-        <option value="ديقرادي" data-price="300">ديكرادي (300 دج)</option>
-        <option value="ديقرادي أطفال" data-price="250">ديكرادي أطفال (250 دج)</option>
+        <option value="ديكرادي" data-price="300">ديكرادي (300 دج)</option>
+        <option value="ديكرادي أطفال" data-price="250">ديكرادي أطفال (250 دج)</option>
         <option value="بروتين الشعر" data-price="1000">بروتين الشعر</option>
         <option value="Turkish / Tourist" data-price="300">Turkish / Tourist (300 دج)</option>
-        <option value="Brushing + sechoir" data-price="150">Brushing + سشوار (150 دج)</option>
-        <option value="lissage / طرساج" data-price="100">تلسيج (100 دج)</option>
-        <option value="طرساج لحية" data-price="150">ليساج لحية (150 دج)</option>
-        <option value="Dégradé + Brushing + barbe" data-price="450">Dégradé + Brushing + باربة (450 دج)</option>
-        <option value="ماسك / masque" data-price="200">ماسق كابيلير (200 دج)</option>
+        <option value="Brushing + سشوار" data-price="150">Brushing + سشوار (150 دج)</option>
+        <option value="تلسيج" data-price="100">تلسيج (100 دج)</option>
+        <option value="ليساج لحية" data-price="150">ليساج لحية (150 دج)</option>
+        <option value="Dégradé + Brushing + باربة" data-price="450">Dégradé + Brushing + باربة (450 دج)</option>
+        <option value="ماسق كابيلير" data-price="200">ماسق كابيلير (200 دج)</option>
         <option value="PACK PREMIUM" data-price="3000">PACK PREMIUM (3000 دج)</option>
       </select>
       <label>التاريخ</label>
@@ -195,7 +193,6 @@ footer b{color:var(--gold)}
   </div>
 </section>
 
-<!-- قسم عرض آراء وتقييمات الزبائن للعامة + نموذج إضافة تقييم -->
 <section class="section" id="reviewsSection">
   <div class="section-title"><small>CLIENT FEEDBACK</small><h2>آراء وتقييمات الزبائن</h2><p>ما يقوله عملاؤنا عن تجربتهم في صالوننا</p></div>
   
@@ -219,7 +216,6 @@ footer b{color:var(--gold)}
     <p class="feedback" id="reviewFeedback" style="text-align:center;"></p>
   </div>
 
-  <!-- شبكة عرض التقييمات المنشورة -->
   <div class="reviews-grid" id="publicReviewsGrid">
     <p style="color:var(--muted); text-align:center; grid-column: 1/-1;">جاري تحميل آراء الزبائن...</p>
   </div>
@@ -282,7 +278,6 @@ footer b{color:var(--gold)}
     <p id="statsReportText" style="color:var(--muted); font-size:14px; line-height:1.6;">جاري تحليل البيانات...</p>
   </div>
 
-  <!-- لوحة إدارة وتحكم بالتقييمات -->
   <div class="panel" style="margin-top: 20px;">
     <h3>⭐ إدارة ومراجعة تقييمات الزبائن</h3>
     <div id="adminReviewsList">جاري تحميل التقييمات...</div>
@@ -331,7 +326,7 @@ footer b{color:var(--gold)}
   const auth = firebase.auth();
   const db = firebase.firestore();
   const ADMIN_UID = "Mgx6RTN03sWDkU9SnWpjCRe7zs63";
-  const WHATSAPP_NUMBER = "213667267719";
+  const WHATSAPP_NUMBER = "213782242293";
 
   function toggleTheme() {
     const html = document.documentElement;
@@ -482,13 +477,13 @@ footer b{color:var(--gold)}
     }
   });
 
-  // جلب وعرض التقييمات المعتمدة للعامة في الموقع
+  // جلب التقييمات المنشورة مع معالجة الأخطاء
   db.collection('reviews').where('approved', '==', true).orderBy('createdAt', 'desc').onSnapshot(snapshot => {
     const grid = document.getElementById('publicReviewsGrid');
     if (!grid) return;
     grid.innerHTML = '';
     if (snapshot.empty) {
-      grid.innerHTML = '<p style="color:var(--muted); text-align:center; grid-column: 1/-1;">لا توجد تقييمات منشورة حتى الآن. كن أول من يتقيم!</p>';
+      grid.innerHTML = '<p style="color:var(--muted); text-align:center; grid-column: 1/-1;">لا توجد تقييمات منشورة حتى الآن.</p>';
       return;
     }
     snapshot.forEach(doc => {
@@ -504,9 +499,11 @@ footer b{color:var(--gold)}
       `;
       grid.appendChild(div);
     });
+  }, error => {
+    console.error("خطأ في قراءة التقييمات:", error);
   });
 
-  // إرسال تقييم جديد من قبل الزبون
+  // إرسال تقييم جديد مع التقاط الخطأ وعرضه
   async function submitReview(e) {
     e.preventDefault();
     const name = document.getElementById('revName').value;
@@ -520,18 +517,18 @@ footer b{color:var(--gold)}
         clientName: name,
         stars: stars,
         comment: comment,
-        approved: false, // يحتاج موافقة المدير أولاً ليظهر للعامة
+        approved: false,
         createdAt: firebase.firestore.FieldValue.serverTimestamp()
       });
       document.getElementById('reviewForm').reset();
       feedback.textContent = '✅ شكراً لك! تم إرسال تقييمك وسيظهر في الموقع بعد مراجعته من الإدارة.';
-      setTimeout(() => feedback.textContent = '', 5000);
-    } catch(e) {
-      feedback.textContent = 'خطأ: ' + e.message;
+      setTimeout(() => feedback.textContent = '', 6000);
+    } catch(err) {
+      console.error(err);
+      feedback.textContent = '❌ حدث خطأ أثناء الإرسال: تأكد من ضبط قواعد الأمان (Firestore Rules) لتسمح بالإضافة.';
     }
   }
 
-  // موافقة المدير على نشر التقييم
   async function approveReview(id) {
     try {
       await db.collection('reviews').doc(id).update({ approved: true });
@@ -539,7 +536,6 @@ footer b{color:var(--gold)}
     } catch(e) { alert(e.message); }
   }
 
-  // حذف التقييم
   async function deleteReview(id) {
     if (confirm('هل أنت متأكد من حذف هذا التقييم نهائياً؟')) {
       try {
@@ -686,7 +682,7 @@ footer b{color:var(--gold)}
   }
 
   async function deleteBooking(id) {
-    if (confirm('هل أنت متأكد من حذف هذا السجل من القائمة؟')) {
+    if (confirm('هل أنت متأكد من حذف هذا السجل من القائمة؟ (لن تتأثر الإيرادات المحفوظة)')) {
       try {
         await db.collection('bookings').doc(id).delete();
       } catch(e) { alert(e.message); }
@@ -709,7 +705,6 @@ footer b{color:var(--gold)}
     alert('تم التصفير بنجاح!');
   }
 
-  // تحميل إدارة التقييمات في لوحة المدير
   function loadAdminReviews() {
     db.collection('reviews').orderBy('createdAt', 'desc').onSnapshot(snapshot => {
       const root = document.getElementById('adminReviewsList');
@@ -733,6 +728,8 @@ footer b{color:var(--gold)}
         `;
         root.appendChild(div);
       });
+    }, error => {
+      console.error("خطأ إدارة التقييمات:", error);
     });
   }
 
@@ -741,7 +738,6 @@ footer b{color:var(--gold)}
       const root = document.getElementById('adminBookings');
       if (!root) return;
       root.innerHTML = '';
-      if(snapshot.empty) { root.textContent = 'لا توجد حجوزات حالياً.'; return; }
       
       let serviceCounts = {};
       const activeTodayStr = `${new Date().getFullYear()}-${(new Date().getMonth() + 1).toString().padStart(2, '0')}-${new Date().getDate().toString().padStart(2, '0')}`;
@@ -751,6 +747,16 @@ footer b{color:var(--gold)}
       let dayRev = Number(localStorage.getItem('mh_saved_day_' + activeTodayStr) || 0);
       let monthRev = Number(localStorage.getItem('mh_saved_month_' + activeMonthStr) || 0);
       let yearRev = Number(localStorage.getItem('mh_saved_year_' + activeYearStr) || 0);
+
+      document.getElementById('revDay').textContent = dayRev + ' دج';
+      document.getElementById('revMonth').textContent = monthRev + ' دج';
+      document.getElementById('revYear').textContent = yearRev + ' دج';
+
+      if(snapshot.empty) { 
+        root.textContent = 'لا توجد حجوزات حالياً في القائمة (الإيرادات محفوظة بأمان).'; 
+        document.getElementById('statsReportText').innerHTML = `🏆 <b>الخدمة الأكثر طلباً:</b> لا توجد بيانات كافية.<br>📈 <b>إجمالي الحجوزات في القائمة:</b> 0 حجز.`;
+        return; 
+      }
 
       snapshot.forEach(docSnap => {
         const b = docSnap.data();
@@ -762,7 +768,8 @@ footer b{color:var(--gold)}
         let timePassed = '';
         if (b.startTime && b.status === 'جاري الحلاقة') {
           const startSec = b.startTime.toMillis();
-          const diffMin = Math.floor((Date.now() - startSec) / 60000);
+          const nowSec = Date.now();
+          const diffMin = Math.floor((nowSec - startSec) / 60000);
           timePassed = `⏱️ الوقت المستغرق: ${diffMin} دقيقة`;
         }
 
@@ -777,10 +784,6 @@ footer b{color:var(--gold)}
         `;
         root.appendChild(div);
       });
-
-      document.getElementById('revDay').textContent = dayRev + ' دج';
-      document.getElementById('revMonth').textContent = monthRev + ' دج';
-      document.getElementById('revYear').textContent = yearRev + ' دج';
 
       let topService = "لا توجد بيانات كافية";
       let maxCount = 0;
